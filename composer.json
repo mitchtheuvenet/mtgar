@@ -1,0 +1,15 @@
+{
+    "name": "theuvenet/mtgar",
+    "authors": [
+        {
+            "name": "mitchtheuvenet",
+            "email": "mitch.theuvenet@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "require": {}
+}
