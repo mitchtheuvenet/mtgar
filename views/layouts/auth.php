@@ -18,7 +18,7 @@
         <link rel="icon" type="image/png" href="images/favicon.png">
 
         <!-- Page title -->
-        <title>{{pageTitle}} &centerdot; MTGAR</title>
+        <title>AUTH &centerdot; MTGAR</title>
     </head>
     <body>
         <div class="container-fluid vh-100">
