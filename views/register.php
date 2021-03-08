@@ -1,36 +1,45 @@
+<?php
+
+use app\core\form\Field;
+use app\core\form\Form;
+
+?>
+
 <div class="row">
     <div class="col-md-4 offset-md-4 card bg-light mt-4 mb-4">
         <img src="images/logo.png" class="card-img-top p-5" alt="Logo">
         <div class="card-body">
             <h2 class="card-title text-center">Create an account</h2>
-            <form class="card-text" action="/register" method="post">
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" pattern="[a-zA-Z0-9]{4,16}" class="form-control" name="username" id="username" aria-describedby="username_desc" required>
-                    <div id="username_desc" class="form-text">Must be between 4&ndash;16 characters long, only consisting of alphabetical and/or numerical characters.</div>
-                </div>
-                <div class="mb-2">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" minlength="8" class="form-control" name="password" id="password" aria-describedby="password_desc" required>
-                    <div id="password_desc" class="form-text">Must be at least 8 characters long. It is advised to use a combination of lower-/uppercase letters, numbers and special characters.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="passwordConfirm" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" name="passwordConfirm" id="passwordConfirm" required>
-                </div>
-                <div class="mb-2">
-                    <label for="email" class="form-label">E-mail Address</label>
-                    <input type="email" class="form-control" name="email" id="email" aria-describedby="email_desc" required>
-                    <div id="email_desc" class="form-text">Will never be shared with third parties.</div>
-                </div>
-                <div class="mb-5">
-                    <label for="emailConfirm" class="form-label">Confirm E-mail Address</label>
-                    <input type="email" class="form-control" name="emailConfirm" id="emailConfirm" required>
-                </div>
+            <?php $form = Form::begin('/register', 'post'); ?>
+                <?php
+
+                echo $form->field($model, 'username', Field::TYPE_TEXT, 'Username', true, 3, [
+                    'description' => 'Must be between 4&ndash;16 characters long, only consisting of alphabetical and/or numerical characters.',
+                    'htmlAttrs' => [
+                        'pattern' => '[a-zA-Z0-9]{4,16}'
+                    ]
+                ]);
+
+                echo $form->field($model, 'password', Field::TYPE_PASSWORD, 'Password', true, 2, [
+                    'description' => 'Must be at least 8 characters long. It is advised to use a combination of lower-/uppercase letters, numbers and special characters.',
+                    'htmlAttrs' => [
+                        'minlength' => 8
+                    ]
+                ]);
+
+                echo $form->field($model, 'passwordConfirm', Field::TYPE_PASSWORD, 'Confirm Password', true);
+
+                echo $form->field($model, 'email', Field::TYPE_EMAIL, 'E-mail Address', true, 2, [
+                    'description' => 'Will never be shared with third parties.'
+                ]);
+
+                echo $form->field($model, 'emailConfirm', Field::TYPE_EMAIL, 'Confirm E-mail Address', true, 4);
+
+                ?>
                 <div class="d-grid mb-2">
                     <button type="submit" class="btn btn-primary btn-lg">Register</button>
                 </div>
-            </form>
+            <?php Form::end(); ?>
         </div>
     </div>
 </div>
