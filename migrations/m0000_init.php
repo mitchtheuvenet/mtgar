@@ -5,7 +5,7 @@ use app\core\Migration;
 class m0000_init extends Migration {
 
     public function up() {
-        $this->exec("
+        self::exec("
             CREATE TABLE `users` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
                 `username` VARCHAR(16) NOT NULL UNIQUE,
@@ -17,7 +17,7 @@ class m0000_init extends Migration {
     }
 
     public function down() {
-        $this->exec("DROP TABLE `users`;");
+        self::exec("DROP TABLE `users`;");
     }
 
 }

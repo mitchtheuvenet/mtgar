@@ -8,7 +8,7 @@ abstract class Migration {
 
     abstract public function down();
 
-    protected function exec(string $sql) {
+    protected static function exec(string $sql) {
         Application::$app->db->pdo->exec($sql);
     }
 
