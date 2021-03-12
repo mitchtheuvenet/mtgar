@@ -10,6 +10,7 @@ abstract class Model {
     public const RULE_MAX = 'max';
     public const RULE_MATCH = 'match';
     public const RULE_PATTERN = 'pattern';
+    public const RULE_UNIQUE = 'unique';
 
     public array $errors = [];
 
@@ -71,6 +72,24 @@ abstract class Model {
                         }
 
                         break;
+                    case self::RULE_UNIQUE:
+                        $className = $rule['class'];
+
+                        $uniqueAttr = $rule['attribute'] ?? $attribute;
+                        $tableName = $className::tableName();
+
+                        $statement = Application::$app->db->prepare("SELECT `id` FROM `{$tableName}` WHERE `{$uniqueAttr}` = :val;");
+                        $statement->bindValue(":val", $value);
+
+                        $statement->execute();
+
+                        $record = $statement->fetchObject();
+
+                        if (!empty($record)) {
+                            $this->addError($attribute, $ruleName);
+                        }
+
+                        break;
                 }
             }
         }
@@ -95,12 +114,24 @@ abstract class Model {
             self::RULE_MIN => 'This field\'s length must be at least {min}',
             self::RULE_MAX => 'This field\'s length must not exceed {max}',
             self::RULE_MATCH => 'This field must match the value of field \'{match}\'',
-            self::RULE_PATTERN => 'This field must match the specified pattern: {pattern}'
+            self::RULE_PATTERN => 'This field must match the specified pattern: {pattern}',
+            self::RULE_UNIQUE => 'This field must be unique'
         ];
     }
 
     public function hasError($attribute) {
         return isset($this->errors[$attribute]);
+    }
+
+    public function hasUniqueError($attribute) {
+        if ($this->hasError($attribute)) {
+            $uniqueErrorMsg = $this->errorMessages()[self::RULE_UNIQUE];
+            $attrErrors = $this->errors[$attribute];
+
+            return in_array($uniqueErrorMsg, $attrErrors);
+        } else {
+            return false;
+        }
     }
 
     public function getFirstError($attribute) {

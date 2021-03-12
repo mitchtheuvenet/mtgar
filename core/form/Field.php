@@ -39,9 +39,22 @@ class Field {
             $description = "<div id=\"{$this->attribute}_desc\" class=\"";
 
             if ($hasError) {
-                $firstError = $this->model->getFirstError();
+                $errorMsg = $this->model->getFirstError($this->attribute);
+
+                if ($this->model->hasUniqueError($this->attribute)) {
+                    switch ($this->attribute) {
+                        case 'username':
+                            $errorMsg = 'This username is already taken. Please try a different name.';
+                            break;
+                        case 'email':
+                            $errorMsg = 'This e-mail address has already been registered. Please try a different address.';
+                            break;
+                        default:
+                            $errorMsg = 'This value already exists in our database. Please try something else.';
+                    }
+                }
     
-                $description .= "invalid-feedback\">{$firstError}</div>";
+                $description .= "invalid-feedback\">{$errorMsg}</div>";
             } else {
                 $attrDescription = $this->rules['description'] ?? '';
 
