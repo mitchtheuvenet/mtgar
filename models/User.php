@@ -62,6 +62,7 @@ class User extends DbModel {
             'email' => [
                 self::RULE_REQUIRED,
                 self::RULE_EMAIL,
+                [self::RULE_MAX, 'max' => 255],
                 [self::RULE_UNIQUE, 'class' => self::class]
             ],
             'emailConfirm' => [

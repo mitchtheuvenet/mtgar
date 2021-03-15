@@ -71,13 +71,18 @@ abstract class Model {
                     case self::RULE_MATCH:
                         if ($value !== $this->{$rule['match']}) {
                             $rule['match'] = $this->getLabel($rule['match']);
-                            
+
                             $this->addError($attribute, $ruleName, $rule);
                         }
 
                         break;
                     case self::RULE_PATTERN:
                         if (!preg_match($rule['pattern'], $value)) {
+                            switch ($rule['pattern']) {
+                                case '/[a-zA-Z0-9]{4,16}/':
+                                    $rule['pattern'] = 'between 4&ndash;16 characters long, only consisting of alphabetical and/or numerical characters';
+                            }
+
                             $this->addError($attribute, $ruleName, $rule);
                         }
 
@@ -96,7 +101,7 @@ abstract class Model {
                         $record = $statement->fetchObject();
 
                         if (!empty($record)) {
-                            $this->addError($attribute, $ruleName);
+                            $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
                         }
                 }
             }
@@ -123,23 +128,12 @@ abstract class Model {
             self::RULE_MAX => 'This field\'s length must not exceed {max}.',
             self::RULE_MATCH => 'This field must match with \'{match}\'.',
             self::RULE_PATTERN => 'This field must match the specified pattern: {pattern}.',
-            self::RULE_UNIQUE => 'This field must be unique.'
+            self::RULE_UNIQUE => 'This {field} is already in use.'
         ];
     }
 
     public function hasError($attribute) {
         return isset($this->errors[$attribute]);
-    }
-
-    public function hasUniqueError($attribute) {
-        if ($this->hasError($attribute)) {
-            $uniqueErrorMsg = $this->errorMessages()[self::RULE_UNIQUE];
-            $attrErrors = $this->errors[$attribute];
-
-            return in_array($uniqueErrorMsg, $attrErrors);
-        } else {
-            return false;
-        }
     }
 
     public function getFirstError($attribute) {
