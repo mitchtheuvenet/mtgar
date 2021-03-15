@@ -24,6 +24,14 @@ abstract class Model {
 
     abstract public function rules(): array;
 
+    public function labels(): array {
+        return [];
+    }
+
+    public function getLabel(string $attribute) {
+        return $this->labels()[$attribute] ?? $attribute;
+    }
+
     public function validate() {
         foreach ($this->rules() as $attribute => $rules) {
             $value = $this->{$attribute};
@@ -62,6 +70,8 @@ abstract class Model {
                         break;
                     case self::RULE_MATCH:
                         if ($value !== $this->{$rule['match']}) {
+                            $rule['match'] = $this->getLabel($rule['match']);
+                            
                             $this->addError($attribute, $ruleName, $rule);
                         }
 
@@ -88,8 +98,6 @@ abstract class Model {
                         if (!empty($record)) {
                             $this->addError($attribute, $ruleName);
                         }
-
-                        break;
                 }
             }
         }
@@ -109,13 +117,13 @@ abstract class Model {
 
     protected function errorMessages() {
         return [
-            self::RULE_REQUIRED => 'This field is required',
-            self::RULE_EMAIL => 'This field must contain a valid e-mail address',
-            self::RULE_MIN => 'This field\'s length must be at least {min}',
-            self::RULE_MAX => 'This field\'s length must not exceed {max}',
-            self::RULE_MATCH => 'This field must match the value of field \'{match}\'',
-            self::RULE_PATTERN => 'This field must match the specified pattern: {pattern}',
-            self::RULE_UNIQUE => 'This field must be unique'
+            self::RULE_REQUIRED => 'This field is required.',
+            self::RULE_EMAIL => 'This field must contain a valid e-mail address.',
+            self::RULE_MIN => 'This field\'s length must be at least {min}.',
+            self::RULE_MAX => 'This field\'s length must not exceed {max}.',
+            self::RULE_MATCH => 'This field must match with \'{match}\'.',
+            self::RULE_PATTERN => 'This field must match the specified pattern: {pattern}.',
+            self::RULE_UNIQUE => 'This field must be unique.'
         ];
     }
 

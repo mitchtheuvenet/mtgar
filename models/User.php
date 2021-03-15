@@ -26,6 +26,16 @@ class User extends DbModel {
         return ['username', 'password', 'email', 'status'];
     }
 
+    public function labels(): array {
+        return [
+            'username' => 'Username',
+            'password' => 'Password',
+            'passwordConfirm' => 'Confirm Password',
+            'email' => 'E-mail Address',
+            'emailConfirm' => 'Confirm E-mail Address'
+        ];
+    }
+
     public function save() {
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
 

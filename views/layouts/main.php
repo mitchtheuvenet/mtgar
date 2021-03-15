@@ -1,3 +1,11 @@
+<?php
+
+use app\core\Application;
+
+$successFlash = Application::$app->session->getFlash('success');
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -22,6 +30,11 @@
     </head>
     <body>
         <div class="container-fluid vh-100">
+            <?php if (!empty($successFlash)): ?>
+                <div class="alert alert-success" role="alert">
+                    <?= $successFlash; ?>
+                </div>
+            <?php endif; ?>
             {{content}}
         </div>
 

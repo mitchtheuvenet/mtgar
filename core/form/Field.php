@@ -18,11 +18,10 @@ class Field {
     public array $rules;
     public int $mb;
 
-    public function __construct(Model $model, string $attribute, string $type, string $label, bool $required, int $mb = 3, array $rules = []) {
+    public function __construct(Model $model, string $attribute, string $type, bool $required, int $mb = 3, array $rules = []) {
         $this->model = $model;
         $this->attribute = $attribute;
         $this->type = $type;
-        $this->label = $label;
         $this->required = $required;
         $this->mb = $mb;
         $this->rules = $rules;
@@ -47,10 +46,7 @@ class Field {
                             $errorMsg = 'This username is already taken. Please try a different name.';
                             break;
                         case 'email':
-                            $errorMsg = 'This e-mail address has already been registered. Please try a different address.';
-                            break;
-                        default:
-                            $errorMsg = 'This value already exists in our database. Please try something else.';
+                            $errorMsg = 'This e-mail address has already been registered. Please use a different address.';
                     }
                 }
     
@@ -83,7 +79,7 @@ class Field {
         ',
             strval($this->mb),
             $this->attribute,
-            $this->label,
+            $this->model->getLabel($this->attribute),
             $this->type,
             $this->attribute,
             $this->attribute,

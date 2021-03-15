@@ -16,8 +16,8 @@ class Form {
         echo '</form>';
     }
 
-    public function field(Model $model, string $attribute, string $type, string $label, bool $required, int $mb = 3, array $rules = []) {
-        return new Field($model, $attribute, $type, $label, $required, $mb, $rules);
+    public function field(Model $model, string $attribute, string $type, bool $required, int $mb = 3, array $rules = []) {
+        return new Field($model, $attribute, $type, $required, $mb, $rules);
     }
 
 }
