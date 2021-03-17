@@ -4,7 +4,7 @@ namespace app\models;
 
 use app\core\DbModel;
 
-class User extends DbModel {
+class DbUser extends DbModel {
 
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
@@ -18,11 +18,11 @@ class User extends DbModel {
     public string $email = '';
     public string $emailConfirm = '';
 
-    public function tableName(): string {
+    public static function tableName(): string {
         return 'users';
     }
 
-    public function columnNames(): array {
+    public static function columnNames(): array {
         return ['username', 'password', 'email', 'status'];
     }
 
@@ -30,9 +30,9 @@ class User extends DbModel {
         return [
             'username' => 'Username',
             'password' => 'Password',
-            'passwordConfirm' => 'Confirm Password',
-            'email' => 'E-mail Address',
-            'emailConfirm' => 'Confirm E-mail Address'
+            'passwordConfirm' => 'Confirm password',
+            'email' => 'E-mail address',
+            'emailConfirm' => 'Confirm e-mail address'
         ];
     }
 

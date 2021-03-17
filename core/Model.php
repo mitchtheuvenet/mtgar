@@ -120,6 +120,10 @@ abstract class Model {
         $this->errors[$attribute][] = $msg;
     }
 
+    // public function addErrorByMessage(string $attribute, string $message) {
+    //     $this->errors[$attribute][] = $message;
+    // }
+
     protected function errorMessages() {
         return [
             self::RULE_REQUIRED => 'This field is required.',

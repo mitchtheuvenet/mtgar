@@ -5,40 +5,49 @@ namespace app\controllers;
 use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
+use app\core\Response;
 
-use app\models\User;
+use app\models\DbUser;
+use app\models\Login;
 
 class AuthController extends Controller {
 
-    public function login(Request $request) {
-        if ($request->isGet()) {
-            $this->layout = 'auth';
-
-            return $this->render('login');
-        }
+    public function login(Request $request, Response $response) {
+        $login = new Login();
 
         if ($request->isPost()) {
-            $body = $request->getBody();
+            $login->loadData($request->getBody());
 
-            var_dump($body); exit;
+            if ($login->validate() && $login->logIn()) {
+                $response->redirect('/');
+            } else {
+                Application::$app->session->setFlash('error', 'Login failed.');
+            }
         }
+
+        $this->layout = self::LAYOUT_AUTH;
+
+        return $this->render('login', [
+            'model' => $login
+        ]);
     }
 
-    public function register(Request $request) {
-        $user = new User();
+    public function register(Request $request, Response $response) {
+        $user = new DbUser();
 
         if ($request->isPost()) {
             $user->loadData($request->getBody());
 
             if ($user->validate() && $user->save()) {
-                Application::$app->session->setFlash('success', 'Thanks for registering!');
-                Application::$app->response->redirect('/');
+                Application::$app->session->setFlash('success', 'Account created successfully. You can now login using your entered credentials.');
+
+                $response->redirect('/login');
 
                 exit;
             }
         }
 
-        $this->layout = 'auth';
+        $this->layout = self::LAYOUT_AUTH;
 
         return $this->render('register', [
             'model' => $user

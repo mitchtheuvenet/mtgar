@@ -1,23 +1,44 @@
+<?php
+
+use app\core\Application;
+
+use app\core\form\Field;
+use app\core\form\Form;
+
+$successFlash = Application::$app->session->getFlash('success');
+$errorFlash = Application::$app->session->getFlash('error');
+
+?>
+
 <div class="row align-items-center h-100">
     <div class="col-md-4 offset-md-4 card bg-light">
         <img src="images/logo.png" class="card-img-top p-5" alt="Logo">
         <div class="card-body">
-            <h2 class="card-title text-center">Login to proceed</h2>
-            <form action="/login" method="post">
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" name="username" id="username" required>
+            <?php if (!empty($successFlash)): ?>
+                <div class="alert alert-success text-center" role="alert">
+                    <?= $successFlash; ?>
                 </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" required>
+            <?php endif; ?>
+            <?php if (!empty($errorFlash)): ?>
+                <div class="alert alert-danger text-center" role="alert">
+                    <?= $errorFlash; ?>
                 </div>
+            <?php endif; ?>
+            <h2 class="card-title text-center">Log in to proceed</h2>
+            <?php $form = Form::begin('/login', 'post'); ?>
+                <?php
+
+                echo $form->field($model, 'username', Field::TYPE_TEXT);
+
+                echo $form->field($model, 'password', Field::TYPE_PASSWORD);
+
+                ?>
                 <div class="mb-4 form-check">
                     <input type="checkbox" class="form-check-input" name="rememberMe" id="rememberMe">
                     <label for="rememberMe" class="form-check-label">Remember me</label>
                 </div>
                 <div class="d-grid mb-3">
-                    <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                    <button type="submit" class="btn btn-primary btn-lg">Log in</button>
                 </div>
                 <div class="card-text text-center">
                     <div class="mb-1">
@@ -25,7 +46,7 @@
                     </div>
                     New here? <a href="/register">Create an account</a>.
                 </div>
-            </form>
+            <?php Form::end(); ?>
         </div>
     </div>
 </div>
