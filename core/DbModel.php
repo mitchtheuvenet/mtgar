@@ -8,6 +8,8 @@ abstract class DbModel extends Model {
 
     abstract public static function columnNames(): array;
 
+    abstract public static function primaryKey(): string;
+
     public function save() {
         $tableName = static::tableName();
         $columnNames = static::columnNames();

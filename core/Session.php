@@ -19,6 +19,18 @@ class Session {
         $_SESSION[self::FLASH_KEY] = $flashMessages;
     }
 
+    public function get(string $key) {
+        return $_SESSION[$key] ?? false;
+    }
+
+    public function set(string $key, $value) {
+        $_SESSION[$key] = $value;
+    }
+
+    public function remove(string $key) {
+        unset($_SESSION[$key]);
+    }
+
     public function setFlash($key, $message) {
         $_SESSION[self::FLASH_KEY][$key] = [
             'remove' => false,

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\core\Model;
+use app\core\Application;
 
 class Login extends Model {
 
@@ -30,10 +31,7 @@ class Login extends Model {
             return false;
         }
 
-        echo '<pre>';
-        var_dump($user);
-        echo '</pre>';
-        exit;
+        return Application::$app->logIn($user);
     }
 
 }

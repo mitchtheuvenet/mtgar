@@ -26,6 +26,10 @@ class DbUser extends DbModel {
         return ['username', 'password', 'email', 'status'];
     }
 
+    public static function primaryKey(): string {
+        return 'id';
+    }
+
     public function labels(): array {
         return [
             'username' => 'Username',
