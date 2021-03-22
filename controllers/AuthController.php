@@ -42,8 +42,6 @@ class AuthController extends Controller {
                 Application::$app->session->setFlash('success', 'Account created successfully. You can now login using your entered credentials.');
 
                 $response->redirect('/login');
-
-                exit;
             }
         }
 
@@ -52,6 +50,14 @@ class AuthController extends Controller {
         return $this->render('register', [
             'model' => $user
         ]);
+    }
+
+    public function logout(Request $request, Response $response) {
+        Application::$app->logOut();
+
+        Application::$app->session->setFlash('success', 'Logged out successfully.');
+
+        $response->redirect('/login');
     }
 
 }

@@ -2,10 +2,6 @@
 
 use app\core\Application;
 
-echo '<pre>';
-var_dump(Application::$app->user);
-echo '</pre>';
-
 $successFlash = Application::$app->session->getFlash('success');
 
 ?>
@@ -33,7 +29,33 @@ $successFlash = Application::$app->session->getFlash('success');
         <title>{{pageTitle}} &centerdot; MTGAR</title>
     </head>
     <body>
-        <div class="container-fluid vh-100">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a href="/" class="navbar-brand">MTGAR</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a href="/" class="nav-link">Home</a>
+                        </li>
+                    </ul>
+                    <?php if (Application::isGuest()): ?>
+                        <a href="/login" class="btn btn-outline-primary" role="button">Log in</a>
+                    <?php else: ?>
+                        <div class="navbar-text me-2">
+                            Logged in as <b><?php echo Application::$app->user->username; ?></b>
+                        </div>
+                        <form action="/logout" method="post">
+                            <button class="btn btn-outline-danger" type="submit">Log out</button>
+                        </form>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
             <?php if (!empty($successFlash)): ?>
                 <div class="alert alert-success" role="alert">
                     <?= $successFlash; ?>

@@ -7,7 +7,9 @@ use app\core\form\Form;
 
 <div class="row">
     <div class="col-md-4 offset-md-4 card bg-light mt-4 mb-4">
-        <img src="images/logo.png" class="card-img-top p-5" alt="Logo">
+        <a href="/" class="p-5">
+            <img src="images/logo.png" class="card-img-top" alt="Logo">
+        </a>
         <div class="card-body">
             <h2 class="card-title text-center">Create an account</h2>
             <?php $form = Form::begin('/register', 'post'); ?>
@@ -23,7 +25,7 @@ use app\core\form\Form;
 
                 echo $form->field($model, 'email', Field::TYPE_EMAIL, 2, 'Will never be shared with third parties.');
 
-                echo $form->field($model, 'emailConfirm', Field::TYPE_EMAIL, 4);
+                echo $form->field($model, 'emailConfirm', Field::TYPE_EMAIL, 5);
 
                 ?>
                 <div class="d-grid mb-2">
