@@ -5,6 +5,8 @@ use app\core\Application;
 use app\core\form\Field;
 use app\core\form\Form;
 
+$this->title = 'Login';
+
 $successFlash = Application::$app->session->getFlash('success');
 $errorFlash = Application::$app->session->getFlash('error');
 

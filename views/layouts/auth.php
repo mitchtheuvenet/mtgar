@@ -4,10 +4,9 @@
         <!-- Metadata -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="application-name" content="{{siteTitle}}">
-        <meta name="application-version" content="{{siteVersion}}">
+        <meta name="application-name" content="MTG Akashic Records">
         <meta name="author" content="mitchtheuvenet">
-        <meta name="description" content="A concise card collection management web application for Magic: the Gathering.">
+        <meta name="description" content="A concise card collection management web application for Magic: the Gathering">
         <meta name="keywords" content="mtg, magic, the, gathering, collection, management, tcg, ccg, collectible, trading, card, game">
 
         <!-- Bootstrap CSS -->
@@ -18,7 +17,7 @@
         <link rel="icon" type="image/png" href="images/favicon.png">
 
         <!-- Page title -->
-        <title>AUTH &centerdot; MTGAR</title>
+        <title><?= $this->title; ?> &centerdot; MTGAR</title>
     </head>
     <body>
         <div class="container-fluid vh-100">

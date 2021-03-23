@@ -3,6 +3,8 @@
 use app\core\form\Field;
 use app\core\form\Form;
 
+$this->title = 'Register';
+
 ?>
 
 <div class="row">
