@@ -32,7 +32,9 @@ $successFlash = Application::$app->session->getFlash('success');
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a href="/" class="navbar-brand">MTGAR</a>
+                <a href="/" class="navbar-brand">
+                    <img src="/images/logo_small.png" alt="Logo" style="max-height:3rem;">
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -48,6 +50,7 @@ $successFlash = Application::$app->session->getFlash('success');
                         <div class="navbar-text me-2">
                             Logged in as <b><?php echo Application::$app->user->username; ?></b>
                         </div>
+                        <a href="/profile" class="btn btn-outline-info me-2" role="button">Profile</a>
                         <form action="/logout" method="post">
                             <button class="btn btn-outline-danger" type="submit">Log out</button>
                         </form>

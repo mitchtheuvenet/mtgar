@@ -7,10 +7,16 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 
+use app\core\middlewares\AuthMiddleware;
+
 use app\models\DbUser;
 use app\models\Login;
 
 class AuthController extends Controller {
+
+    public function __construct() {
+        $this->registerMiddleware(new AuthMiddleware(['profile']));
+    }
 
     public function login(Request $request, Response $response) {
         $login = new Login();
@@ -58,6 +64,12 @@ class AuthController extends Controller {
         Application::$app->session->setFlash('success', 'Logged out successfully.');
 
         $response->redirect('/login');
+    }
+
+    public function profile() {
+        $this->layout = self::LAYOUT_MAIN;
+
+        return $this->render('profile');
     }
 
 }
