@@ -14,7 +14,7 @@ $errorFlash = Application::$app->session->getFlash('error');
 
 <div class="row align-items-center h-100">
     <div class="col-md-4 offset-md-4 card bg-light">
-        <a href="/" class="p-5">
+        <a href="/" class="p-5" tabindex="-1">
             <img src="images/logo.png" class="card-img-top" alt="Logo">
         </a>
         <div class="card-body">

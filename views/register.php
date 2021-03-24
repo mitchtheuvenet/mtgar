@@ -9,7 +9,7 @@ $this->title = 'Register';
 
 <div class="row">
     <div class="col-md-4 offset-md-4 card bg-light mt-4 mb-4">
-        <a href="/" class="p-5">
+        <a href="/" class="p-5" tabindex="-1">
             <img src="images/logo.png" class="card-img-top" alt="Logo">
         </a>
         <div class="card-body">
