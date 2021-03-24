@@ -2,8 +2,6 @@
 
 use app\core\Application;
 
-$successFlash = Application::$app->session->getFlash('success');
-
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +27,7 @@ $successFlash = Application::$app->session->getFlash('success');
     </head>
     <body>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div class="container-fluid">
                 <a href="/" class="navbar-brand">
                     <img src="/images/logo_small.png" alt="Logo" style="max-height:3rem;">
@@ -40,16 +38,21 @@ $successFlash = Application::$app->session->getFlash('success');
                 <div class="collapse navbar-collapse" id="navbarText">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a href="/" class="nav-link">Home</a>
+                            <a href="/" class="nav-link<?php echo $this->title === 'Home' ? ' active' : '' ?>">Home</a>
+                        </li>
+                        <?php if (!Application::isGuest()): ?>
+                            <li class="nav-item">
+                                <a href="/profile" class="nav-link<?php echo $this->title === 'Profile' ? ' active' : '' ?>">Profile</a>
+                            </li>
+                        <?php endif; ?>
+                        <li class="nav-item">
+                            <a href="/contact" class="nav-link<?php echo $this->title === 'Contact' ? ' active' : '' ?>">Contact</a>
                         </li>
                     </ul>
                     <?php if (Application::isGuest()): ?>
                         <a href="/login" class="btn btn-outline-primary" role="button">Log in</a>
                     <?php else: ?>
-                        <div class="navbar-text me-2">
-                            Logged in as <b><?php echo Application::$app->user->username; ?></b>
-                        </div>
-                        <a href="/profile" class="btn btn-outline-info me-2" role="button">Profile</a>
+                        <span class="navbar-text mx-2">Logged in as <b><?= Application::$app->user->username; ?></b></span>
                         <form action="/logout" method="post">
                             <button class="btn btn-outline-danger" type="submit">Log out</button>
                         </form>
@@ -57,14 +60,20 @@ $successFlash = Application::$app->session->getFlash('success');
                 </div>
             </div>
         </nav>
-        <div class="container">
-            <?php if (!empty($successFlash)): ?>
-                <div class="alert alert-success" role="alert">
-                    <?= $successFlash; ?>
+
+        <main>
+            <div class="container-fluid" style="margin-top: 4.5rem;">
+                {{content}}
+            </div>
+        </main>
+
+        <footer class="footer mt-auto py-2 bg-light fixed-bottom">
+            <div class="container-fluid">
+                <div class="row">
+                    <span class="text-muted text-center">MTG Akashic Records &copy; 2021</span>
                 </div>
-            <?php endif; ?>
-            {{content}}
-        </div>
+            </div>
+        </footer>
 
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"

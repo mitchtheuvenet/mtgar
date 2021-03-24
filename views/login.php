@@ -2,7 +2,7 @@
 
 use app\core\Application;
 
-use app\core\form\Field;
+use app\core\form\InputField;
 use app\core\form\Form;
 
 $this->title = 'Login';
@@ -30,13 +30,8 @@ $errorFlash = Application::$app->session->getFlash('error');
             <?php endif; ?>
             <h2 class="card-title text-center">Log in to proceed</h2>
             <?php $form = Form::begin('/login', 'post'); ?>
-                <?php
-
-                echo $form->field($model, 'username', Field::TYPE_TEXT);
-
-                echo $form->field($model, 'password', Field::TYPE_PASSWORD, 5);
-
-                ?>
+                <?= $form->inputField($model, 'username'); ?>
+                <?= $form->inputField($model, 'password', 5)->passwordField(); ?>
                 <div class="d-grid mb-3">
                     <button type="submit" class="btn btn-primary btn-lg">Log in</button>
                 </div>

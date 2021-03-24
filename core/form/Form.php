@@ -16,8 +16,12 @@ class Form {
         echo '</form>';
     }
 
-    public function field(Model $model, string $attribute, string $type, int $mb = 3, string $description = '') {
-        return new Field($model, $attribute, $type, $mb, $description);
+    public function inputField(Model $model, string $attribute, int $mb = 3, string $description = '') {
+        return new InputField($model, $attribute, $mb, $description);
+    }
+
+    public function textareaField(Model $model, string $attribute, int $mb = 3, string $description = '') {
+        return new TextareaField($model, $attribute, $mb, $description);
     }
 
 }

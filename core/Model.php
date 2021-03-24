@@ -128,8 +128,8 @@ abstract class Model {
         return [
             self::RULE_REQUIRED => 'This field is required.',
             self::RULE_EMAIL => 'This field must contain a valid e-mail address.',
-            self::RULE_MIN => 'This field\'s length must be at least {min}.',
-            self::RULE_MAX => 'This field\'s length must not exceed {max}.',
+            self::RULE_MIN => 'This field\'s length must be at least {min} characters.',
+            self::RULE_MAX => 'This field\'s length must not exceed {max} characters.',
             self::RULE_MATCH => 'This field must match with \'{match}\'.',
             self::RULE_PATTERN => 'This field must match the specified pattern: {pattern}.',
             self::RULE_UNIQUE => 'This {field} is already in use.'

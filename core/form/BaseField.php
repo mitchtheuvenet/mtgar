@@ -4,30 +4,23 @@ namespace app\core\form;
 
 use app\core\Model;
 
-class Field {
-
-    public const TYPE_TEXT = 'text';
-    public const TYPE_PASSWORD = 'password';
-    public const TYPE_EMAIL = 'email';
+abstract class BaseField {
 
     public Model $model;
     public string $attribute;
-    public string $type;
     public int $mb;
-    public string $description;
+    
+    public string $description = '';
 
-    public function __construct(Model $model, string $attribute, string $type, int $mb = 3, string $description = '') {
+    public function __construct(Model $model, string $attribute, int $mb) {
         $this->model = $model;
         $this->attribute = $attribute;
-        $this->type = $type;
         $this->mb = $mb;
-        $this->description = $description;
     }
 
-    public function __toString() {
-        $hasError = $this->model->hasError($this->attribute);
-        $hasDescription = !empty($this->description);
+    abstract protected function renderInput(bool $hasError): string;
 
+    private function description(bool $hasError, bool $hasDescription) {
         $description = '';
 
         if ($hasError || $hasDescription) {
@@ -48,22 +41,26 @@ class Field {
             }
         }
 
+        return $description;
+    }
+
+    public function __toString() {
+        $hasError = $this->model->hasError($this->attribute);
+        $hasDescription = !empty($this->description);
+
+        $description = $this->description($hasError, $hasDescription);
+
         return sprintf('
             <div class="mb-%s">
                 <label for="%s" class="form-label">%s</label>
-                <input type="%s" name="%s" id="%s" value="%s" class="form-control%s"%s>
+                %s
                 %s
             </div>
         ',
             strval($this->mb),
             $this->attribute,
             $this->model->getLabel($this->attribute),
-            $this->type,
-            $this->attribute,
-            $this->attribute,
-            $this->model->{$this->attribute},
-            $hasError ? ' is-invalid' : '',
-            !empty($description) ? " aria-describedby=\"{$this->attribute}_desc\"" : '',
+            $this->renderInput($hasError),
             $description
         );
     }
