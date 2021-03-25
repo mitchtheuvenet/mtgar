@@ -28,7 +28,7 @@ $errorFlash = Application::$app->session->getFlash('error');
                     <?= $errorFlash; ?>
                 </div>
             <?php endif; ?>
-            <h2 class="card-title text-center">Log in to proceed</h2>
+            <h2 class="card-title text-center mb-4">Log in to proceed</h2>
             <?php $form = Form::begin('/login', 'post'); ?>
                 <?= $form->inputField($model, 'username'); ?>
                 <?= $form->inputField($model, 'password', 5)->passwordField(); ?>

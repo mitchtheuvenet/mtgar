@@ -20,6 +20,8 @@ abstract class BaseField {
 
     abstract protected function renderInput(bool $hasError): string;
 
+    abstract protected function placeholder(): string;
+
     private function description(bool $hasError, bool $hasDescription) {
         $description = '';
 
@@ -51,16 +53,16 @@ abstract class BaseField {
         $description = $this->description($hasError, $hasDescription);
 
         return sprintf('
-            <div class="mb-%s">
-                <label for="%s" class="form-label">%s</label>
+            <div class="form-floating mb-%s">
                 %s
+                <label for="%s">%s</label>
                 %s
             </div>
         ',
             strval($this->mb),
+            $this->renderInput($hasError),
             $this->attribute,
             $this->model->getLabel($this->attribute),
-            $this->renderInput($hasError),
             $description
         );
     }

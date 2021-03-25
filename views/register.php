@@ -13,7 +13,7 @@ $this->title = 'Register';
             <img src="images/logo.png" class="card-img-top" alt="Logo">
         </a>
         <div class="card-body">
-            <h2 class="card-title text-center">Create an account</h2>
+            <h2 class="card-title text-center mb-4">Create an account</h2>
             <?php $form = Form::begin('/register', 'post'); ?>
                 <?= $form->inputField($model, 'username', 3,
                         'Must be between 4&ndash;16 characters long, only consisting of alphabetical and/or numerical characters.'); ?>
