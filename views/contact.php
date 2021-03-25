@@ -21,6 +21,7 @@ $successFlash = Application::$app->session->getFlash('success');
         <?php endif; ?>
         <?php $form = Form::begin('/contact', 'post'); ?>
             <?= $form->inputField($model, 'email')->emailField(); ?>
+            <?= $form->inputField($model, 'name'); ?>
             <?= $form->inputField($model, 'subject'); ?>
             <?= $form->textareaField($model, 'body', 5); ?>
             <div class="d-grid mb-2">

@@ -37,10 +37,14 @@ class SiteController extends Controller {
         if ($request->isPost()) {
             $contact->loadData($request->getBody());
 
-            if ($contact->validate() && $contact->send()) {
-                Application::$app->session->setFlash('success', 'Thank you for contacting us.');
+            if ($contact->validate()) {
+                if ($contact->send()) {
+                    $this->setFlash('success', 'Thank you for contacting us. We will get in touch with you soon&trade;.');
 
-                $response->redirect('/contact');
+                    $response->redirect('/contact');
+                } else {
+                    $this->setFlash('error', 'Something went wrong while submitting your message. Please try again later.');
+                }
             }
         }
 

@@ -10,6 +10,7 @@ class Application {
     public static Application $app;
 
     public Database $db;
+    public Mailer $mailer;
 
     public ?Controller $controller;
     public View $view;
@@ -32,6 +33,7 @@ class Application {
         $this->view = new View();
 
         $this->db = new Database($config['db']);
+        $this->mailer = new Mailer($config['smtp']);
 
         $userPkVal = $this->session->get('user');
 

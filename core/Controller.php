@@ -14,8 +14,12 @@ class Controller {
 
     public string $action = '';
 
-    public function render($view, $params = []) {
+    protected function render($view, $params = []) {
         return Application::$app->view->renderView($view, $params);
+    }
+
+    protected function setFlash(string $key, string $message) {
+        Application::$app->session->setFlash($key, $message);
     }
 
     public function getLayout() {

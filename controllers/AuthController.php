@@ -28,7 +28,7 @@ class AuthController extends Controller {
                 if ($login->logIn()) {
                     $response->redirect('/');
                 } else {
-                    Application::$app->session->setFlash('error', 'Login failed.');
+                    $this->setFlash('error', 'Login failed.');
                 }
             }
         }
@@ -47,7 +47,7 @@ class AuthController extends Controller {
             $user->loadData($request->getBody());
 
             if ($user->validate() && $user->save()) {
-                Application::$app->session->setFlash('success', 'Account created successfully. You can now log in using your entered credentials.');
+                $this->setFlash('success', 'Your new account has been created. You can now log in using your entered credentials.');
 
                 $response->redirect('/login');
             }
@@ -61,7 +61,7 @@ class AuthController extends Controller {
     public function logout(Request $request, Response $response) {
         Application::$app->logOut();
 
-        Application::$app->session->setFlash('success', 'Logged out successfully.');
+        $this->setFlash('success', 'You have been logged out.');
 
         $response->redirect('/login');
     }
