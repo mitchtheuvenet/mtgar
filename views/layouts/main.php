@@ -5,7 +5,7 @@ use app\core\Application;
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
     <head>
         <!-- Metadata -->
         <meta charset="utf-8">
@@ -25,49 +25,56 @@ use app\core\Application;
         <!-- Page title -->
         <title><?= $this->title; ?> &centerdot; MTGAR</title>
     </head>
-    <body>
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-            <div class="container-fluid">
-                <a href="/" class="navbar-brand" tabindex="-1">
-                    <img src="/images/logo_small.png" alt="Logo" style="max-height:3rem;">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarText">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a href="/" class="nav-link<?php echo $this->title === 'Home' ? ' active' : '' ?>">Home</a>
-                        </li>
-                        <?php if (!Application::isGuest()): ?>
+    <body class="d-flex flex-column h-100">
+        <header>
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+                <div class="container-fluid">
+                    <a href="/" class="navbar-brand" tabindex="-1">
+                        <img src="/images/logo_small.png" alt="Logo" style="max-height:3rem;">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarText">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a href="/profile" class="nav-link<?php echo $this->title === 'Profile' ? ' active' : '' ?>">Profile</a>
+                                <a href="/" class="nav-link<?php echo $this->title === 'Home' ? ' active' : '' ?>">Home</a>
                             </li>
-                        <?php endif; ?>
-                        <li class="nav-item">
-                            <a href="/contact" class="nav-link<?php echo $this->title === 'Contact' ? ' active' : '' ?>">Contact</a>
-                        </li>
-                    </ul>
-                    <?php if (Application::isGuest()): ?>
-                        <a href="/login" class="btn btn-outline-primary" role="button">Log in</a>
-                    <?php else: ?>
-                        <span class="navbar-text mx-2">Logged in as <b><?= Application::$app->user->username; ?></b></span>
-                        <form action="/logout" method="post">
-                            <button class="btn btn-outline-danger" type="submit">Log out</button>
-                        </form>
-                    <?php endif; ?>
+                            <?php if (!Application::isGuest()): ?>
+                                <li class="nav-item">
+                                    <a href="/profile" class="nav-link<?php echo $this->title === 'Profile' ? ' active' : '' ?>">Profile</a>
+                                </li>
+                            <?php endif; ?>
+                            <li class="nav-item">
+                                <a href="/contact" class="nav-link<?php echo $this->title === 'Contact' ? ' active' : '' ?>">Contact</a>
+                            </li>
+                        </ul>
+                        <div class="d-flex">
+                            <?php if (Application::isGuest()): ?>
+                                <a href="/login" class="btn btn-outline-primary" role="button">Log in</a>
+                            <?php else: ?>
+                                <span class="navbar-text mx-2">Logged in as <b><?= Application::$app->user->username; ?></b></span>
+                                <form action="/logout" method="post">
+                                    <button class="btn btn-outline-danger" type="submit">Log out</button>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </header>
 
-        <main>
-            <div class="container-fluid" style="margin-top: 4.5rem;">
-                {{content}}
+        <main class="flex-shrink-0" style="margin-top:4.5rem;">
+            <div class="container-fluid">
+                <div class="row mt-5">
+                    <!-- Content -->
+                    {{content}}
+                </div>
             </div>
         </main>
 
-        <footer class="footer mt-auto py-2 bg-light fixed-bottom">
+        <footer class="footer mt-auto py-2 bg-light">
             <div class="container-fluid">
                 <div class="row">
                     <span class="text-muted text-center">MTG Akashic Records &copy; 2021</span>
