@@ -20,15 +20,15 @@ class SiteController extends Controller {
     }
 
     public function home() {
-        $params = [
+        return $this->render('home', [
             'name' => Application::$app->user->username ?? 'guest'
-        ];
-
-        return $this->render('home', $params);
+        ]);
     }
 
     public function profile() {
-        return $this->render('profile');
+        return $this->render('profile', [
+            'user' => Application::$app->user
+        ]);
     }
 
     public function contact(Request $request, Response $response) {
