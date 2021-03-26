@@ -14,7 +14,7 @@ class TextareaField extends BaseField {
 
     protected function renderInput(bool $hasError): string {
         return sprintf('
-            <textarea name="%s" id="%s" class="form-control%s" placeholder="%s"%s>%s</textarea>
+            <textarea name="%s" id="%s" class="form-control%s" style="height:calc(14rem + 2px);min-height:calc(3.5rem + 2px);" placeholder="%s"%s>%s</textarea>
         ',
             $this->attribute,
             $this->attribute,
