@@ -21,7 +21,7 @@ class SiteController extends Controller {
 
     public function home() {
         $params = [
-            'name' => 'Test'
+            'name' => Application::$app->user->username ?? 'guest'
         ];
 
         return $this->render('home', $params);
