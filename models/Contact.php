@@ -51,14 +51,14 @@ class Contact extends Model {
 
     public function send() {
         try {
-            Application::$app->mailer->sendMail($this->subject, $this->body, $this->from(), true);
+            Application::$app->mailer->sendContactMail($this->from(), $this->subject, $this->body);
+
+            return true;
         } catch (\Exception $e) {
             // TODO: add exception handling
 
             return false;
         }
-
-        return true;
     }
 
     private function from() {
