@@ -12,8 +12,14 @@ class Login extends Model {
 
     public function rules(): array {
         return [
-            'username' => [self::RULE_REQUIRED],
-            'password' => [self::RULE_REQUIRED]
+            'username' => [
+                self::RULE_REQUIRED,
+                [self::RULE_MAX, 'max' => 255]
+            ],
+            'password' => [
+                self::RULE_REQUIRED,
+                [self::RULE_MAX, 'max' => 255]
+            ]
         ];
     }
 
