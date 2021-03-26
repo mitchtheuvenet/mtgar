@@ -5,6 +5,8 @@ use app\core\form\Form;
 
 $this->title = 'Register';
 
+$errorFlash = Application::$app->session->getFlash('error');
+
 ?>
 
 <div class="row">
@@ -13,6 +15,11 @@ $this->title = 'Register';
             <img src="images/logo.png" class="card-img-top" alt="Logo">
         </a>
         <div class="card-body">
+            <?php if (!empty($errorFlash)): ?>
+                <div class="alert alert-danger text-center" role="alert">
+                    <?= $errorFlash; ?>
+                </div>
+            <?php endif; ?>
             <h2 class="card-title text-center mb-4">Create an account</h2>
             <?php $form = Form::begin('/register', 'post'); ?>
                 <?= $form->inputField($model, 'username', 3,

@@ -46,10 +46,14 @@ class AuthController extends Controller {
         if ($request->isPost()) {
             $user->loadData($request->getBody());
 
-            if ($user->validate() && $user->save()) {
-                $this->setFlash('success', 'Your new account has been created. You can now log in using your entered credentials.');
+            if ($user->validate()) {
+                if ($user->save()) {
+                    $this->setFlash('success', 'Your new account has been created. You can now log in using your entered credentials.');
 
-                $response->redirect('/login');
+                    $response->redirect('/login');
+                } else {
+                    $this->setFlash('error', 'Something went wrong while creating your new account. Please try again later.');
+                }
             }
         }
 
