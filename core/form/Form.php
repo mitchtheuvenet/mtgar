@@ -20,8 +20,8 @@ class Form {
         return new InputField($model, $attribute, $mb, $description);
     }
 
-    public function textareaField(Model $model, string $attribute, int $mb = 3, string $description = '') {
-        return new TextareaField($model, $attribute, $mb, $description);
+    public function textareaField(Model $model, string $attribute, int $mb = 3, int $max = 500, int $heightMultiplier = 4) {
+        return new TextareaField($model, $attribute, $mb, $max, $heightMultiplier);
     }
 
 }

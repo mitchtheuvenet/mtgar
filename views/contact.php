@@ -7,6 +7,31 @@ use app\core\form\Form;
 
 $this->title = 'Contact';
 
+$this->script = <<<'EOT'
+    const textarea = document.getElementById('body');
+    const textareaDesc = document.getElementById('body_desc');
+    const maxLength = 500;
+
+    textarea.addEventListener('input', event => {
+        const target = event.currentTarget;
+        const currentLength = target.value.length;
+
+        if (currentLength > maxLength) {
+            textarea.classList.add('is-invalid');
+            textareaDesc.classList.add('invalid-feedback');
+            textareaDesc.classList.remove('form-text');
+        } else {
+            if (textarea.classList.contains('is-invalid')) {
+                textarea.classList.remove('is-invalid');
+                textareaDesc.classList.remove('invalid-feedback');
+                textareaDesc.classList.add('form-text');
+            }
+        }
+
+        textareaDesc.innerHTML = `${currentLength}/${maxLength}`;
+    });
+EOT;
+
 $successFlash = Application::$app->session->getFlash('success');
 $errorFlash = Application::$app->session->getFlash('error');
 

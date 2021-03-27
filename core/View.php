@@ -6,7 +6,8 @@ class View {
 
     private const LAYOUT_DEFAULT = 'main';
 
-    public string $title = '';
+    private string $title = '';
+    private string $script = '';
 
     public function renderView($view, $params) {
         $viewContent = $this->renderOnlyView($view, $params);
