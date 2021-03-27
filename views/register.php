@@ -1,5 +1,7 @@
 <?php
 
+use app\core\Application;
+
 use app\core\form\InputField;
 use app\core\form\Form;
 
