@@ -13,7 +13,8 @@ $errorFlash = Application::$app->session->getFlash('error');
 ?>
 
 <div class="col-md-4 offset-md-4">
-    <h1 class="text-center mb-4">Contact us</h1>
+    <h1 class="text-center">Contact us</h1>
+    <p class="lead text-center mb-4">Please fill out the contact form below.</p>
     <?php if (!empty($successFlash)): ?>
         <div class="alert alert-success text-center" role="alert">
             <?= $successFlash; ?>
