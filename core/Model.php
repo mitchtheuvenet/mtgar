@@ -11,6 +11,7 @@ abstract class Model {
     public const RULE_MATCH = 'match';
     public const RULE_PATTERN = 'pattern';
     public const RULE_UNIQUE = 'unique';
+    public const RULE_EXISTS = 'exists';
 
     public array $errors = [];
 
@@ -88,19 +89,17 @@ abstract class Model {
 
                         break;
                     case self::RULE_UNIQUE:
-                        $className = $rule['class'];
-
-                        $uniqueAttr = $rule['attribute'] ?? $attribute;
-                        $tableName = $className::tableName();
-
-                        $statement = Application::$app->db->prepare("SELECT `id` FROM `{$tableName}` WHERE `{$uniqueAttr}` = :val;");
-                        $statement->bindValue(":val", $value);
-
-                        $statement->execute();
-
-                        $record = $statement->fetchObject();
+                        $record = $this->getRecordByValue($rule['class'], $attribute, $value);
 
                         if (!empty($record)) {
+                            $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
+                        }
+
+                        break;
+                    case self::RULE_EXISTS:
+                        $record = $this->getRecordByValue($rule['class'], $attribute, $value);
+
+                        if (empty($record)) {
                             $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
                         }
                 }
@@ -108,6 +107,29 @@ abstract class Model {
         }
 
         return empty($this->errors);
+    }
+
+    public function hasError($attribute) {
+        return isset($this->errors[$attribute]);
+    }
+
+    public function getFirstError($attribute) {
+        return $this->errors[$attribute][0] ?? false;
+    }
+
+    // public function addErrorByMessage(string $attribute, string $message) {
+    //     $this->errors[$attribute][] = $message;
+    // }
+
+    protected function getRecordByValue(string $class, string $attribute, $value) {
+        $tableName = $class::tableName();
+
+        $statement = Application::$app->db->prepare("SELECT `id` FROM `{$tableName}` WHERE `{$attribute}` = :val;");
+        $statement->bindValue(':val', $value);
+
+        $statement->execute();
+
+        return $statement->fetchObject();
     }
 
     protected function addError(string $attribute, string $rule, $params = []) {
@@ -120,10 +142,6 @@ abstract class Model {
         $this->errors[$attribute][] = $msg;
     }
 
-    // public function addErrorByMessage(string $attribute, string $message) {
-    //     $this->errors[$attribute][] = $message;
-    // }
-
     protected function errorMessages() {
         return [
             self::RULE_REQUIRED => 'This field is required.',
@@ -132,16 +150,9 @@ abstract class Model {
             self::RULE_MAX => 'This field\'s length must not exceed {max} characters.',
             self::RULE_MATCH => 'This field must match with \'{match}\'.',
             self::RULE_PATTERN => 'This field must match the specified pattern: {pattern}.',
-            self::RULE_UNIQUE => 'This {field} is already in use.'
+            self::RULE_UNIQUE => 'This {field} is already in use.',
+            self::RULE_EXISTS => 'This {field} is not registered at our website.'
         ];
-    }
-
-    public function hasError($attribute) {
-        return isset($this->errors[$attribute]);
-    }
-
-    public function getFirstError($attribute) {
-        return $this->errors[$attribute][0] ?? false;
     }
 
 }
