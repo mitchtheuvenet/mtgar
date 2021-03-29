@@ -31,10 +31,15 @@ $errorFlash = Application::$app->session->getFlash('error');
                 <?= $form->inputField($model, 'passwordConfirm')->passwordField(); ?>
                 <?= $form->inputField($model, 'email', 2, 'Will never be shared with third parties.')->emailField(); ?>
                 <?= $form->inputField($model, 'emailConfirm', 5)->emailField(); ?>
-                <div class="d-grid mb-2">
+                <div class="d-grid mb-3">
                     <button type="submit" class="btn btn-primary btn-lg">Register</button>
                 </div>
             <?php Form::end(); ?>
+            <div class="card-text text-center">
+                <div class="row">
+                    <span>Already registered? <a href="/login">Log in</a>.</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

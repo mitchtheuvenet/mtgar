@@ -35,13 +35,15 @@ $errorFlash = Application::$app->session->getFlash('error');
                 <div class="d-grid mb-3">
                     <button type="submit" class="btn btn-primary btn-lg">Log in</button>
                 </div>
-                <div class="card-text text-center">
-                    <div class="mb-1">
-                        <a href="#">Forgot password</a>?
-                    </div>
-                    New here? <a href="/register">Create an account</a>.
-                </div>
             <?php Form::end(); ?>
+            <div class="card-text text-center">
+                <div class="row mb-1">
+                    <span><a href="#">Forgot password</a>?</span>
+                </div>
+                <div class="row">
+                    <span>New here? <a href="/register">Create an account</a>.</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
