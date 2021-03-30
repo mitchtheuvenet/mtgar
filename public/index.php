@@ -7,6 +7,8 @@ use app\controllers\AuthController;
 
 require_once  __DIR__ . '/../vendor/autoload.php';
 
+date_default_timezone_set('Europe/Amsterdam');
+
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
