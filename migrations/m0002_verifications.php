@@ -11,10 +11,11 @@ class m0002_verifications extends Migration {
                 `user` INT NOT NULL,
                 `type` TINYINT NOT NULL,
                 `code` CHAR(32) NOT NULL,
+                `used` BIT DEFAULT 0,
+                `expired` BIT DEFAULT 0,
                 `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-                FOREIGN KEY (`user`) REFERENCES `users`(`id`),
-                CONSTRAINT `uq_verification` UNIQUE (`user`, `type`)
+                FOREIGN KEY (`user`) REFERENCES `users`(`id`)
             ) ENGINE=INNODB;
         ");
     }
