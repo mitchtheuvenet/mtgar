@@ -27,7 +27,7 @@ $errorFlash = Application::$app->session->getFlash('error');
                     <?= $errorFlash; ?>
                 </div>
             <?php endif; ?>
-            <h2 class="card-title text-center mb-4">Log in to proceed</h2>
+            <h2 class="card-title text-center mb-4">Log in to your account</h2>
             <?php $form = Form::begin('/login', 'post'); ?>
                 <?= $form->inputField($model, 'username'); ?>
                 <?= $form->inputField($model, 'password', 5)->passwordField(); ?>
@@ -37,7 +37,7 @@ $errorFlash = Application::$app->session->getFlash('error');
             <?php Form::end(); ?>
             <div class="card-text text-center">
                 <div class="row mb-1">
-                    <span><a href="#">Forgot password</a>?</span>
+                    <span><a href="/login/forgot">Forgot password</a>?</span>
                 </div>
                 <div class="row">
                     <span>New here? <a href="/register">Create an account</a>.</span>

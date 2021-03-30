@@ -14,7 +14,7 @@
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="images/favicon.png">
+        <link rel="icon" type="image/png" href="<?= in_array($this->title, ['Forgot password']) ? '../' : ''; ?>images/favicon.png">
 
         <!-- Page title -->
         <title><?= $this->title; ?> &centerdot; MTGAR</title>

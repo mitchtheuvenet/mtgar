@@ -8,6 +8,7 @@ use app\core\Request;
 use app\core\Response;
 
 use app\models\DbUser;
+use app\models\DbVerification;
 use app\models\Login;
 
 class AuthController extends Controller {
@@ -35,6 +36,30 @@ class AuthController extends Controller {
 
         return $this->render('login', [
             'model' => $login
+        ]);
+    }
+
+    public function forgot(Request $request, Response $response) {
+        $this->redirectHomeIfLoggedIn($response);
+
+        $verification = new DbVerification();
+
+        if ($request->isPost()) {
+            $verification->loadData($request->getBody());
+
+            if ($verification->validate()) {
+                if ($verification->sendCode(DbVerification::TYPE_PASSWORD_RESET)) {
+                    $this->setFlash('info', 'Code sent.');
+
+                    // $response->redirect('/login/reset');
+                } else {
+                    $this->setFlash('error', 'Something went wrong while sending the verification code. Please try again later.');
+                }
+            }
+        }
+
+        return $this->render('forgot', [
+            'model' => $verification
         ]);
     }
 
