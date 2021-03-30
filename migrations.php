@@ -12,6 +12,11 @@ $config = [
         'dsn' => $_ENV['DB_DSN'],
         'user' => $_ENV['DB_USER'],
         'pass' => $_ENV['DB_PASS']
+    ],
+    'smtp' => [
+        'host' => $_ENV['SMTP_HOST'],
+        'user' => $_ENV['SMTP_USER'],
+        'pass' => $_ENV['SMTP_PASS']
     ]
 ];
 
