@@ -4,14 +4,14 @@ namespace app\core;
 
 abstract class Model {
 
-    public const RULE_REQUIRED = 'required';
-    public const RULE_EMAIL = 'email';
-    public const RULE_MIN = 'min';
-    public const RULE_MAX = 'max';
-    public const RULE_MATCH = 'match';
-    public const RULE_PATTERN = 'pattern';
-    public const RULE_UNIQUE = 'unique';
-    public const RULE_EXISTS = 'exists';
+    protected const RULE_REQUIRED = 'required';
+    protected const RULE_EMAIL = 'email';
+    protected const RULE_MIN = 'min';
+    protected const RULE_MAX = 'max';
+    protected const RULE_MATCH = 'match';
+    protected const RULE_PATTERN = 'pattern';
+    protected const RULE_UNIQUE = 'unique';
+    protected const RULE_EXISTS = 'exists';
 
     public array $errors = [];
 
