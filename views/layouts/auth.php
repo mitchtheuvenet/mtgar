@@ -1,3 +1,13 @@
+<?php
+
+use app\core\Application;
+
+$infoFlash = Application::$app->session->getFlash('info');
+$successFlash = Application::$app->session->getFlash('success');
+$errorFlash = Application::$app->session->getFlash('error');
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -21,7 +31,32 @@
     </head>
     <body>
         <div class="container-fluid vh-100">
-            {{content}}
+            <div class="row<?php echo $this->title !== 'Register' ? ' align-items-center h-100' : ''; ?>">
+                <div class="col-md-4 offset-md-4 card bg-light my-4">
+                    <a href="/" class="p-5" tabindex="-1">
+                        <img src="<?= in_array($this->title, ['Forgot password']) ? '../' : ''; ?>images/logo.png" class="card-img-top" alt="Logo">
+                    </a>
+                    <div class="card-body">
+                        <?php if (!empty($infoFlash)): ?>
+                            <div class="alert alert-info text-center" role="alert">
+                                <?= $infoFlash; ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (!empty($successFlash)): ?>
+                            <div class="alert alert-success text-center" role="alert">
+                                <?= $successFlash; ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (!empty($errorFlash)): ?>
+                            <div class="alert alert-danger text-center" role="alert">
+                                <?= $errorFlash; ?>
+                            </div>
+                        <?php endif; ?>
+                        <!-- Content -->
+                        {{content}}
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Bootstrap JS -->
