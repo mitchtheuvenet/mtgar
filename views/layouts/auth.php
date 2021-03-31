@@ -6,6 +6,11 @@ $infoFlash = Application::$app->session->getFlash('info');
 $successFlash = Application::$app->session->getFlash('success');
 $errorFlash = Application::$app->session->getFlash('error');
 
+$path = Application::$app->request->path();
+$nesting = substr_count($path, '/', 1);
+
+$proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
+
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +29,7 @@ $errorFlash = Application::$app->session->getFlash('error');
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="<?= in_array($this->title, ['Forgot password']) ? '../' : ''; ?>images/favicon.png">
+        <link rel="icon" type="image/png" href="<?= $proot; ?>images/favicon.png">
 
         <!-- Page title -->
         <title><?= $this->title; ?> &centerdot; MTGAR</title>
@@ -34,7 +39,7 @@ $errorFlash = Application::$app->session->getFlash('error');
             <div class="row<?php echo $this->title !== 'Register' ? ' align-items-center h-100' : ''; ?>">
                 <div class="col-md-4 offset-md-4 card bg-light my-4">
                     <a href="/" class="p-5" tabindex="-1">
-                        <img src="<?= in_array($this->title, ['Forgot password']) ? '../' : ''; ?>images/logo.png" class="card-img-top" alt="Logo">
+                        <img src="<?= $proot; ?>images/logo.png" class="card-img-top" alt="Logo">
                     </a>
                     <div class="card-body">
                         <?php if (!empty($infoFlash)): ?>
