@@ -6,9 +6,9 @@ use app\core\DbModel;
 
 class DbUser extends DbModel {
 
-    const STATUS_INACTIVE = 0;
-    const STATUS_ACTIVE = 1;
-    const STATUS_DELETED = 2;
+    private const STATUS_INACTIVE = 0;
+    private const STATUS_ACTIVE = 1;
+    private const STATUS_DELETED = 2;
 
     public int $status = self::STATUS_INACTIVE;
 
