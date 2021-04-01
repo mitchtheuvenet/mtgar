@@ -45,7 +45,6 @@ class Mailer {
     private function initMail(): PHPMailer {
         $mail = new PHPMailer(true); // enable exceptions
 
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
         $mail->isSMTP();
         $mail->Host = $this->host;
         $mail->SMTPAuth = true;
