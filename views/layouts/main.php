@@ -77,7 +77,7 @@ use app\core\Application;
         <footer class="footer mt-auto py-2 bg-light">
             <div class="container-fluid">
                 <div class="row">
-                    <span class="text-muted text-center">MTG Akashic Records &copy; 2021</span>
+                    <span class="text-muted text-center">MTG Akashic Records &copy; <?= date('Y'); ?></span>
                 </div>
             </div>
         </footer>
