@@ -19,20 +19,15 @@ class TextareaField extends BaseField {
 
     protected function renderInput(bool $hasError): string {
         return sprintf('
-            <textarea name="%s" id="%s" class="form-control%s" style="height:calc(%srem + 2px);min-height:calc(3.5rem + 2px);" placeholder="%s" aria-describedby="%s">%s</textarea>
+            <textarea name="%s" id="%s" class="form-control%s" style="height:calc(%srem + 2px);min-height:calc(3.5rem + 2px);" placeholder="&zwnj;" aria-describedby="%s">%s</textarea>
         ',
             $this->attribute,
             $this->attribute,
             $hasError ? ' is-invalid' : '',
             strval($this->height),
-            $this->placeholder(),
             "{$this->attribute}_desc",
             $this->model->{$this->attribute}
         );
-    }
-
-    protected function placeholder(): string {
-        return 'sample text';
     }
 
 }

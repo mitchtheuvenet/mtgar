@@ -20,8 +20,6 @@ abstract class BaseField {
 
     abstract protected function renderInput(bool $hasError): string;
 
-    abstract protected function placeholder(): string;
-
     private function description(bool $hasError, bool $hasDescription) {
         $description = '';
 

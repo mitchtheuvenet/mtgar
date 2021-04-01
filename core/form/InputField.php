@@ -21,29 +21,15 @@ class InputField extends BaseField {
 
     protected function renderInput(bool $hasError): string {
         return sprintf('
-            <input type="%s" name="%s" id="%s" value="%s" class="form-control%s" placeholder="%s"%s>
+            <input type="%s" name="%s" id="%s" value="%s" class="form-control%s" placeholder="&zwnj;"%s>
         ',
             $this->type,
             $this->attribute,
             $this->attribute,
             $this->model->{$this->attribute},
             $hasError ? ' is-invalid' : '',
-            $this->placeholder(),
             !empty($description) ? " aria-describedby=\"{$this->attribute}_desc\"" : ''
         );
-    }
-
-    protected function placeholder(): string {
-        switch ($this->type) {
-            case self::TYPE_TEXT:
-                return 'sample text';
-                break;
-            case self::TYPE_PASSWORD:
-                return 'password123';
-                break;
-            case self::TYPE_EMAIL:
-                return 'example@gmail.com';
-        }
     }
 
     public function passwordField() {
