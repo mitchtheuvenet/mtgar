@@ -10,6 +10,7 @@ use app\core\Response;
 use app\models\DbUser;
 use app\models\DbVerification;
 use app\models\Login;
+use app\models\PasswordReset;
 
 class AuthController extends Controller {
 
@@ -49,9 +50,11 @@ class AuthController extends Controller {
 
             if ($verification->validate()) {
                 if ($verification->sendCode(DbVerification::TYPE_PASSWORD_RESET)) {
-                    $this->setFlash('info', 'Code sent.');
+                    $email = $verification->email;
 
-                    // $response->redirect('/login/reset');
+                    $this->setFlash('info', "Verification code sent to <strong>{$email}</strong>. Please check your inbox (or spam folder).");
+
+                    $response->redirect("/login/reset?email={$email}");
                 } else {
                     $this->setFlash('error', 'Something went wrong while sending the verification code. Please try again later.');
                 }
@@ -60,6 +63,38 @@ class AuthController extends Controller {
 
         return $this->render('forgot', [
             'model' => $verification
+        ]);
+    }
+
+    public function reset(Request $request, Response $response) {
+        $this->redirectHomeIfLoggedIn($response);
+
+        $passwordReset = new PasswordReset();
+
+        if ($request->isGet()) {
+            $email = $request->getBody()['email'] ?? '';
+
+            if (empty($email)) {
+                $response->redirect('/login/forgot');
+            }
+
+            $passwordReset->email = $email;
+        } else if ($request->isPost()) {
+            $passwordReset->loadData($request->getBody());
+
+            if ($passwordReset->validate()) {
+                if ($passwordReset->apply()) {
+                    $this->setFlash('success', 'Your password has been reset. You can now log in using your new password.');
+
+                    $response->redirect('/login');
+                } else {
+                    $this->setFlash('error', 'Something went wrong while resetting your password. Please try again later.');
+                }
+            }
+        }
+
+        return $this->render('reset', [
+            'model' => $passwordReset
         ]);
     }
 

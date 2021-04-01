@@ -79,11 +79,6 @@ abstract class Model {
                         break;
                     case self::RULE_PATTERN:
                         if (!preg_match($rule['pattern'], $value)) {
-                            switch ($rule['pattern']) {
-                                case '/[a-zA-Z0-9]{4,16}/':
-                                    $rule['pattern'] = 'between 4&ndash;16 characters long, only consisting of alphabetical and/or numerical characters';
-                            }
-
                             $this->addError($attribute, $ruleName, $rule);
                         }
 
@@ -149,7 +144,7 @@ abstract class Model {
             self::RULE_MIN => 'This field\'s length must be at least {min} characters.',
             self::RULE_MAX => 'This field\'s length must not exceed {max} characters.',
             self::RULE_MATCH => 'This field must match with \'{match}\'.',
-            self::RULE_PATTERN => 'This field must match the specified pattern: {pattern}.',
+            self::RULE_PATTERN => 'This field must match the specified pattern: {description}.',
             self::RULE_UNIQUE => 'This {field} is already in use.',
             self::RULE_EXISTS => 'This {field} is not registered at our website.'
         ];

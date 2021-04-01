@@ -10,8 +10,8 @@ class DbVerification extends DbModel {
     public const TYPE_REGISTRATION = 0;
     public const TYPE_PASSWORD_RESET = 1;
 
-    private const CODE_LENGTH = 6;
-    private const CODE_EXPIRE_HOURS = 1;
+    public const CODE_EXPIRE_HOURS = 1;
+    public const CODE_LENGTH = 6;
 
     public string $email = '';
 
@@ -54,6 +54,25 @@ class DbVerification extends DbModel {
         $this->user = $userObject->id;
         $this->type = $type;
 
+        $existingCode = self::findObject([
+            'user' => $this->user,
+            'type' => $this->type,
+            'used' => false,
+            'expired' => false,
+        ]);
+
+        if (!empty($existingCode)) {
+            try {
+                $existingCode->expired = true;
+
+                $existingCode->update(['expired']);
+            } catch (\Exception $e) {
+                // TODO: add exception handling
+
+                return false;
+            }
+        }
+
         $codePlain = $this->generateCode();
         $this->code = md5($codePlain);
 
@@ -63,17 +82,17 @@ class DbVerification extends DbModel {
         $subject = $this->mailSubject();
         $body = $this->mailBody($name, $codePlain);
 
-        if (parent::save()) {
-            try {
+        try {
+            if (parent::save()) {
                 Application::$app->mailer->sendNoReplyMail($to, $subject, $body);
 
                 return true;
-            } catch (\Exception $e) {
-                // TODO: exception handling
-            }         
-        }
+            }
+        } catch (\Exception $e) {
+            // TODO: add exception handling
 
-        return false;
+            return false;
+        }         
     }
 
     private function generateCode(): string {

@@ -52,7 +52,11 @@ class DbUser extends DbModel {
         return [
             'username' => [
                 self::RULE_REQUIRED,
-                [self::RULE_PATTERN, 'pattern' => '/[a-zA-Z0-9]{4,16}/'],
+                [
+                    self::RULE_PATTERN,
+                    'pattern' => '/[a-zA-Z0-9]{4,16}/',
+                    'description' => 'a name between 4&ndash;16 characters long, only consisting of alphabetical and/or numerical characters'
+                ],
                 [self::RULE_UNIQUE, 'class' => self::class]
             ],
             'password' => [

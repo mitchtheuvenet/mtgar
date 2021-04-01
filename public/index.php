@@ -38,6 +38,8 @@ $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);
 $app->router->get('/login/forgot', [AuthController::class, 'forgot']);
 $app->router->post('/login/forgot', [AuthController::class, 'forgot']);
+$app->router->get('/login/reset', [AuthController::class, 'reset']);
+$app->router->post('/login/reset', [AuthController::class, 'reset']);
 
 $app->router->get('/register', [AuthController::class, 'register']);
 $app->router->post('/register', [AuthController::class, 'register']);
