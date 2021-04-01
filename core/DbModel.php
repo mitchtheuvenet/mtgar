@@ -31,6 +31,31 @@ abstract class DbModel extends Model {
         return true;
     }
 
+    public function update(array $columns = []): bool {
+        if (!isset($this->id)) {
+            return false;
+        }
+
+        $tableName = static::tableName();
+        $columnNames = !empty($columns) ? $columns : static::columnNames();
+
+        $columnValues = array_map(fn($col) => "`{$col}` = :{$col}", $columnNames);
+
+        $statement = self::prepare("
+            UPDATE `{$tableName}`
+            SET " . implode(', ', $columnValues) . "
+            WHERE `id` = {$this->id};
+        ");
+
+        foreach ($columnNames as $attribute) {
+            $statement->bindValue(":{$attribute}", $this->{$attribute});
+        }
+
+        $statement->execute();
+
+        return true;
+    }
+
     public static function findObject(array $where) {
         $tableName = static::tableName();
         $columnNames = array_keys($where);
