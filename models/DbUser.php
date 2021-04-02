@@ -6,9 +6,9 @@ use app\core\DbModel;
 
 class DbUser extends DbModel {
 
-    private const STATUS_INACTIVE = 0;
-    private const STATUS_ACTIVE = 1;
-    private const STATUS_DELETED = 2;
+    public const STATUS_INACTIVE = 0;
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_DELETED = 2;
 
     public int $status = self::STATUS_INACTIVE;
 
@@ -40,10 +40,8 @@ class DbUser extends DbModel {
         ];
     }
 
-    public function save() {
+    public function save(): bool {
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
-
-        $this->status = self::STATUS_ACTIVE;
 
         return parent::save();
     }

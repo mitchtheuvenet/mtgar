@@ -7,17 +7,21 @@ use app\core\Application;
 
 class DbVerification extends DbModel {
 
-    public const TYPE_REGISTRATION = 0;
+    public const TYPE_EMAIL = 0;
     public const TYPE_PASSWORD_RESET = 1;
 
     public const CODE_EXPIRE = 3600;
     public const CODE_LENGTH = 6;
 
-    public string $email = '';
+    public string $email;
 
     public int $user;
     public int $type;
     public string $code;
+
+    public function __construct(string $email = '') {
+        $this->email = $email;
+    }
 
     public static function tableName(): string {
         return 'verifications';
@@ -108,7 +112,7 @@ class DbVerification extends DbModel {
     private function mailSubject(): string {
         $subject = '';
 
-        if ($this->type === self::TYPE_REGISTRATION) {
+        if ($this->type === self::TYPE_EMAIL) {
             $subject .= 'Registration';
         } else if ($this->type === self::TYPE_PASSWORD_RESET) {
             $subject .= 'Password reset';

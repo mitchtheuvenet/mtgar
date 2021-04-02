@@ -9,6 +9,7 @@ use app\core\Response;
 
 use app\models\DbUser;
 use app\models\DbVerification;
+use app\models\EmailVerification;
 use app\models\Login;
 use app\models\PasswordReset;
 
@@ -82,13 +83,13 @@ class AuthController extends Controller {
 
             if (empty($email)) {
                 $response->redirect('/login/forgot');
+            } else {
+                $passwordReset->email = $email;
             }
-
-            $passwordReset->email = $email;
         } else if ($request->isPost()) {
             $passwordReset->loadData($request->getBody());
 
-            if ($passwordReset->validate()) {
+            if ($passwordReset->validate(DbVerification::TYPE_PASSWORD_RESET)) {
                 if ($passwordReset->apply()) {
                     $this->setFlash('success', 'Your password has been reset. You can now log in using your new password.');
 
@@ -114,17 +115,53 @@ class AuthController extends Controller {
 
             if ($user->validate()) {
                 if ($user->save()) {
-                    $this->setFlash('success', 'Your new account has been created. You can now log in using your entered credentials.');
+                    $verification = new DbVerification($user->email);
 
-                    $response->redirect('/login');
-                } else {
-                    $this->setFlash('error', 'Something went wrong while creating your new account. Please try again later.');
+                    if ($verification->sendCode(DbVerification::TYPE_EMAIL)) {
+                        $this->setFlash('info', "Your new account has been created, but requires verification. A code has been sent to <strong>{$user->email}</strong>. Please check your inbox (or spam folder).");
+
+                        $response->redirect("/register/verify?email={$user->email}");
+                    }
                 }
+                
+                $this->setFlash('error', 'Something went wrong while creating your new account. Please try again later.');
             }
         }
 
         return $this->render('register', [
             'model' => $user
+        ]);
+    }
+
+    public function verify(Request $request, Response $response) {
+        $this->redirectHomeIfLoggedIn($response);
+
+        $emailVerification = new EmailVerification();
+
+        if ($request->isGet()) {
+            $email = $request->getBody()['email'] ?? '';
+
+            if (empty($email)) {
+                $response->redirect('/register');
+            } else {
+                $emailVerification->email = $email;
+            }
+        } else if ($request->isPost()) {
+            $emailVerification->loadData($request->getBody());
+
+            if ($emailVerification->validate(DbVerification::TYPE_EMAIL)) {
+                if ($emailVerification->confirm()) {
+                    $this->setFlash('success', 'Your new account has been verified. You can now log in using your entered credentials.');
+
+                    $response->redirect('/login');
+                } else {
+                    $this->setFlash('error', 'Something went wrong while verifying your e-mail address. Please try again later.');
+                }
+            }
+        }
+
+        return $this->render('verify', [
+            'model' => $emailVerification
         ]);
     }
 

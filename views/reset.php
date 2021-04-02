@@ -4,7 +4,7 @@ use app\core\form\Form;
 
 $this->title = 'Reset password';
 
-$digits = $model->getCodeDigits();
+$digits = $model::getCodeDigits();
 
 ?>
 

@@ -43,6 +43,8 @@ $app->router->post('/login/reset', [AuthController::class, 'reset']);
 
 $app->router->get('/register', [AuthController::class, 'register']);
 $app->router->post('/register', [AuthController::class, 'register']);
+$app->router->get('/register/verify', [AuthController::class, 'verify']);
+$app->router->post('/register/verify', [AuthController::class, 'verify']);
 
 $app->router->post('/logout', [AuthController::class, 'logout']);
 

@@ -96,7 +96,7 @@ abstract class DbModel extends Model {
         }
     }
 
-    public static function prepare(string $sql): PDOStatement {
+    public static function prepare(string $sql): \PDOStatement {
         return Application::$app->db->pdo->prepare($sql);
     }
 
