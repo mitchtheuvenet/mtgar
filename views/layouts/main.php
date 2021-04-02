@@ -52,7 +52,7 @@ use app\core\Application;
                         </ul>
                         <div class="d-flex">
                             <?php if (Application::isGuest()): ?>
-                                <a href="/login" class="btn btn-outline-primary" role="button">Log in</a>
+                                <a href="/login" class="btn btn-primary" role="button">Log in</a>
                             <?php else: ?>
                                 <span class="navbar-text mx-2">Logged in as <b><?= Application::$app->user->username; ?></b></span>
                                 <form action="/logout" method="post">
