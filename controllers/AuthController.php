@@ -45,7 +45,13 @@ class AuthController extends Controller {
 
         $verification = new DbVerification();
 
-        if ($request->isPost()) {
+        if ($request->isGet()) {
+            $email = $request->getBody()['email'] ?? '';
+
+            if (!empty($email)) {
+                $verification->email = $email;
+            }
+        } else if ($request->isPost()) {
             $verification->loadData($request->getBody());
 
             if ($verification->validate()) {

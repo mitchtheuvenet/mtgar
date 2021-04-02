@@ -10,7 +10,7 @@ abstract class DbModel extends Model {
 
     abstract public static function primaryKey(): string;
 
-    public function save() {
+    public function save(): bool {
         $tableName = static::tableName();
         $columnNames = static::columnNames();
 
@@ -26,9 +26,15 @@ abstract class DbModel extends Model {
             $statement->bindValue(":{$attribute}", $this->{$attribute});
         }
 
-        $statement->execute();
+        try {
+            $statement->execute();
 
-        return true;
+            return true;
+        } catch (\PDOException $e) {
+            // add exception handling
+
+            return false;
+        }
     }
 
     public function update(array $columns = []): bool {
@@ -51,9 +57,15 @@ abstract class DbModel extends Model {
             $statement->bindValue(":{$attribute}", $this->{$attribute});
         }
 
-        $statement->execute();
+        try {
+            $statement->execute();
 
-        return true;
+            return true;
+        } catch (\PDOException $e) {
+            // add exception handling
+
+            return false;
+        }
     }
 
     public static function findObject(array $where) {
@@ -73,12 +85,18 @@ abstract class DbModel extends Model {
             $statement->bindValue(":{$col}", $val);
         }
 
-        $statement->execute();
+        try {
+            $statement->execute();
 
-        return $statement->fetchObject(static::class);
+            return $statement->fetchObject(static::class);
+        } catch (\PDOException $e) {
+            // add exception handling
+
+            return false;
+        }
     }
 
-    public static function prepare(string $sql) {
+    public static function prepare(string $sql): PDOStatement {
         return Application::$app->db->pdo->prepare($sql);
     }
 

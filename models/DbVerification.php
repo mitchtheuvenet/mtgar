@@ -10,7 +10,7 @@ class DbVerification extends DbModel {
     public const TYPE_REGISTRATION = 0;
     public const TYPE_PASSWORD_RESET = 1;
 
-    public const CODE_EXPIRE_HOURS = 1;
+    public const CODE_EXPIRE = 3600;
     public const CODE_LENGTH = 6;
 
     public string $email = '';
@@ -54,21 +54,12 @@ class DbVerification extends DbModel {
         $this->user = $userObject->id;
         $this->type = $type;
 
-        $existingCode = self::findObject([
-            'user' => $this->user,
-            'type' => $this->type,
-            'used' => false,
-            'expired' => false,
-        ]);
+        $activeVerification = self::findActiveVerification($this->user, $this->type);
 
-        if (!empty($existingCode)) {
-            try {
-                $existingCode->expired = true;
+        if (!empty($activeVerification)) {
+            $activeVerification->expired = true;
 
-                $existingCode->update(['expired']);
-            } catch (\Exception $e) {
-                // TODO: add exception handling
-
+            if (!$activeVerification->update(['expired'])) {
                 return false;
             }
         }
@@ -82,17 +73,26 @@ class DbVerification extends DbModel {
         $subject = $this->mailSubject();
         $body = $this->mailBody($name, $codePlain);
 
-        try {
-            if (parent::save()) {
+        if (parent::save()) {
+            try {
                 Application::$app->mailer->sendNoReplyMail($to, $subject, $body);
-
+    
                 return true;
+            } catch (\Exception $e) {
+                // TODO: add exception handling
             }
-        } catch (\Exception $e) {
-            // TODO: add exception handling
+        }
 
-            return false;
-        }         
+        return false;
+    }
+
+    public static function findActiveVerification(int $userId, int $type) {
+        return self::findObject([
+            'user' => $userId,
+            'type' => $type,
+            'used' => false,
+            'expired' => false
+        ]);
     }
 
     private function generateCode(): string {
@@ -120,7 +120,7 @@ class DbVerification extends DbModel {
     }
 
     private function mailBody(string $username, string $code): string {
-        $expire = date('Y-m-d G:i T', time() + self::CODE_EXPIRE_HOURS * 3600); // 1 hour = 3600 seconds
+        $expire = date('Y-m-d G:i T', time() + self::CODE_EXPIRE);
 
         $body =     "Hello {$username},\n";
         $body .=    "\n";

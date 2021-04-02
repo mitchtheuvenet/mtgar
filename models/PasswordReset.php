@@ -13,9 +13,8 @@ class PasswordReset extends Model {
     public string $password = '';
     public string $passwordConfirm = '';
 
-    public function __construct(string $email = '') {
-        $this->email = $email;
-    }
+    private DbUser $user;
+    private DbVerification $activeVerification;
 
     public function rules(): array {
         $digits = $this->getCodeDigits();
@@ -49,15 +48,40 @@ class PasswordReset extends Model {
         ];
     }
 
+    public function validate(): bool {
+        $this->user = DbUser::findObject(['email' => $this->email]);
+        $this->activeVerification = DbVerification::findActiveVerification($this->user->id, DbVerification::TYPE_PASSWORD_RESET);
+
+        $codeDigits = $this->getCodeDigits();
+
+        if (!empty($this->verificationCode) && preg_match("/[0-9]{{$codeDigits}}/", $this->verificationCode)) {
+            if (md5($this->verificationCode) !== $this->activeVerification->code) {
+                $this->addCustomError('verificationCode', 'This verification code is invalid.');
+    
+                return parent::validate();
+            }
+    
+            $timePassed = time() - strtotime($this->activeVerification->created_at);
+    
+            if ($timePassed >= DbVerification::CODE_EXPIRE) {
+                $this->activeVerification->expired = true;
+    
+                if ($this->activeVerification->update(['expired'])) {
+                    $this->addCustomError('verificationCode', 'This verification code has expired. Please <a href="/login/forgot?email=' . $this->email . '">request a new code</a> and try again.');
+                } else {
+                    $this->addCustomError('verificationCode', 'Unknown error.');
+                }
+            }
+        }
+
+        return parent::validate();
+    }
+
     public function apply(): bool {
-        // $user = DbUser::findObject();
-        // $verification = DbVerification::findObject(['code' => $this->verificationCode]);
+        $this->activeVerification->used = true;
+        $this->user->password = password_hash($this->password, PASSWORD_BCRYPT);
 
-        // $this->password = password_hash($this->password, PASSWORD_BCRYPT);
-
-        // if ($user->update())
-
-        return false;
+        return $this->activeVerification->update(['used']) && $this->user->update(['password']);
     }
 
     public function getCodeDigits(): string {

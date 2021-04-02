@@ -29,11 +29,11 @@ abstract class Model {
         return [];
     }
 
-    public function getLabel(string $attribute) {
+    public function getLabel(string $attribute): string {
         return $this->labels()[$attribute] ?? $attribute;
     }
 
-    public function validate() {
+    public function validate(): bool {
         foreach ($this->rules() as $attribute => $rules) {
             $value = $this->{$attribute};
 
@@ -84,7 +84,7 @@ abstract class Model {
 
                         break;
                     case self::RULE_UNIQUE:
-                        $record = $this->getRecordByValue($rule['class'], $attribute, $value);
+                        $record = $rule['class']::findObject([$attribute => $value]);
 
                         if (!empty($record)) {
                             $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
@@ -92,7 +92,7 @@ abstract class Model {
 
                         break;
                     case self::RULE_EXISTS:
-                        $record = $this->getRecordByValue($rule['class'], $attribute, $value);
+                        $record = $rule['class']::findObject([$attribute => $value]);
 
                         if (empty($record)) {
                             $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
@@ -104,40 +104,29 @@ abstract class Model {
         return empty($this->errors);
     }
 
-    public function hasError($attribute) {
+    public function hasError($attribute): bool {
         return isset($this->errors[$attribute]);
     }
 
-    public function getFirstError($attribute) {
-        return $this->errors[$attribute][0] ?? false;
-    }
-
-    // public function addErrorByMessage(string $attribute, string $message) {
-    //     $this->errors[$attribute][] = $message;
-    // }
-
-    protected function getRecordByValue(string $class, string $attribute, $value) {
-        $tableName = $class::tableName();
-
-        $statement = Application::$app->db->prepare("SELECT `id` FROM `{$tableName}` WHERE `{$attribute}` = :val;");
-        $statement->bindValue(':val', $value);
-
-        $statement->execute();
-
-        return $statement->fetchObject();
+    public function getFirstError($attribute): string {
+        return $this->errors[$attribute][0] ?? 'Unknown error.';
     }
 
     protected function addError(string $attribute, string $rule, $params = []) {
-        $msg = $this->errorMessages()[$rule] ?? '';
+        $message = self::errorMessages()[$rule] ?? '';
 
         foreach ($params as $key => $val) {
-            $msg = str_replace("{{$key}}", $val, $msg);
+            $message = str_replace("{{$key}}", $val, $message);
         }
 
-        $this->errors[$attribute][] = $msg;
+        $this->errors[$attribute][] = $message;
     }
 
-    protected function errorMessages() {
+    protected function addCustomError(string $attribute, string $message) {
+        $this->errors[$attribute][] = $message;
+    }
+
+    private static function errorMessages(): array {
         return [
             self::RULE_REQUIRED => 'This field is required.',
             self::RULE_EMAIL => 'This field must contain a valid e-mail address.',

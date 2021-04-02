@@ -11,7 +11,7 @@ $this->title = 'Register';
     <?= $form->inputField($model, 'username', 3,
             'Must be between 4&ndash;16 characters long, only consisting of alphabetical and/or numerical characters.'); ?>
     <?= $form->inputField($model, 'password', 2,
-            'Must be at least 8 characters long. It is advised to use a combination of lower-/uppercase letters, numbers and special characters.')->passwordField(); ?>
+            'Must be at least 8 characters long.')->passwordField(); ?>
     <?= $form->inputField($model, 'passwordConfirm')->passwordField(); ?>
     <?= $form->inputField($model, 'email', 2, 'Will never be shared with third parties.')->emailField(); ?>
     <?= $form->inputField($model, 'emailConfirm', 5)->emailField(); ?>
