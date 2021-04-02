@@ -51,7 +51,7 @@ class Contact extends Model {
 
     public function send() {
         try {
-            Application::$app->mailer->sendContactMail($this->from(), $this->subject, $this->body);
+            Application::$app->mailer->sendContactMail($this->from(), $this->subject, $this->htmlBody());
 
             return true;
         } catch (\Exception $e) {
@@ -59,6 +59,18 @@ class Contact extends Model {
 
             return false;
         }
+    }
+
+    private function htmlBody() {
+        $lines = explode("\n", $this->body);
+
+        $htmlBody = '';
+
+        foreach ($lines as $line) {
+            $htmlBody .= "<p>{$line}</p>\n";
+        }
+
+        return $htmlBody;
     }
 
     private function from() {

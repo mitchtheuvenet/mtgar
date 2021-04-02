@@ -13,11 +13,13 @@ class Mailer {
     private string $host;
     private string $username;
     private string $password;
+    private int $debug;
 
     public function __construct(array $config) {
         $this->host = $config['host'] ?? '';
         $this->username = $config['user'] ?? '';
         $this->password = $config['pass'] ?? '';
+        $this->debug = $config['debug'] ?? SMTP::DEBUG_OFF;
     }
 
     public function sendNoReplyMail(array $to, string $subject, string $body) {
@@ -46,6 +48,7 @@ class Mailer {
         $mail = new PHPMailer(true); // enable exceptions
 
         $mail->isSMTP();
+        $mail->SMTPDebug = $debug;
         $mail->Host = $this->host;
         $mail->SMTPAuth = true;
         $mail->Username = $this->username;
@@ -56,9 +59,9 @@ class Mailer {
         return $mail;
     }
 
-    private function bodyWithStyling(string $body): string {
-        return '<div style="white-space:pre;">' . $body . '</div>';
-    }
+    // private function bodyWithStyling(string $body): string {
+    //     return '<div style="">' . $body . '</div>';
+    // }
 
     private function sendMail(array $from, array $to, string $subject, string $body, array $replyTo = []) {
         $mail = $this->initMail();
@@ -72,8 +75,8 @@ class Mailer {
 
         $mail->isHTML(true);
         $mail->Subject = $subject;
-        $mail->Body = $this->bodyWithStyling($body);
-        $mail->AltBody = $body;
+        $mail->Body = $body;
+        // $mail->AltBody = $body;
 
         $mail->send();
     }

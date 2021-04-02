@@ -126,15 +126,15 @@ class DbVerification extends DbModel {
     private function mailBody(string $username, string $code): string {
         $expire = date('Y-m-d G:i T', time() + self::CODE_EXPIRE);
 
-        $body =     "Hello {$username},\n";
-        $body .=    "\n";
-        $body .=    "Your verification code is: <strong>{$code}</strong>.\n";
-        $body .=    "\n";
-        $body .=    "This code will expire at <strong>{$expire}</strong>. Please use it before then.\n";
-        $body .=    "\n";
-        $body .=    "Kind regards,\n";
-        $body .=    "\n";
-        $body .=    "The MTGAR Staff";
+        $body =     "<p>Hello {$username},</p>\n";
+        
+        $body .=    "<p>Your verification code is: <strong>{$code}</strong>.</p>\n";
+        
+        $body .=    "<p>This code will expire at <strong>{$expire}</strong>. Please use it before then.</p>\n";
+        
+        $body .=    "<p>Kind regards,</p>\n";
+        
+        $body .=    "<p>The MTGAR Staff</p>";
 
         return $body;
     }
