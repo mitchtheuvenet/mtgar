@@ -15,7 +15,9 @@ class m0002_verifications extends Migration {
                 `expired` BIT DEFAULT 0 NOT NULL,
                 `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-                FOREIGN KEY (`user`) REFERENCES `users`(`id`)
+                FOREIGN KEY (`user`)
+                    REFERENCES `users`(`id`)
+                    ON DELETE CASCADE
             ) ENGINE=INNODB;
         ");
     }
