@@ -31,7 +31,7 @@ abstract class DbModel extends Model {
 
             return true;
         } catch (\PDOException $e) {
-            // add exception handling
+            // TODO: add exception handling
 
             return false;
         }
@@ -50,19 +50,46 @@ abstract class DbModel extends Model {
         $statement = self::prepare("
             UPDATE `{$tableName}`
             SET " . implode(', ', $columnValues) . "
-            WHERE `id` = {$this->id};
+            WHERE `id` = :id;
         ");
 
         foreach ($columnNames as $attribute) {
             $statement->bindValue(":{$attribute}", $this->{$attribute});
         }
 
+        $statement->bindValue(':id', $this->id);
+
         try {
             $statement->execute();
 
             return true;
         } catch (\PDOException $e) {
-            // add exception handling
+            // TODO: add exception handling
+
+            return false;
+        }
+    }
+
+    public function delete(): bool {
+        if (!isset($this->id)) {
+            return false;
+        }
+
+        $tableName = static::tableName();
+
+        $statement = self::prepare("
+            DELETE FROM `{$tableName}`
+            WHERE `id` = :id;
+        ");
+
+        $statement->bindValue(':id', $this->id);
+
+        try {
+            $statement->execute();
+
+            return true;
+        } catch (\PDOException $e) {
+            // TODO: add exception handling
 
             return false;
         }
@@ -90,7 +117,7 @@ abstract class DbModel extends Model {
 
             return $statement->fetchObject(static::class);
         } catch (\PDOException $e) {
-            // add exception handling
+            // TODO: add exception handling
 
             return false;
         }
