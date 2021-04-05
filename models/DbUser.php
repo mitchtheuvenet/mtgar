@@ -40,12 +40,6 @@ class DbUser extends DbModel {
         ];
     }
 
-    public function save(): bool {
-        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
-
-        return parent::save();
-    }
-
     public function rules(): array {
         return [
             'username' => [
@@ -77,6 +71,35 @@ class DbUser extends DbModel {
                 [self::RULE_MATCH, 'match' => 'email']
             ]
         ];
+    }
+
+    public function save(): bool {
+        $inactiveUserWithEmail = DbUser::findObject(['email' => $this->email, 'status' => DbUser::STATUS_INACTIVE]);
+        $inactiveUserWithName = DbUser::findObject(['username' => $this->username, 'status' => DbUser::STATUS_INACTIVE]);
+
+        if (!empty($inactiveUserWithEmail)) {
+            if (!$inactiveUserWithEmail->delete()) {
+                return false;
+            }
+        }
+
+        if (!empty($inactiveUserWithName)) {
+            if (!$inactiveUserWithName->delete()) {
+                return false;
+            }
+        }
+
+        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+
+        return parent::save();
+    }
+
+    public static function findObject(array $where) {
+        if (!isset($where['status'])) {
+            $where['status'] = self::STATUS_ACTIVE;
+        }
+
+        return parent::findObject($where);
     }
 
 }

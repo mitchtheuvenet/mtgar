@@ -31,7 +31,7 @@ class Login extends Model {
     }
 
     public function logIn() {
-        $user = DbUser::findObject(['username' => $this->username, 'status' => DbUser::STATUS_ACTIVE]);
+        $user = DbUser::findObject(['username' => $this->username]);
 
         if (empty($user) || !password_verify($this->password, $user->password)) {
             return false;

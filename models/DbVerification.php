@@ -53,7 +53,13 @@ class DbVerification extends DbModel {
     }
 
     public function sendCode(int $type): bool {
-        $userObject = DbUser::findObject(['email' => $this->email]);
+        $where = ['email' => $this->email];
+
+        if ($type === self::TYPE_EMAIL) {
+            $where['status'] = DbUser::STATUS_INACTIVE;
+        }
+
+        $userObject = DbUser::findObject($where);
 
         $this->user = $userObject->id;
         $this->type = $type;

@@ -11,7 +11,13 @@ abstract class VerificationModel extends Model {
     protected DbVerification $activeVerification;
 
     public function validate(): bool {
-        $this->user = DbUser::findObject(['email' => $this->email]);
+        $where = ['email' => $this->email];
+
+        if ($this->verificationType === DbVerification::TYPE_EMAIL) {
+            $where['status'] = DbUser::STATUS_INACTIVE;
+        }
+
+        $this->user = DbUser::findObject($where);
         $this->activeVerification = DbVerification::findActiveVerification($this->user->id, $this->verificationType);
 
         $codeDigits = self::getCodeDigits();
