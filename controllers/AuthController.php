@@ -32,6 +32,8 @@ class AuthController extends Controller {
                     $response->redirect('/');
                 } else {
                     $this->setFlash('error', 'Login failed.');
+
+                    $login->password = '';
                 }
             }
         }
