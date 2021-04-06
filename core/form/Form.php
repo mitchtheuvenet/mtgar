@@ -6,8 +6,8 @@ use app\core\Model;
 
 class Form {
 
-    public static function begin($action, $method) {
-        echo sprintf('<form action="%s" method="%s">', $action, $method);
+    public static function begin($action, $method, $id = '') {
+        echo sprintf('<form action="%s" method="%s"%s>', $action, $method, !empty($id) ? " id=\"{$id}\"" : '');
 
         return new Form();
     }
