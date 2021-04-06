@@ -74,30 +74,41 @@ class DbUser extends DbModel {
     }
 
     public function save(): bool {
-        $inactiveUserWithEmail = DbUser::findObject(['email' => $this->email, 'status' => DbUser::STATUS_INACTIVE]);
-        $inactiveUserWithName = DbUser::findObject(['username' => $this->username, 'status' => DbUser::STATUS_INACTIVE]);
-
-        if (!empty($inactiveUserWithEmail)) {
-            if (!$inactiveUserWithEmail->delete()) {
-                return false;
-            }
-        }
-
-        if (!empty($inactiveUserWithName)) {
-            if (!$inactiveUserWithName->delete()) {
-                return false;
-            }
-        }
-
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
 
-        return parent::save();
+        if ($this->deleteInactives()) {
+            return parent::save();
+        } else {
+            return false;
+        }
     }
 
     public function delete(): bool {
         $this->status = self::STATUS_DELETED;
 
         return parent::update(['status']);
+    }
+
+    public function deleteInactives(array $columns = ['email', 'username']): bool {
+        if (in_array('email', $columns, true)) {
+            $inactiveUserWithEmail = self::findObject(['email' => $this->email, 'status' => self::STATUS_INACTIVE]);
+
+            if (!empty($inactiveUserWithEmail)) {
+                if (!$inactiveUserWithEmail->delete()) {
+                    return false;
+                }
+            }
+        }
+
+        if (in_array('username', $columns, true)) {
+            $inactiveUserWithName = self::findObject(['username' => $this->username, 'status' => self::STATUS_INACTIVE]);
+
+            if (!empty($inactiveUserWithName)) {
+                if (!$inactiveUserWithName->delete()) {
+                    return false;
+                }
+            }
+        }
     }
 
     public static function findObject(array $where) {
