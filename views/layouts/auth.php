@@ -2,12 +2,9 @@
 
 use app\core\Application;
 
-$infoFlash = Application::$app->session->getFlash('info');
-$successFlash = Application::$app->session->getFlash('success');
-$errorFlash = Application::$app->session->getFlash('error');
+$flashMessages = $this->getFlashMessages();
 
-$path = Application::$app->request->path();
-$nesting = substr_count($path, '/', 1);
+$nesting = substr_count($this->path(), '/', 1);
 
 $proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
 
@@ -42,21 +39,20 @@ $proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
                         <img src="<?= $proot; ?>images/logo.png" class="card-img-top" alt="Logo">
                     </a>
                     <div class="card-body">
-                        <?php if (!empty($infoFlash)): ?>
-                            <div class="alert alert-info text-center" role="alert">
-                                <?= $infoFlash; ?>
-                            </div>
-                        <?php endif; ?>
-                        <?php if (!empty($successFlash)): ?>
-                            <div class="alert alert-success text-center" role="alert">
-                                <?= $successFlash; ?>
-                            </div>
-                        <?php endif; ?>
-                        <?php if (!empty($errorFlash)): ?>
-                            <div class="alert alert-danger text-center" role="alert">
-                                <?= $errorFlash; ?>
-                            </div>
-                        <?php endif; ?>
+                        <?php
+                        
+                        foreach ($flashMessages as $key => $message) {
+                            $key = $key === 'error' ? 'danger' : $key;
+                            $message = $message['value'] ?? '';
+
+                            echo "
+                                <div class=\"alert alert-{$key} text-center\" role=\"alert\">
+                                    {$message}
+                                </div>
+                            ";
+                        }
+                        
+                        ?>
                         <!-- Content -->
                         {{content}}
                     </div>

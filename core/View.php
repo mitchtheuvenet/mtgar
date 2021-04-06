@@ -44,4 +44,12 @@ class View {
         return ob_get_clean();
     }
 
+    protected function getFlashMessages() {
+        return Application::$app->session->get(Session::FLASH_KEY);
+    }
+
+    protected function path() {
+        return Application::$app->request->path();
+    }
+
 }
