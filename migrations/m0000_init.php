@@ -8,9 +8,9 @@ class m0000_init extends Migration {
         self::exec("
             CREATE TABLE `users` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
-                `username` VARCHAR(16) NOT NULL UNIQUE,
+                `username` VARCHAR(16) NOT NULL,
                 `password` CHAR(60) NOT NULL,
-                `email` VARCHAR(255) NOT NULL UNIQUE,
+                `email` VARCHAR(255) NOT NULL,
                 `status` TINYINT NOT NULL
             ) ENGINE=INNODB;
         ");

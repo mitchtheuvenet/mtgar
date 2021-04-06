@@ -94,6 +94,12 @@ class DbUser extends DbModel {
         return parent::save();
     }
 
+    public function delete(): bool {
+        $this->status = self::STATUS_DELETED;
+
+        return parent::update(['status']);
+    }
+
     public static function findObject(array $where) {
         if (!isset($where['status'])) {
             $where['status'] = self::STATUS_ACTIVE;
