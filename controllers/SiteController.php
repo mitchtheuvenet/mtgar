@@ -39,7 +39,7 @@ class SiteController extends Controller {
 
             if ($contact->validate()) {
                 if ($contact->send()) {
-                    $this->setFlash('success', 'Thank you for contacting us. We will get in touch with you soon&trade;.');
+                    $this->setFlash('success', 'Thank you for contacting us. We will get in touch with you soon.');
 
                     $response->redirect('/contact');
                 } else {

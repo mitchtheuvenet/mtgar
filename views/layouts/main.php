@@ -2,6 +2,12 @@
 
 use app\core\Application;
 
+$flashMessages = $this->getFlashMessages();
+
+$nesting = substr_count($this->path(), '/', 1);
+
+$proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
+
 ?>
 
 <!DOCTYPE html>
@@ -68,6 +74,21 @@ use app\core\Application;
         <main class="flex-shrink-0" style="margin-top:4.5rem;">
             <div class="container-fluid">
                 <div class="row mt-5">
+                    <?php
+                        
+                    foreach ($flashMessages as $key => $message) {
+                        $key = $key === 'error' ? 'danger' : $key;
+                        $message = $message['value'] ?? '';
+
+                        echo "
+                            <div class=\"alert alert-{$key} alert-dismissible fade show text-center\" style=\"border-radius:0;\" role=\"alert\">
+                                {$message}
+                                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>
+                            </div>
+                        ";
+                    }
+                        
+                    ?>
                     <!-- Content -->
                     {{content}}
                 </div>

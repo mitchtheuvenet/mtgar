@@ -1,7 +1,5 @@
 <?php
 
-use app\core\Application;
-
 use app\core\form\Form;
 
 $this->title = 'Contact';
@@ -31,24 +29,11 @@ $this->script = <<<'EOT'
     });
 EOT;
 
-$successFlash = Application::$app->session->getFlash('success');
-$errorFlash = Application::$app->session->getFlash('error');
-
 ?>
 
 <div class="col-md-4 offset-md-4">
     <h1 class="text-center">Contact us</h1>
     <p class="lead text-center mb-4">Please fill out the contact form below.</p>
-    <?php if (!empty($successFlash)): ?>
-        <div class="alert alert-success text-center" role="alert">
-            <?= $successFlash; ?>
-        </div>
-    <?php endif; ?>
-    <?php if (!empty($errorFlash)): ?>
-        <div class="alert alert-danger text-center" role="alert">
-            <?= $errorFlash; ?>
-        </div>
-    <?php endif; ?>
     <?php $form = Form::begin('/contact', 'post'); ?>
         <?= $form->inputField($model, 'email')->emailField(); ?>
         <?= $form->inputField($model, 'name'); ?>
