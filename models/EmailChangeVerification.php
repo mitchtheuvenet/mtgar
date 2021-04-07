@@ -3,7 +3,6 @@
 namespace app\models;
 
 use app\core\VerificationModel;
-use app\core\Application;
 
 class EmailChangeVerification extends VerificationModel {
 

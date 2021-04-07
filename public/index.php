@@ -36,10 +36,10 @@ $app->router->get('/profile/change/email/verify', [AuthController::class, 'verif
 $app->router->post('/profile/change/email/verify', [AuthController::class, 'verifyNewEmail']);
 $app->router->get('/profile/change/password', [AuthController::class, 'changePassword']);
 $app->router->post('/profile/change/password', [AuthController::class, 'changePassword']);
-// $app->router->get('/profile/delete', [AuthController::class, 'deleteAccount']);
-// $app->router->post('/profile/delete', [AuthController::class, 'deleteAccount']);
-// $app->router->get('/profile/delete/confirm', [AuthController::class, 'confirmDeleteAccount']);
-// $app->router->post('/profile/delete/confirm', [AuthController::class, 'confirmDeleteAccount']);
+$app->router->get('/profile/delete', [AuthController::class, 'deleteAccount']);
+$app->router->post('/profile/delete', [AuthController::class, 'deleteAccount']);
+$app->router->get('/profile/delete/confirm', [AuthController::class, 'confirmDeleteAccount']);
+$app->router->post('/profile/delete/confirm', [AuthController::class, 'confirmDeleteAccount']);
 
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);

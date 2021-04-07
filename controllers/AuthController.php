@@ -9,6 +9,7 @@ use app\core\Response;
 
 use app\core\middlewares\AuthMiddleware;
 
+use app\models\AccountDeleteConfirmation;
 use app\models\DbUser;
 use app\models\DbVerification;
 use app\models\EmailChangeRequest;
@@ -22,7 +23,7 @@ use app\models\VerificationWithPassword;
 class AuthController extends Controller {
 
     public function __construct() {
-        $this->registerMiddleware(new AuthMiddleware(['changePassword', 'changeEmail', 'verifyNewEmail']));
+        $this->registerMiddleware(new AuthMiddleware(['changePassword', 'changeEmail', 'verifyNewEmail', 'deleteAccount', 'confirmDeleteAccount', 'logout']));
 
         $this->layout = self::LAYOUT_AUTH;
     }
@@ -151,7 +152,7 @@ class AuthController extends Controller {
         $registrationVerification = new RegistrationVerification();
 
         if ($request->isGet()) {
-            $email = urldecode($request->getBody()['email']) ?? '';
+            $email = $request->getBody()['email'] ?? '';
 
             if (empty($email)) {
                 $response->redirect('/register');
@@ -207,7 +208,7 @@ class AuthController extends Controller {
         $emailChangeVerification = new EmailChangeVerification();
 
         if ($request->isGet()) {
-            $newEmail = urldecode($request->getBody()['newEmail']) ?? '';
+            $newEmail = $request->getBody()['newEmail'] ?? '';
 
             if (empty($newEmail)) {
                 $response->redirect('/profile/change/email');
@@ -264,6 +265,58 @@ class AuthController extends Controller {
         $this->setFlash('success', 'You have been logged out.');
 
         $response->redirect('/login');
+    }
+
+    public function deleteAccount(Request $request, Response $response) {
+        $verification = new VerificationWithPassword();
+
+        if ($request->isPost()) {
+            $verification->loadData($request->getBody());
+
+            if ($verification->validate()) {
+                if ($verification->sendCode(DbVerification::TYPE_ACCOUNT_DELETION)) {
+                    $email = $verification->email;
+
+                    $this->setFlash('info', "Verification code sent to <strong>{$email}</strong>. Please check your inbox (or spam folder).");
+
+                    $response->redirect('/profile/delete/confirm');
+                } else {
+                    $verification->password = '';
+
+                    $this->setFlash('error', 'Something went wrong while sending the verification code. Please try again later.');
+                }
+            }
+        }
+
+        return $this->render('profile_delete', [
+            'model' => $verification
+        ]);
+    }
+
+    public function confirmDeleteAccount(Request $request, Response $response) {
+        $accountDeleteConfirmation = new AccountDeleteConfirmation();
+
+        if ($request->isGet()) {
+            $accountDeleteConfirmation->email = Application::$app->user->email;
+        } else if ($request->isPost()) {
+            $accountDeleteConfirmation->loadData($request->getBody());
+
+            if ($accountDeleteConfirmation->validate(DbVerification::TYPE_ACCOUNT_DELETION)) {
+                if ($accountDeleteConfirmation->confirm()) {
+                    Application::$app->logOut();
+
+                    $this->setFlash('success', 'Your account has been deleted. Thank you for using MTGAR!');
+
+                    $response->redirect('/login');
+                } else {
+                    $this->setFlash('error', 'Something went wrong while deleting your account. Please try again later.');
+                }
+            }
+        }
+
+        return $this->render('profile_delete_confirm', [
+            'model' => $accountDeleteConfirmation
+        ]);
     }
 
     private function redirectHomeIfLoggedIn(Response $response) {
