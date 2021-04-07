@@ -7,15 +7,20 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 
+use app\core\middlewares\AuthMiddleware;
+
 use app\models\DbUser;
 use app\models\DbVerification;
-use app\models\EmailVerification;
 use app\models\Login;
+use app\models\PasswordChange;
 use app\models\PasswordReset;
+use app\models\RegistrationVerification;
 
 class AuthController extends Controller {
 
     public function __construct() {
+        $this->registerMiddleware(new AuthMiddleware(['changePassword']));
+
         $this->layout = self::LAYOUT_AUTH;
     }
 
@@ -43,7 +48,7 @@ class AuthController extends Controller {
         ]);
     }
 
-    public function forgot(Request $request, Response $response) {
+    public function forgotPassword(Request $request, Response $response) {
         $this->redirectHomeIfLoggedIn($response);
 
         $verification = new DbVerification();
@@ -75,7 +80,7 @@ class AuthController extends Controller {
         ]);
     }
 
-    public function reset(Request $request, Response $response) {
+    public function resetPassword(Request $request, Response $response) {
         $this->redirectHomeIfLoggedIn($response);
 
         $passwordReset = new PasswordReset();
@@ -119,7 +124,7 @@ class AuthController extends Controller {
                 if ($user->save()) {
                     $verification = new DbVerification($user->email);
 
-                    if ($verification->sendCode(DbVerification::TYPE_EMAIL)) {
+                    if ($verification->sendCode(DbVerification::TYPE_REGISTRATION)) {
                         $this->setFlash('info', "Your new account has been created, but requires verification. A code has been sent to <strong>{$user->email}</strong>. Please check your inbox (or spam folder).");
 
                         $response->redirect("/register/verify?email={$user->email}");
@@ -135,10 +140,10 @@ class AuthController extends Controller {
         ]);
     }
 
-    public function verify(Request $request, Response $response) {
+    public function verifyRegistration(Request $request, Response $response) {
         $this->redirectHomeIfLoggedIn($response);
 
-        $emailVerification = new EmailVerification();
+        $registrationVerification = new RegistrationVerification();
 
         if ($request->isGet()) {
             $email = $request->getBody()['email'] ?? '';
@@ -146,13 +151,13 @@ class AuthController extends Controller {
             if (empty($email)) {
                 $response->redirect('/register');
             } else {
-                $emailVerification->email = $email;
+                $registrationVerification->email = $email;
             }
         } else if ($request->isPost()) {
-            $emailVerification->loadData($request->getBody());
+            $registrationVerification->loadData($request->getBody());
 
-            if ($emailVerification->validate(DbVerification::TYPE_EMAIL)) {
-                if ($emailVerification->confirm()) {
+            if ($registrationVerification->validate(DbVerification::TYPE_REGISTRATION)) {
+                if ($registrationVerification->confirm()) {
                     $this->setFlash('success', 'Your new account has been verified. You can now log in using your entered credentials.');
 
                     $response->redirect('/login');
@@ -163,7 +168,31 @@ class AuthController extends Controller {
         }
 
         return $this->render('verify', [
-            'model' => $emailVerification
+            'model' => $registrationVerification
+        ]);
+    }
+
+    public function changePassword(Request $request, Response $response) {
+        $passwordChange = new PasswordChange();
+
+        if ($request->isPost()) {
+            $passwordChange->loadData($request->getBody());
+
+            if ($passwordChange->validate()) {
+                if ($passwordChange->apply()) {
+                    $this->setFlash('success', 'Your password has been changed.');
+
+                    $response->redirect('/profile');
+                } else {
+                    $passwordChange = new PasswordChange();
+
+                    $this->setFlash('error', 'Something went wrong while changing your password. Please try again later.');
+                }
+            }
+        }
+
+        return $this->render('profile_change_password', [
+            'model' => $passwordChange
         ]);
     }
 

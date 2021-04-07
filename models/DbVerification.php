@@ -7,8 +7,10 @@ use app\core\Application;
 
 class DbVerification extends DbModel {
 
-    public const TYPE_EMAIL = 0;
+    public const TYPE_REGISTRATION = 0;
     public const TYPE_PASSWORD_RESET = 1;
+    public const TYPE_EMAIL_CHANGE = 2;
+    public const TYPE_ACCOUNT_DELETION = 3;
 
     public const CODE_EXPIRE = 3600;
     public const CODE_LENGTH = 6;
@@ -55,7 +57,7 @@ class DbVerification extends DbModel {
     public function sendCode(int $type): bool {
         $where = ['email' => $this->email];
 
-        if ($type === self::TYPE_EMAIL) {
+        if ($type === self::TYPE_REGISTRATION) {
             $where['status'] = DbUser::STATUS_INACTIVE;
         }
 
@@ -118,10 +120,19 @@ class DbVerification extends DbModel {
     private function mailSubject(): string {
         $subject = '';
 
-        if ($this->type === self::TYPE_EMAIL) {
-            $subject .= 'Registration';
-        } else if ($this->type === self::TYPE_PASSWORD_RESET) {
-            $subject .= 'Password reset';
+        switch ($this->type) {
+            case self::TYPE_REGISTRATION:
+                $subject .= 'Registration';
+                break;
+            case self::TYPE_PASSWORD_RESET:
+                $subject .= 'Password reset';
+                break;
+            case self::TYPE_EMAIL_CHANGE:
+                $subject .= 'New e-mail address';
+                break;
+            case self::TYPE_ACCOUNT_DELETION:
+                $subject .= 'Account deletion';
+                
         }
 
         $subject .= ' verification code';

@@ -13,7 +13,7 @@ abstract class VerificationModel extends Model {
     public function validate(): bool {
         $where = ['email' => $this->email];
 
-        if ($this->verificationType === DbVerification::TYPE_EMAIL) {
+        if ($this->verificationType === DbVerification::TYPE_REGISTRATION) {
             $where['status'] = DbUser::STATUS_INACTIVE;
         }
 
@@ -37,15 +37,23 @@ abstract class VerificationModel extends Model {
                 if ($this->activeVerification->update(['expired'])) {
                     $callToAction = '';
 
-                    if ($this->verificationType === DbVerification::TYPE_EMAIL) {
-                        $callToAction = '<a href="/register">register again</a> and use the code before it expires.';
-                    } else if ($this->verificationType === DbVerification::TYPE_PASSWORD_RESET) {
-                        $callToAction = '<a href="/login/forgot?email=' . $this->email . '">request a new code</a> and try again.';
+                    switch ($this->verificationType) {
+                        case DbVerification::TYPE_REGISTRATION:
+                            $callToAction = '<a href="/register">register again</a> and use the code before it expires.';
+                            break;
+                        case DbVerification::TYPE_PASSWORD_RESET:
+                            $callToAction = '<a href="/login/forgot?email=' . $this->email . '">request a new code</a> and try again.';
+                            break;
+                        case DbVerification::TYPE_EMAIL_CHANGE:
+                            $callToAction = '<a href="/profile/change/email">request a new code</a> and try again.';
+                            break;
+                        case DbVerification::TYPE_ACCOUNT_DELETION:
+                            $callToAction = '<a href="/profile/delete">request a new code</a> and try again.';
                     }
 
                     $this->addCustomError('verificationCode', 'This verification code has expired. Please ' . $callToAction);
                 } else {
-                    $this->addCustomError('verificationCode', 'Unknown error.');
+                    $this->addCustomError('verificationCode', 'Something went wrong while verifying your code. Please try again later.');
                 }
             }
         }

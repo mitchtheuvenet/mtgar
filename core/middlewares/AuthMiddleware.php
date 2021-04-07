@@ -6,7 +6,7 @@ use app\core\Application;
 
 use app\core\exceptions\UnauthorizedException;
 
-class SiteMiddleware extends BaseMiddleware {
+class AuthMiddleware extends BaseMiddleware {
 
     public function execute() {
         if (Application::isGuest()) {

@@ -7,9 +7,9 @@ use app\core\Application;
 
 use app\models\DbUser;
 
-class EmailVerification extends VerificationModel {
+class RegistrationVerification extends VerificationModel {
 
-    protected int $verificationType = DbVerification::TYPE_EMAIL;
+    protected int $verificationType = DbVerification::TYPE_REGISTRATION;
 
     public string $email;
 

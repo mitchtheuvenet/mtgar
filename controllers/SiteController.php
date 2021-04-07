@@ -7,14 +7,14 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 
-use app\core\middlewares\SiteMiddleware;
+use app\core\middlewares\AuthMiddleware;
 
 use app\models\Contact;
 
 class SiteController extends Controller {
 
     public function __construct() {
-        $this->registerMiddleware(new SiteMiddleware(['profile']));
+        $this->registerMiddleware(new AuthMiddleware(['profile']));
 
         $this->layout = self::LAYOUT_MAIN;
     }
