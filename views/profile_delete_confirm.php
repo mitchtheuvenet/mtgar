@@ -4,6 +4,8 @@ use app\core\form\Form;
 
 $this->title = 'Confirm account deletion';
 
+$this->script = Form::script();
+
 $digits = $model::getCodeDigits();
 
 ?>
@@ -28,11 +30,11 @@ $digits = $model::getCodeDigits();
                 <h5 class="modal-title" id="confirmModalLbl">Confirm account deletion</h5>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete your MTGAR account? This action cannot be undone.</p>
+                <p>Are you sure you want to delete your MTGAR account?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" form="confirmForm" class="btn btn-outline-danger">Delete</button>
+                <button type="submit" id="submitBtn" form="confirmForm" class="btn btn-outline-danger">Delete</button>
             </div>
         </div>
     </div>

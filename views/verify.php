@@ -4,6 +4,8 @@ use app\core\form\Form;
 
 $this->title = 'Verify e-mail address';
 
+$this->script = Form::script();
+
 $digits = $model::getCodeDigits();
 
 ?>
@@ -13,7 +15,7 @@ $digits = $model::getCodeDigits();
     <input type="hidden" id="email" name="email" value="<?= $model->email; ?>">
     <?= $form->inputField($model, 'verificationCode', 5, "Must be a {$digits}-digit numerical code."); ?>
     <div class="d-grid mb-3">
-        <button type="submit" class="btn btn-primary btn-lg">Verify</button>
+        <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Verify</button>
     </div>
 <?php Form::end(); ?>
 <div class="card-text text-center">

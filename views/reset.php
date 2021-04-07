@@ -4,6 +4,8 @@ use app\core\form\Form;
 
 $this->title = 'Reset password';
 
+$this->script = Form::script();
+
 $digits = $model::getCodeDigits();
 
 ?>
@@ -15,7 +17,7 @@ $digits = $model::getCodeDigits();
     <?= $form->inputField($model, 'password', 2, 'Must be at least 8 characters long.')->passwordField(); ?>
     <?= $form->inputField($model, 'passwordConfirm', 5)->passwordField(); ?>
     <div class="d-grid mb-3">
-        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+        <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Save</button>
     </div>
 <?php Form::end(); ?>
 <div class="card-text text-center">

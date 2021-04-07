@@ -4,6 +4,8 @@ use app\core\form\Form;
 
 $this->title = 'Register';
 
+$this->script = Form::script();
+
 ?>
 
 <h2 class="card-title text-center mb-4">Create an account</h2>
@@ -16,7 +18,7 @@ $this->title = 'Register';
     <?= $form->inputField($model, 'email', 2, 'Will never be shared with third parties.')->emailField(); ?>
     <?= $form->inputField($model, 'emailConfirm', 5)->emailField(); ?>
     <div class="d-grid mb-3">
-        <button type="submit" class="btn btn-primary btn-lg">Register</button>
+        <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Register</button>
     </div>
 <?php Form::end(); ?>
 <div class="card-text text-center">

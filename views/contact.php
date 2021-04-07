@@ -4,7 +4,8 @@ use app\core\form\Form;
 
 $this->title = 'Contact';
 
-$this->script = <<<'EOT'
+$this->script = Form::script();
+$this->script .= <<<'EOT'
     const textarea = document.getElementById('body');
     const textareaDesc = document.getElementById('body_desc');
     const maxLength = 500;
@@ -40,7 +41,7 @@ EOT;
         <?= $form->inputField($model, 'subject'); ?>
         <?= $form->textareaField($model, 'body', 5); ?>
         <div class="d-grid mb-2">
-            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+            <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Submit</button>
         </div>
     <?php Form::end(); ?>
 </div>
