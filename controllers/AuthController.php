@@ -79,7 +79,7 @@ class AuthController extends Controller {
             }
         }
 
-        return $this->render('forgot', [
+        return $this->render('login_forgot', [
             'model' => $verification
         ]);
     }
@@ -111,7 +111,7 @@ class AuthController extends Controller {
             }
         }
 
-        return $this->render('reset', [
+        return $this->render('login_reset', [
             'model' => $passwordReset
         ]);
     }
@@ -173,7 +173,7 @@ class AuthController extends Controller {
             }
         }
 
-        return $this->render('verify', [
+        return $this->render('register_verify', [
             'model' => $registrationVerification
         ]);
     }
