@@ -71,7 +71,7 @@ abstract class Model {
                         break;
                     case self::RULE_MATCH:
                         if ($value !== $this->{$rule['match']}) {
-                            $rule['match'] = $this->getLabel($rule['match']);
+                            $rule['match'] = strtolower($this->getLabel($rule['match']));
 
                             $this->addError($attribute, $ruleName, $rule);
                         }
