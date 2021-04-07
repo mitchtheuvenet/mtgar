@@ -7,8 +7,35 @@ use app\models\DbVerification;
 
 abstract class VerificationModel extends Model {
 
+    public string $email;
+
+    public string $verificationCode = '';
+
     protected DbUser $user;
     protected DbVerification $activeVerification;
+
+    protected int $verificationType;
+
+    public function rules(): array {
+        $digits = self::getCodeDigits();
+
+        return [
+            'verificationCode' => [
+                self::RULE_REQUIRED,
+                [
+                    self::RULE_PATTERN,
+                    'pattern' => "/[0-9]{{$digits}}/",
+                    'description' => "a {$digits}-digit numerical code"
+                ]
+            ]
+        ];
+    }
+
+    public function labels(): array {
+        return [
+            'verificationCode' => 'Verification code'
+        ];
+    }
 
     public function validate(): bool {
         $where = ['email' => $this->email];

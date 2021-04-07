@@ -30,10 +30,10 @@ $app = new Application(dirname(__DIR__), $config);
 $app->router->get('/', [SiteController::class, 'home']);
 
 $app->router->get('/profile', [SiteController::class, 'profile']);
-// $app->router->get('/profile/change/email', [AuthController::class, 'changeEmail']);
-// $app->router->post('/profile/change/email', [AuthController::class, 'changeEmail']);
-// $app->router->get('/profile/change/email/verify', [AuthController::class, 'verifyNewEmail']);
-// $app->router->post('/profile/change/email/verify', [AuthController::class, 'verifyNewEmail']);
+$app->router->get('/profile/change/email', [AuthController::class, 'changeEmail']);
+$app->router->post('/profile/change/email', [AuthController::class, 'changeEmail']);
+$app->router->get('/profile/change/email/verify', [AuthController::class, 'verifyNewEmail']);
+$app->router->post('/profile/change/email/verify', [AuthController::class, 'verifyNewEmail']);
 $app->router->get('/profile/change/password', [AuthController::class, 'changePassword']);
 $app->router->post('/profile/change/password', [AuthController::class, 'changePassword']);
 // $app->router->get('/profile/delete', [AuthController::class, 'deleteAccount']);

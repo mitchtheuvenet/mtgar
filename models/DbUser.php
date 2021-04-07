@@ -78,9 +78,9 @@ class DbUser extends DbModel {
 
         if ($this->deleteInactives()) {
             return parent::save();
-        } else {
-            return false;
         }
+        
+        return false;
     }
 
     public function delete(): bool {
@@ -109,6 +109,8 @@ class DbUser extends DbModel {
                 }
             }
         }
+
+        return true;
     }
 
     public static function findObject(array $where) {

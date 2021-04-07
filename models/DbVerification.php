@@ -17,9 +17,10 @@ class DbVerification extends DbModel {
 
     public string $email;
 
-    public int $user;
-    public int $type;
     public string $code;
+
+    protected int $user;
+    protected int $type;
 
     public function __construct(string $email = '') {
         $this->email = $email;
@@ -54,7 +55,7 @@ class DbVerification extends DbModel {
         ];
     }
 
-    public function sendCode(int $type): bool {
+    public function sendCode(int $type, string $newEmail = ''): bool {
         $where = ['email' => $this->email];
 
         if ($type === self::TYPE_REGISTRATION) {
@@ -81,7 +82,7 @@ class DbVerification extends DbModel {
 
         $name = $userObject->username;
 
-        $to = ['email' => $userObject->email, 'name' => $name];
+        $to = ['email' => !empty($newEmail) ? $newEmail : $this->email, 'name' => $name];
         $subject = $this->mailSubject();
         $body = $this->mailBody($name, $codePlain);
 

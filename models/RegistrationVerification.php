@@ -9,31 +9,8 @@ use app\models\DbUser;
 
 class RegistrationVerification extends VerificationModel {
 
-    protected int $verificationType = DbVerification::TYPE_REGISTRATION;
-
-    public string $email;
-
-    public string $verificationCode = '';
-
-    public function rules(): array {
-        $digits = self::getCodeDigits();
-
-        return [
-            'verificationCode' => [
-                self::RULE_REQUIRED,
-                [
-                    self::RULE_PATTERN,
-                    'pattern' => "/[0-9]{{$digits}}/",
-                    'description' => "a {$digits}-digit numerical code"
-                ]
-            ]
-        ];
-    }
-
-    public function labels(): array {
-        return [
-            'verificationCode' => 'Verification code'
-        ];
+    public function __construct() {
+        $this->verificationType = DbVerification::TYPE_REGISTRATION;
     }
 
     public function confirm(): bool {
