@@ -46,9 +46,9 @@ $proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
                             $message = $message['value'] ?? '';
 
                             echo "
-                                <div class=\"alert alert-{$key} alert-dismissible fade show text-center\" role=\"alert\" tabindex=\"-1\">
+                                <div class=\"alert alert-{$key} alert-dismissible fade show text-center\" role=\"alert\">
                                     {$message}
-                                    <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>
+                                    <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\" tabindex=\"-1\"></button>
                                 </div>
                             ";
                         }
