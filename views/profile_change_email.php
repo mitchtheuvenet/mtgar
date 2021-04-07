@@ -11,7 +11,7 @@ $this->script = Form::script();
 <h2 class="card-title text-center mb-4">Change your e-mail address</h2>
 <?php $form = Form::begin('/profile/change/email', 'post'); ?>
     <?= $form->inputField($model, 'password')->passwordField(); ?>
-    <?= $form->inputField($model, 'newEmail')->emailField(); ?>
+    <?= $form->inputField($model, 'newEmail', 2, 'A new verification code will be sent to this e-mail address.')->emailField(); ?>
     <?= $form->inputField($model, 'newEmailConfirm', 5)->emailField(); ?>
     <div class="d-grid mb-3">
         <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Send code</button>

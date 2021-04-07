@@ -10,7 +10,7 @@ $digits = $model::getCodeDigits();
 
 ?>
 
-<h2 class="card-title text-center mb-4">Confirm account deletion</h2>
+<h2 class="card-title text-center mb-4">Confirm your account deletion</h2>
 <?php $form = Form::begin('/profile/delete/confirm', 'post', 'confirmForm'); ?>
     <input type="hidden" id="email" name="email" value="<?= $model->email; ?>">
     <?= $form->inputField($model, 'verificationCode', 5, "Must be a {$digits}-digit numerical code."); ?>

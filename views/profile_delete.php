@@ -8,9 +8,9 @@ $this->script = Form::script();
 
 ?>
 
-<h2 class="card-title text-center mb-4">Delete your account</h2>
+<h2 class="card-title text-center mb-4">Enter your password</h2>
 <?php $form = Form::begin('/profile/delete', 'post'); ?>
-    <?= $form->inputField($model, 'password', 5)->passwordField(); ?>
+    <?= $form->inputField($model, 'password', 5, 'For security reasons, an additional verification code will be sent to your e-mail address.')->passwordField(); ?>
     <div class="d-grid mb-3">
         <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Send code</button>
     </div>
