@@ -18,6 +18,10 @@ class DbUser extends DbModel {
     public string $email = '';
     public string $emailConfirm = '';
 
+    public ?int $id;
+    public ?bool $admin;
+    public ?string $created_at;
+
     public static function tableName(): string {
         return 'users';
     }

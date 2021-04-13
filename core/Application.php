@@ -76,4 +76,8 @@ class Application {
         return is_null(self::$app->user);
     }
 
+    public static function isAdmin() {
+        return !self::isGuest() && self::$app->user->admin === true;
+    }
+
 }
