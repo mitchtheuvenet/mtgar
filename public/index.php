@@ -44,6 +44,8 @@ $app->router->post('/profile/delete/confirm', [AuthController::class, 'confirmDe
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);
 
+$app->router->get('/users', [SiteController::class, 'users']);
+
 $app->router->get('/login', [AuthController::class, 'login']);
 $app->router->post('/login', [AuthController::class, 'login']);
 $app->router->get('/login/forgot', [AuthController::class, 'forgotPassword']);

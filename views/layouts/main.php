@@ -58,6 +58,11 @@ $proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
                             <li class="nav-item">
                                 <a href="/contact" class="nav-link<?php echo $this->title === 'Contact' ? ' active' : '' ?>">Contact</a>
                             </li>
+                            <?php if (Application::isAdmin()): ?>
+                                <li class="nav-item border-start ms-3 ps-3">
+                                    <a href="/users" class="nav-link<?php echo $this->title === 'Users' ? ' active' : '' ?>">Users</a>
+                                </li>
+                            <?php endif; ?>
                         </ul>
                         <div class="d-flex">
                             <?php if (Application::isGuest()): ?>

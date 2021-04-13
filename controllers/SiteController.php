@@ -7,6 +7,7 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 
+use app\core\middlewares\AdminMiddleware;
 use app\core\middlewares\AuthMiddleware;
 
 use app\models\Contact;
@@ -14,6 +15,7 @@ use app\models\Contact;
 class SiteController extends Controller {
 
     public function __construct() {
+        $this->registerMiddleware(new AdminMiddleware(['users']));
         $this->registerMiddleware(new AuthMiddleware(['profile']));
 
         $this->layout = self::LAYOUT_MAIN;
@@ -51,6 +53,10 @@ class SiteController extends Controller {
         return $this->render('contact', [
             'model' => $contact
         ]);
+    }
+
+    public function users(Request $request, Response $response) {
+        return $this->render('users');
     }
 
 }
