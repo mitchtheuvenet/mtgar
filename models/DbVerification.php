@@ -19,6 +19,11 @@ class DbVerification extends DbModel {
 
     public string $code;
 
+    public ?int $id;
+    public ?bool $used;
+    public ?bool $expired;
+    public ?string $created_at;
+
     protected int $user;
     protected int $type;
 
