@@ -11,7 +11,8 @@ class m0000_init extends Migration {
                 `username` VARCHAR(16) NOT NULL,
                 `password` CHAR(60) NOT NULL,
                 `email` VARCHAR(255) NOT NULL,
-                `status` TINYINT NOT NULL
+                `status` TINYINT NOT NULL,
+                `admin` BIT DEFAULT 0 NOT NULL
             ) ENGINE=INNODB;
         ");
     }
