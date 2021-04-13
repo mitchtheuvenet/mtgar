@@ -8,6 +8,7 @@ use app\core\Request;
 use app\core\Response;
 
 use app\core\middlewares\AuthMiddleware;
+use app\core\middlewares\LoginMiddleware;
 
 use app\models\AccountDeleteConfirmation;
 use app\models\DbUser;
@@ -24,13 +25,12 @@ class AuthController extends Controller {
 
     public function __construct() {
         $this->registerMiddleware(new AuthMiddleware(['changePassword', 'changeEmail', 'verifyNewEmail', 'deleteAccount', 'confirmDeleteAccount', 'logout']));
+        $this->registerMiddleware(new LoginMiddleware(['login', 'forgotPassword', 'resetPassword', 'register', 'verifyRegistration']));
 
         $this->layout = self::LAYOUT_AUTH;
     }
 
     public function login(Request $request, Response $response) {
-        $this->redirectHomeIfLoggedIn($response);
-        
         $login = new Login();
 
         if ($request->isPost()) {
@@ -53,8 +53,6 @@ class AuthController extends Controller {
     }
 
     public function forgotPassword(Request $request, Response $response) {
-        $this->redirectHomeIfLoggedIn($response);
-
         $verification = new DbVerification();
 
         if ($request->isGet()) {
@@ -85,8 +83,6 @@ class AuthController extends Controller {
     }
 
     public function resetPassword(Request $request, Response $response) {
-        $this->redirectHomeIfLoggedIn($response);
-
         $passwordReset = new PasswordReset();
 
         if ($request->isGet()) {
@@ -117,8 +113,6 @@ class AuthController extends Controller {
     }
 
     public function register(Request $request, Response $response) {
-        $this->redirectHomeIfLoggedIn($response);
-
         $user = new DbUser();
 
         if ($request->isPost()) {
@@ -147,8 +141,6 @@ class AuthController extends Controller {
     }
 
     public function verifyRegistration(Request $request, Response $response) {
-        $this->redirectHomeIfLoggedIn($response);
-
         $registrationVerification = new RegistrationVerification();
 
         if ($request->isGet()) {
@@ -317,12 +309,6 @@ class AuthController extends Controller {
         return $this->render('profile_delete_confirm', [
             'model' => $accountDeleteConfirmation
         ]);
-    }
-
-    private function redirectHomeIfLoggedIn(Response $response) {
-        if (!Application::isGuest()) {
-            $response->redirect('/');
-        }
     }
 
 }
