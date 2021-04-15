@@ -44,7 +44,7 @@ class DbVerification extends DbModel {
     }
 
     public static function getDisplayValue(string $column, $value): string {
-        return '';
+        return strval($value);
     }
 
     public function rules(): array {
