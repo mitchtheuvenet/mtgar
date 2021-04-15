@@ -34,6 +34,23 @@ class DbUser extends DbModel {
         return 'id';
     }
 
+    public static function getDisplayValue(string $column, $value): string {
+        if ($column === 'status') {
+            $value = intval($value);
+
+            switch ($value) {
+                case self::STATUS_INACTIVE:
+                    return 'Inactive';
+                case self::STATUS_ACTIVE:
+                    return 'Active';
+                case self::STATUS_DELETED:
+                    return 'Deleted';
+            }
+        }
+
+        return strval($value);
+    }
+
     public function labels(): array {
         return [
             'username' => 'Username',
@@ -95,7 +112,10 @@ class DbUser extends DbModel {
 
     public function deleteInactives(array $columns = ['email', 'username']): bool {
         if (in_array('email', $columns, true)) {
-            $inactiveUserWithEmail = self::findObject(['email' => $this->email, 'status' => self::STATUS_INACTIVE]);
+            $inactiveUserWithEmail = self::findObject([
+                'email' => ['value' => $this->email],
+                'status' => ['value' => self::STATUS_INACTIVE]
+            ]);
 
             if (!empty($inactiveUserWithEmail)) {
                 if (!$inactiveUserWithEmail->delete()) {
@@ -105,7 +125,10 @@ class DbUser extends DbModel {
         }
 
         if (in_array('username', $columns, true)) {
-            $inactiveUserWithName = self::findObject(['username' => $this->username, 'status' => self::STATUS_INACTIVE]);
+            $inactiveUserWithName = self::findObject([
+                'username' => ['value' => $this->username],
+                'status' => ['value' => self::STATUS_INACTIVE]
+            ]);
 
             if (!empty($inactiveUserWithName)) {
                 if (!$inactiveUserWithName->delete()) {
@@ -117,12 +140,12 @@ class DbUser extends DbModel {
         return true;
     }
 
-    public static function findObject(array $where) {
+    public static function findObject(array $where, array $columns = []) {
         if (!isset($where['status'])) {
-            $where['status'] = self::STATUS_ACTIVE;
+            $where['status'] = ['value' => self::STATUS_ACTIVE];
         }
 
-        return parent::findObject($where);
+        return parent::findObject($where, $columns);
     }
 
 }

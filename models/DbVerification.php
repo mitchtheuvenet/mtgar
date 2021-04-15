@@ -43,6 +43,10 @@ class DbVerification extends DbModel {
         return 'id';
     }
 
+    public static function getDisplayValue(string $column, $value): string {
+        return '';
+    }
+
     public function rules(): array {
         return [
             'email' => [
@@ -61,10 +65,10 @@ class DbVerification extends DbModel {
     }
 
     public function sendCode(int $type, string $newEmail = ''): bool {
-        $where = ['email' => $this->email];
+        $where = ['email' => ['value' => $this->email]];
 
         if ($type === self::TYPE_REGISTRATION) {
-            $where['status'] = DbUser::STATUS_INACTIVE;
+            $where['status'] = ['value' => DbUser::STATUS_INACTIVE];
         }
 
         $userObject = DbUser::findObject($where);
@@ -106,10 +110,10 @@ class DbVerification extends DbModel {
 
     public static function findActiveVerification(int $userId, int $type) {
         return self::findObject([
-            'user' => $userId,
-            'type' => $type,
-            'used' => false,
-            'expired' => false
+            'user' => ['value' => $userId],
+            'type' => ['value' => $type],
+            'used' => ['value' => false],
+            'expired' => ['value' => false]
         ]);
     }
 

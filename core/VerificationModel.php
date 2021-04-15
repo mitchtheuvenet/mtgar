@@ -38,10 +38,10 @@ abstract class VerificationModel extends Model {
     }
 
     public function validate(): bool {
-        $where = ['email' => $this->email];
+        $where = ['email' => ['value' => $this->email]];
 
         if ($this->verificationType === DbVerification::TYPE_REGISTRATION) {
-            $where['status'] = DbUser::STATUS_INACTIVE;
+            $where['status'] = ['value' => DbUser::STATUS_INACTIVE];
         }
 
         $this->user = DbUser::findObject($where);

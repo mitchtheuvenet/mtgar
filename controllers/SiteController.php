@@ -11,6 +11,7 @@ use app\core\middlewares\AdminMiddleware;
 use app\core\middlewares\AuthMiddleware;
 
 use app\models\Contact;
+use app\models\DbUser;
 
 class SiteController extends Controller {
 
@@ -56,7 +57,41 @@ class SiteController extends Controller {
     }
 
     public function users(Request $request, Response $response) {
-        return $this->render('users');
+        $index = 0;
+        $users = [];
+        $rowsLeft = 0;
+
+        if ($request->isGet()) {
+            $indexStr = $request->getBody()['index'] ?? 0;
+
+            $index = intval($indexStr);
+
+            if ($index < 0) {
+                $index = 0;
+            }
+
+            $where = [
+                'status' => [
+                    'value' => DbUser::STATUS_DELETED,
+                    'operator' => '!='
+                ],
+                'admin' => [
+                    'value' => false
+                ]
+            ];
+
+            $users = DbUser::findArray($where, ['id', 'username', 'email', 'status', 'created_at'], $index);
+
+            $rowCount = DbUser::countRows($where, $index + 1);
+
+            $rowsLeft = intval($rowCount) - ($index + 1) * DbUser::QUERY_LIMIT;
+        }
+
+        return $this->render('users', [
+            'users' => $users,
+            'index' => $index,
+            'rowsLeft' => $rowsLeft
+        ]);
     }
 
 }

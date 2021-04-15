@@ -6,7 +6,7 @@ use app\core\Model;
 
 class Form {
 
-    public static function begin($action, $method, $id = '') {
+    public static function begin(string $action, string $method, string $id = '') {
         echo sprintf('<form action="%s" method="%s" onsubmit="disableSubmitBtn();"%s>', $action, $method, !empty($id) ? " id=\"{$id}\"" : '');
 
         return new Form();

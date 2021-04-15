@@ -40,7 +40,7 @@ class Application {
         if (!empty($userPkVal)) {
             $userPk = DbUser::primaryKey();
 
-            $this->user = DbUser::findObject([$userPk => $userPkVal]);
+            $this->user = DbUser::findObject([$userPk => ['value' => $userPkVal]]);
         } else {
             $this->user = null;
         }

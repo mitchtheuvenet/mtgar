@@ -84,7 +84,7 @@ abstract class Model {
 
                         break;
                     case self::RULE_UNIQUE:
-                        $record = $rule['class']::findObject([$attribute => $value]);
+                        $record = $rule['class']::findObject([$attribute => ['value' => $value]]);
 
                         if (!empty($record)) {
                             $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
@@ -92,7 +92,7 @@ abstract class Model {
 
                         break;
                     case self::RULE_EXISTS:
-                        $record = $rule['class']::findObject([$attribute => $value]);
+                        $record = $rule['class']::findObject([$attribute => ['value' => $value]]);
 
                         if (empty($record)) {
                             $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
