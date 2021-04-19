@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "460a6dd020b0f8e605bc7c371fc93a0f",
+    "content-hash": "bb9855d987aea4db1a2a03d21859c27b",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -71,6 +71,49 @@
                 }
             ],
             "time": "2020-04-13T13:17:36+00:00"
+        },
+        {
+            "name": "mtgsdk/mtgsdk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MagicTheGathering/mtg-sdk-php.git",
+                "reference": "73ba7e00a803b2b7d7ce6bdc13c98c30a355eb57"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MagicTheGathering/mtg-sdk-php/zipball/73ba7e00a803b2b7d7ce6bdc13c98c30a355eb57",
+                "reference": "73ba7e00a803b2b7d7ce6bdc13c98c30a355eb57",
+                "shasum": ""
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^1.12",
+                "php-vcr/php-vcr": "^1.2",
+                "phpunit/phpunit": "^5.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "mtgsdk\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guido Contreras Woda",
+                    "email": "guiwoda@gmail.com"
+                }
+            ],
+            "description": "Magic: The Gathering SDK for php",
+            "support": {
+                "issues": "https://github.com/MagicTheGathering/mtg-sdk-php/issues",
+                "source": "https://github.com/MagicTheGathering/mtg-sdk-php/tree/master"
+            },
+            "time": "2018-10-12T15:26:21+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -543,7 +586,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "mtgsdk/mtgsdk": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
