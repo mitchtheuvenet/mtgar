@@ -1,16 +1,5 @@
 <?php
 
-// cards
-
-// -id INT
-// -name VARCHAR(32)
-// -type VARCHAR(16)
-// -rarity VARCHAR(8)
-// -set CHAR(3)
-// -number SMALLINT
-// -multiverseid INT
-// -created_at TIMESTAMP
-
 use app\core\Migration;
 
 class m0003_cards extends Migration {

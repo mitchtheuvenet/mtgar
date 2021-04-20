@@ -1,12 +1,5 @@
 <?php
 
-// decks
-
-// -id INT
-// -user INT
-// -name VARCHAR(32)
-// -created_at TIMESTAMP
-
 use app\core\Migration;
 
 class m0004_decks extends Migration {

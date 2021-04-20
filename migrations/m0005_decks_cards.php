@@ -1,11 +1,5 @@
 <?php
 
-// decks_cards
-
-// -deck INT
-// -card INT
-// -amount TINYINT
-
 use app\core\Migration;
 
 class m0005_decks_cards extends Migration {
