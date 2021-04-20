@@ -54,6 +54,9 @@ $proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
                                 <li class="nav-item">
                                     <a href="/profile" class="nav-link<?php echo $this->title === 'Profile' ? ' active' : '' ?>">Profile</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="/decks" class="nav-link<?php echo $this->title === 'Decks' ? ' active' : '' ?>">Decks</a>
+                                </li>
                             <?php endif; ?>
                             <li class="nav-item">
                                 <a href="/contact" class="nav-link<?php echo $this->title === 'Contact' ? ' active' : '' ?>">Contact</a>

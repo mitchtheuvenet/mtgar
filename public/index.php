@@ -41,6 +41,8 @@ $app->router->post('/profile/delete', [AuthController::class, 'deleteAccount']);
 $app->router->get('/profile/delete/confirm', [AuthController::class, 'confirmDeleteAccount']);
 $app->router->post('/profile/delete/confirm', [AuthController::class, 'confirmDeleteAccount']);
 
+$app->router->get('/decks', [SiteController::class, 'decks']);
+
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);
 
