@@ -14,12 +14,12 @@ $this->title = 'Profile';
         </div>
         <div class="col-md-6">
             <p class="lead"><?= $user->username; ?></p>
-            <p class="lead"><?= $user->email; ?><a href="/profile/change/email"><i class="bi bi-pencil-square mx-2" style=""></i></a></p>
+            <p class="lead"><?= $user->email; ?><a href="/profile/change/email"><i class="bi bi-pencil-square mx-2"></i></a></p>
             <p class="lead"><?= strtok($user->created_at, ' '); ?></p>
         </div>
     </div>
     <div class="d-flex gap-3 justify-content-center">
-        <a class="btn btn-primary" href="/profile/change/password" role="button">Change password</a>
-        <a class="btn btn-outline-danger" href="/profile/delete" role="button">Delete account</a>
+        <a class="btn btn-primary" href="/profile/change/password" role="button"><i class="bi bi-pencil-square"></i> Change password</a>
+        <a class="btn btn-outline-danger" href="/profile/delete" role="button"><i class="bi bi-trash-fill"></i> Delete account</a>
     </div>
 </div>
