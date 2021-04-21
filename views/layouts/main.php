@@ -69,11 +69,11 @@ $proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
                         </ul>
                         <div class="d-flex">
                             <?php if (Application::isGuest()): ?>
-                                <a href="/login" class="btn btn-primary" role="button">Log in</a>
+                                <a href="/login" class="btn btn-primary" role="button"><i class="bi bi-box-arrow-in-right"></i> Log in</a>
                             <?php else: ?>
                                 <span class="navbar-text mx-2">Logged in as <b><?= Application::$app->user->username; ?></b></span>
                                 <form action="/logout" method="post">
-                                    <button class="btn btn-outline-danger" type="submit">Log out</button>
+                                    <button class="btn btn-outline-danger" type="submit"><i class="bi bi-box-arrow-right"></i> Log out</button>
                                 </form>
                             <?php endif; ?>
                         </div>
