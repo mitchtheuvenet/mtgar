@@ -13,7 +13,7 @@ class m0003_cards extends Migration {
                 `rarity` CHAR(1) NOT NULL,
                 `set` CHAR(3) NOT NULL,
                 `number` SMALLINT NOT NULL,
-                `multiverseid` INT NOT NULL,
+                `multiverseid` INT UNIQUE NOT NULL,
                 `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=INNODB;
         ");
