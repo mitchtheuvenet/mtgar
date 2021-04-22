@@ -5,7 +5,7 @@ use app\core\Migration;
 class m0003_cards extends Migration {
 
     public function up() {
-        self::exec("
+        self::exec(<<<'SQL'
             CREATE TABLE `cards` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
                 `name` VARCHAR(32) NOT NULL,
@@ -16,11 +16,13 @@ class m0003_cards extends Migration {
                 `multiverseid` INT UNIQUE NOT NULL,
                 `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=INNODB;
-        ");
+        SQL);
     }
 
     public function down() {
-        self::exec("DROP TABLE `cards`;");
+        self::exec(<<<'SQL'
+            DROP TABLE `cards`;
+        SQL);
     }
 
 }

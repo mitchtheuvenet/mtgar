@@ -5,7 +5,7 @@ use app\core\Migration;
 class m0004_decks extends Migration {
 
     public function up() {
-        self::exec("
+        self::exec(<<<'SQL'
             CREATE TABLE `decks` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
                 `user` INT NOT NULL,
@@ -22,11 +22,13 @@ class m0004_decks extends Migration {
                     REFERENCES `cards`(`id`)
                     ON DELETE SET NULL
             ) ENGINE=INNODB;
-        ");
+        SQL);
     }
 
     public function down() {
-        self::exec("DROP TABLE `decks`;");
+        self::exec(<<<'SQL'
+            DROP TABLE `decks`;
+        SQL);
     }
 
 }

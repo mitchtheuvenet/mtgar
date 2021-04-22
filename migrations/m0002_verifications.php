@@ -5,7 +5,7 @@ use app\core\Migration;
 class m0002_verifications extends Migration {
 
     public function up() {
-        self::exec("
+        self::exec(<<<'SQL'
             CREATE TABLE `verifications` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
                 `user` INT NOT NULL,
@@ -19,11 +19,13 @@ class m0002_verifications extends Migration {
                     REFERENCES `users`(`id`)
                     ON DELETE CASCADE
             ) ENGINE=INNODB;
-        ");
+        SQL);
     }
 
     public function down() {
-        self::exec("DROP TABLE `verifications`;");
+        self::exec(<<<'SQL'
+            DROP TABLE `verifications`;
+        SQL);
     }
 
 }
