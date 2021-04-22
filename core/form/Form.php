@@ -6,7 +6,7 @@ use app\core\Model;
 
 class Form {
 
-    public static function begin(string $action, string $method, string $id = '') {
+    public static function begin(string $action, string $method, string $id = ''): Form {
         echo sprintf('<form action="%s" method="%s" onsubmit="disableSubmitBtn();"%s>', $action, $method, !empty($id) ? " id=\"{$id}\"" : '');
 
         return new Form();
@@ -16,7 +16,7 @@ class Form {
         echo '</form>';
     }
 
-    public static function script() {
+    public static function script(): string {
         return <<<'JS'
             function disableSubmitBtn() {
                 const button = document.getElementById('submitBtn');
@@ -27,11 +27,11 @@ class Form {
         JS;
     }
 
-    public function inputField(Model $model, string $attribute, int $mb = 3, string $description = '') {
+    public function inputField(Model $model, string $attribute, int $mb = 3, string $description = ''): InputField {
         return new InputField($model, $attribute, $mb, $description);
     }
 
-    public function textareaField(Model $model, string $attribute, int $mb = 3, int $max = 500, int $heightMultiplier = 4) {
+    public function textareaField(Model $model, string $attribute, int $mb = 3, int $max = 500, int $heightMultiplier = 4): textareaField {
         return new TextareaField($model, $attribute, $mb, $max, $heightMultiplier);
     }
 
