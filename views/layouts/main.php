@@ -37,7 +37,7 @@ $proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
     <body class="d-flex flex-column h-100">
         <header>
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
                 <div class="container-fluid">
                     <a href="/" class="navbar-brand" tabindex="-1">
                         <img src="/images/logo_small.png" alt="Logo" style="max-height:3rem;">
