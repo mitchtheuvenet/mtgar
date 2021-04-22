@@ -12,7 +12,9 @@ abstract class DbModel extends Model {
 
     abstract public static function primaryKey(): string;
 
-    abstract public static function getDisplayValue(string $column, $value): string;
+    public static function getDisplayValue(string $column, $value): string {
+        return strval($value);
+    }
 
     public function save(): bool {
         $tableName = static::tableName();

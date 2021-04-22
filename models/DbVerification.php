@@ -43,10 +43,6 @@ class DbVerification extends DbModel {
         return 'id';
     }
 
-    public static function getDisplayValue(string $column, $value): string {
-        return strval($value);
-    }
-
     public function rules(): array {
         return [
             'email' => [
