@@ -40,7 +40,7 @@ JS;
         <?= $form->inputField($model, 'name'); ?>
         <?= $form->inputField($model, 'subject'); ?>
         <?= $form->textareaField($model, 'body', 5); ?>
-        <div class="d-grid mb-2">
+        <div class="d-grid">
             <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Submit</button>
         </div>
     <?php Form::end(); ?>
