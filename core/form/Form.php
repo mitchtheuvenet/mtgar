@@ -17,14 +17,14 @@ class Form {
     }
 
     public static function script() {
-        return <<<'EOT'
+        return <<<'JS'
             function disableSubmitBtn() {
                 const button = document.getElementById('submitBtn');
 
                 button.disabled = true;
                 button.innerHTML = '<span class="spinner-border spinner-border-sm" style="width:1em;height:1em;" role="status" aria-hidden="true"></span><span class="visually-hidden">Submitting...</span>';
             }
-        EOT;
+        JS;
     }
 
     public function inputField(Model $model, string $attribute, int $mb = 3, string $description = '') {

@@ -5,7 +5,7 @@ use app\core\form\Form;
 $this->title = 'Contact';
 
 $this->script = Form::script();
-$this->script .= <<<'EOT'
+$this->script .= <<<'JS'
     const textarea = document.getElementById('body');
     const textareaDesc = document.getElementById('body_desc');
     const maxLength = 500;
@@ -28,7 +28,7 @@ $this->script .= <<<'EOT'
 
         textareaDesc.innerHTML = `${currentLength}/${maxLength}`;
     });
-EOT;
+JS;
 
 ?>
 
