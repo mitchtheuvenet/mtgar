@@ -35,7 +35,7 @@ abstract class Model {
 
     public function validate(): bool {
         foreach ($this->rules() as $attribute => $rules) {
-            $value = $this->{$attribute};
+            $value = $this->{$attribute} ?? '';
 
             foreach ($rules as $rule) {
                 $ruleName = $rule;
@@ -52,25 +52,25 @@ abstract class Model {
 
                         break;
                     case self::RULE_EMAIL:
-                        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        if (!empty($value) && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
                             $this->addError($attribute, $ruleName);
                         }
 
                         break;
                     case self::RULE_MIN:
-                        if (strlen($value) < $rule['min']) {
+                        if (!empty($value) && strlen($value) < $rule['min']) {
                             $this->addError($attribute, $ruleName, $rule);
                         }
 
                         break;
                     case self::RULE_MAX:
-                        if (strlen($value) > $rule['max']) {
+                        if (!empty($value) && strlen($value) > $rule['max']) {
                             $this->addError($attribute, $ruleName, $rule);
                         }
 
                         break;
                     case self::RULE_MATCH:
-                        if ($value !== $this->{$rule['match']}) {
+                        if (!empty($value) && $value !== $this->{$rule['match']}) {
                             $rule['match'] = strtolower($this->getLabel($rule['match']));
 
                             $this->addError($attribute, $ruleName, $rule);
@@ -78,24 +78,28 @@ abstract class Model {
 
                         break;
                     case self::RULE_PATTERN:
-                        if (!preg_match($rule['pattern'], $value)) {
+                        if (!empty($value) && !preg_match($rule['pattern'], $value)) {
                             $this->addError($attribute, $ruleName, $rule);
                         }
 
                         break;
                     case self::RULE_UNIQUE:
-                        $record = $rule['class']::findObject([$attribute => ['value' => $value]]);
+                        if (!empty($value)) {
+                            $record = $rule['class']::findObject([$attribute => ['value' => $value]]);
 
-                        if (!empty($record)) {
-                            $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
+                            if (!empty($record)) {
+                                $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
+                            }
                         }
 
                         break;
                     case self::RULE_EXISTS:
-                        $record = $rule['class']::findObject([$attribute => ['value' => $value]]);
+                        if (!empty($value)) {
+                            $record = $rule['class']::findObject([$attribute => ['value' => $value]]);
 
-                        if (empty($record)) {
-                            $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
+                            if (empty($record)) {
+                                $this->addError($attribute, $ruleName, ['field' => strtolower($this->getLabel($attribute))]);
+                            }
                         }
                 }
             }
