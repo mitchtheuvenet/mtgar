@@ -4,10 +4,6 @@ use app\core\Application;
 
 $flashMessages = $this->getFlashMessages();
 
-$nesting = substr_count($this->path(), '/', 1);
-
-$proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
-
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +25,7 @@ $proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="images/favicon.png">
+        <link rel="icon" type="image/png" href="/images/favicon.png">
 
         <!-- Page title -->
         <title><?= $this->title; ?> &centerdot; MTGAR</title>

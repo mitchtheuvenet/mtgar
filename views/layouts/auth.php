@@ -4,10 +4,6 @@ use app\core\Application;
 
 $flashMessages = $this->getFlashMessages();
 
-$nesting = substr_count($this->path(), '/', 1);
-
-$proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
-
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +22,7 @@ $proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="<?= $proot; ?>images/favicon.png">
+        <link rel="icon" type="image/png" href="/images/favicon.png">
 
         <!-- Page title -->
         <title><?= $this->title; ?> &centerdot; MTGAR</title>
@@ -36,7 +32,7 @@ $proot = $nesting > 0 ? str_repeat('../', $nesting) : '';
             <div class="row<?php echo $this->title !== 'Register' ? ' align-items-center h-100' : ''; ?>">
                 <div class="col-md-4 offset-md-4 card bg-light my-4">
                     <a href="/" class="p-5" tabindex="-1">
-                        <img src="<?= $proot; ?>images/logo.png" class="card-img-top" alt="Logo">
+                        <img src="/images/logo.png" class="card-img-top" alt="Logo">
                     </a>
                     <div class="card-body">
                         <?php
