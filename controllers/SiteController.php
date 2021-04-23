@@ -17,7 +17,7 @@ class SiteController extends Controller {
 
     public function __construct() {
         $this->registerMiddleware(new AdminMiddleware(['users']));
-        $this->registerMiddleware(new AuthMiddleware(['profile', 'decks']));
+        $this->registerMiddleware(new AuthMiddleware(['profile']));
 
         $this->layout = self::LAYOUT_MAIN;
     }
@@ -54,10 +54,6 @@ class SiteController extends Controller {
         return $this->render('contact', [
             'model' => $contact
         ]);
-    }
-
-    public function decks() {
-        return $this->render('decks');
     }
 
     public function users(Request $request, Response $response) {

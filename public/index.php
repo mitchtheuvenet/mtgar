@@ -3,6 +3,7 @@
 use app\core\Application;
 
 use app\controllers\SiteController;
+use app\controllers\DeckController;
 use app\controllers\AuthController;
 
 require_once  __DIR__ . '/../vendor/autoload.php';
@@ -41,7 +42,12 @@ $app->router->post('/profile/delete', [AuthController::class, 'deleteAccount']);
 $app->router->get('/profile/delete/confirm', [AuthController::class, 'confirmDeleteAccount']);
 $app->router->post('/profile/delete/confirm', [AuthController::class, 'confirmDeleteAccount']);
 
-$app->router->get('/decks', [SiteController::class, 'decks']);
+$app->router->get('/decks', [DeckController::class, 'decks']);
+$app->router->get('/decks/create', [DeckController::class, 'createDeck']);
+$app->router->post('/decks/create', [DeckController::class, 'createDeck']);
+$app->router->get('/decks/edit', [DeckController::class, 'editDeck']);
+$app->router->post('/decks/edit', [DeckController::class, 'editDeck']);
+$app->router->post('/decks/delete', [DeckController::class, 'deleteDeck']);
 
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);
