@@ -78,7 +78,7 @@ $flashMessages = $this->getFlashMessages();
             </nav>
         </header>
 
-        <main class="flex-shrink-0" style="margin-top:4.5rem;">
+        <main class="flex-shrink-0" style="margin-top:4.625rem;">
             <div class="container-fluid">
                 <div class="row mt-5">
                     <?php
