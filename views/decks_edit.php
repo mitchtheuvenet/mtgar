@@ -12,7 +12,7 @@ $this->script = Form::script();
     <h1 class="text-center mb-4">Edit your deck</h1>
     <?php $form = Form::begin('/decks/edit', 'post'); ?>
         <input type="hidden" name="id" id="id" value="<?= $model->id; ?>">
-        <?= $form->inputField($model, 'name', 3, 'Can be up to 48 characters.'); ?>
+        <?= $form->inputField($model, 'title', 3, 'Can be up to 48 characters.'); ?>
         <?= $form->inputField($model, 'description', 3, 'Can be up to 128 characters.'); ?>
         <div class="mb-5">
             <p class="text-center">Colors</p>

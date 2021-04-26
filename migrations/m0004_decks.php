@@ -9,7 +9,7 @@ class m0004_decks extends Migration {
             CREATE TABLE `decks` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
                 `user` INT NOT NULL,
-                `name` VARCHAR(48) NOT NULL,
+                `title` VARCHAR(48) NOT NULL,
                 `description` VARCHAR(128) NOT NULL,
                 `colors` VARCHAR(5) NOT NULL,
                 `commander` INT NULL,

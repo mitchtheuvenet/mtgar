@@ -6,14 +6,14 @@ $this->title = 'Decks';
 
 $this->script = Form::script();
 $this->script .= <<<'JS'
-    const modalDeckName = document.getElementById('deckName');
+    const modalDeckName = document.getElementById('deckTitle');
     const modalDeleteBtn = document.getElementById('submitBtn');
 
     function updateModal(deckId) {
-        const deckName = document.getElementById('deckName' + deckId);
+        const deckTitle = document.getElementById('deckTitle' + deckId);
         const deckForm = document.getElementById('deleteForm' + deckId);
 
-        modalDeckName.innerHTML = deckName.innerHTML;
+        modalDeckName.innerHTML = deckTitle.innerHTML;
         modalDeleteBtn.setAttribute('form', deckForm.id);
     }
 JS;
@@ -46,7 +46,7 @@ Rarity CSS colors
                         <?php endforeach; ?>
                     </div>
                     <div class="d-flex flex-column card-body">
-                        <h5 id="deckName<?= $deck['id']; ?>" class="card-title"><?= $deck['name']; ?></h5>
+                        <h5 id="deckTitle<?= $deck['id']; ?>" class="card-title"><?= $deck['title']; ?></h5>
                         <p class="card-text"><?= $deck['description']; ?></p>
                         <div class="d-flex justify-content-between mt-auto">
                             <a href="/decks/view?deck=<?= $deck['id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i> View</a>
@@ -74,7 +74,7 @@ Rarity CSS colors
                 <h5 class="modal-title" id="confirmModalLbl">Deck deletion confirmation</h5>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete your deck: <strong id="deckName"></strong>? This action cannot be undone.</p>
+                <p>Are you sure you want to delete your deck: <strong id="deckTitle"></strong>? This action cannot be undone.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

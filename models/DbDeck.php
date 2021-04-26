@@ -11,7 +11,7 @@ class DbDeck extends DbModel {
 
     public int $user;
 
-    public string $name = '';
+    public string $title = '';
     public string $description = '';
 
     public string $colorW = '';
@@ -35,7 +35,7 @@ class DbDeck extends DbModel {
     }
 
     public static function columnNames(): array {
-        return ['user', 'name', 'description', 'colors'];
+        return ['user', 'title', 'description', 'colors'];
     }
 
     public static function primaryKey(): string {
@@ -44,7 +44,7 @@ class DbDeck extends DbModel {
 
     public function labels(): array {
         return [
-            'name' => 'Name',
+            'title' => 'Title',
             'description' => 'Description'
         ];
     }
@@ -54,7 +54,7 @@ class DbDeck extends DbModel {
             'id' => [
                 [self::RULE_EXISTS, 'class' => $this::class]
             ],
-            'name' => [
+            'title' => [
                 self::RULE_REQUIRED,
                 [self::RULE_MAX, 'max' => 48]
             ],
