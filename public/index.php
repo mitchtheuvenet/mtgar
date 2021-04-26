@@ -48,6 +48,7 @@ $app->router->post('/decks/create', [DeckController::class, 'createDeck']);
 $app->router->get('/decks/edit', [DeckController::class, 'editDeck']);
 $app->router->post('/decks/edit', [DeckController::class, 'editDeck']);
 $app->router->post('/decks/delete', [DeckController::class, 'deleteDeck']);
+$app->router->get('/decks/view', [DeckController::class, 'viewDeck']);
 
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);

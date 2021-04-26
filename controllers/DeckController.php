@@ -7,6 +7,8 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 
+use app\core\exceptions\NotFoundException;
+
 use app\core\middlewares\AuthMiddleware;
 
 // use app\models\DbCard;
@@ -20,7 +22,7 @@ class DeckController extends Controller {
         $this->layout = self::LAYOUT_MAIN;
     }
 
-    public function decks(Request $request, Response $response) {
+    public function decks(Request $request) {
         $index = $request->getBody()['index'] ?? 0;
 
         if (is_numeric($index)) {
@@ -127,6 +129,22 @@ class DeckController extends Controller {
         }
 
         $this->setFlash('error', 'Something went wrong while deleting your deck. Please try again later.');
+    }
+
+    public function viewDeck(Request $request) {
+        $deckId = $request->getBody()['deck'] ?? '';
+
+        if (!empty($deckId)) {
+            $deck = DbDeck::findObject(['id' => ['value' => $deckId]], ['title']);
+
+            if (!empty($deck)) {
+                return $this->render('decks_view', [
+                    'deckTitle' => $deck->title
+                ]);
+            }
+        }
+
+        throw new NotFoundException();
     }
 
 }

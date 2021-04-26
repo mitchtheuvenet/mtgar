@@ -56,7 +56,7 @@ class SiteController extends Controller {
         ]);
     }
 
-    public function users(Request $request, Response $response) {
+    public function users(Request $request) {
         $index = $request->getBody()['index'] ?? 0;
 
         if (is_numeric($index)) {
