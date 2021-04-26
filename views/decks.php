@@ -61,6 +61,8 @@ Rarity CSS colors
                 <?php echo (1 + $i) % 4 === 0 ? '</div><div class="d-flex flex-row justify-content-center mb-3">' : ''; ?>
             <?php endforeach; ?>
         </div>
+    <?php else: ?>
+        <p class="lead text-center">You have no decks saved. Click the button above to create one.</p>
     <?php endif; ?>
 </div>
 
