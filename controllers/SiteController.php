@@ -57,40 +57,39 @@ class SiteController extends Controller {
     }
 
     public function users(Request $request, Response $response) {
-        $index = 0;
-        $users = [];
-        $rowsLeft = 0;
+        $index = $request->getBody()['index'] ?? 0;
 
-        if ($request->isGet()) {
-            $indexStr = $request->getBody()['index'] ?? 0;
+        if (is_numeric($index)) {
+            $index = intval($index);
+        } else {
+            $index = 0;
+        }
 
-            $index = intval($indexStr);
+        $where = [
+            'status' => [
+                'value' => DbUser::STATUS_DELETED,
+                'operator' => '!='
+            ],
+            'admin' => [
+                'value' => false
+            ]
+        ];
 
-            if ($index < 0) {
-                $index = 0;
-            }
+        $users = DbUser::findArray($where, ['id', 'username', 'email', 'status', 'created_at'], $index, 'status', false);
 
-            $where = [
-                'status' => [
-                    'value' => DbUser::STATUS_DELETED,
-                    'operator' => '!='
-                ],
-                'admin' => [
-                    'value' => false
-                ]
-            ];
+        if (!empty($users)) {
+            $rowCount = DbUser::countRows($where);
 
-            $users = DbUser::findArray($where, ['id', 'username', 'email', 'status', 'created_at'], $index);
+            $pageCount = ceil(intval($rowCount) / DbUser::queryLimit());
 
-            $rowCount = DbUser::countRows($where, $index + 1);
-
-            $rowsLeft = intval($rowCount) - ($index + 1) * DbUser::QUERY_LIMIT;
+            $rowsLeft = intval($rowCount) - ($index + 1) * DbUser::queryLimit();
         }
 
         return $this->render('users', [
             'users' => $users,
             'index' => $index,
-            'rowsLeft' => $rowsLeft
+            'pageCount' => $pageCount ?? 0,
+            'rowsLeft' => $rowsLeft ?? 0
         ]);
     }
 

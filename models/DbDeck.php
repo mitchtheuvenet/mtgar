@@ -42,6 +42,10 @@ class DbDeck extends DbModel {
         return 'id';
     }
 
+    public static function queryLimit(): int {
+        return 8;
+    }
+
     public function labels(): array {
         return [
             'title' => 'Title',

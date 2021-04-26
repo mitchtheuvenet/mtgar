@@ -36,6 +36,11 @@ Rarity CSS colors
         <a href="/decks/create" class="btn btn-success"><i class="bi bi-plus"></i> Create new deck</a>
     </div>
     <?php if (!empty($decks)): ?>
+        <div class="d-flex flex-row justify-content-center mb-4">
+            <a class="btn btn-primary<?= $index <= 0 ? ' disabled' : '' ?>" href="/decks?index=<?= $index - 1; ?>" role="button"><i class="bi-arrow-left"></i></a>
+            <p class="lead align-self-center mx-4 mb-0">Page <?= $index + 1; ?> of <?= $pageCount; ?></p>
+            <a class="btn btn-primary<?= $rowsLeft <= 0 ? ' disabled' : '' ?>" href="/decks?index=<?= $index + 1; ?>" role="button"><i class="bi-arrow-right"></i></a>
+        </div>
         <div class="d-flex flex-row justify-content-center mb-3">
             <?php foreach($decks as $i => $deck): ?>
                 <div class="card mx-2" style="width:23%;">
@@ -61,7 +66,7 @@ Rarity CSS colors
                 <?php echo (1 + $i) % 4 === 0 ? '</div><div class="d-flex flex-row justify-content-center mb-3">' : ''; ?>
             <?php endforeach; ?>
         </div>
-    <?php else: ?>
+    <?php elseif ($index === 0): ?>
         <p class="lead text-center">You have no decks saved. Click the button above to create one.</p>
     <?php endif; ?>
 </div>

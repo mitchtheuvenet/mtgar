@@ -4,13 +4,15 @@ namespace app\core;
 
 abstract class DbModel extends Model {
 
-    public const QUERY_LIMIT = 10;
-
     abstract public static function tableName(): string;
 
     abstract public static function columnNames(): array;
 
     abstract public static function primaryKey(): string;
+
+    public static function queryLimit(): int {
+        return 10;
+    }
 
     public static function getDisplayValue(string $column, $value): string {
         return strval($value);
@@ -139,7 +141,7 @@ abstract class DbModel extends Model {
         }
     }
 
-    public static function findArray(array $where, array $columns = [], int $index = 0) {
+    public static function findArray(array $where, array $columns = [], int $index = 0, string $orderBy = '', bool $ascending = true) {
         $tableName = static::tableName();
         $columnNames = array_keys($where);
 
@@ -155,14 +157,21 @@ abstract class DbModel extends Model {
 
         $whereSql = implode(' AND ', $whereArray);
 
-        $limit = self::QUERY_LIMIT;
+        $limit = static::queryLimit();
 
         $startRow = !empty($index) ? strval($index * $limit) . ', ' : '';
+
+        if (empty($orderBy)) {
+            $orderBy = static::primaryKey();
+        }
+
+        $order = $ascending ? 'ASC' : 'DESC';
 
         $statement = self::prepare("
             SELECT {$selectSql}
             FROM `{$tableName}`
             WHERE {$whereSql}
+            ORDER BY `{$orderBy}` {$order}
             LIMIT {$startRow}{$limit};
         ");
 

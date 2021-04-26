@@ -20,15 +20,36 @@ class DeckController extends Controller {
         $this->layout = self::LAYOUT_MAIN;
     }
 
-    public function decks() {
-        $decks = DbDeck::findArray([
+    public function decks(Request $request, Response $response) {
+        $index = $request->getBody()['index'] ?? 0;
+
+        if (is_numeric($index)) {
+            $index = intval($index);
+        } else {
+            $index = 0;
+        }
+
+        $where = [
             'user' => [
                 'value' => Application::$app->user->id
             ]
-        ]);
+        ];
+
+        $decks = DbDeck::findArray($where, ['id', 'user', 'title', 'description', 'colors'], $index, 'title');
+
+        if (!empty($decks)) {
+            $rowCount = DbDeck::countRows($where);
+
+            $pageCount = ceil(intval($rowCount) / DbDeck::queryLimit());
+            
+            $rowsLeft = intval($rowCount) - ($index + 1) * DbDeck::queryLimit();
+        }
 
         return $this->render('decks', [
-            'decks' => $decks
+            'decks' => $decks,
+            'index' => $index,
+            'pageCount' => $pageCount ?? 0,
+            'rowsLeft' => $rowsLeft ?? 0
         ]);
     }
 
