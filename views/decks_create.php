@@ -9,7 +9,11 @@ $this->script = Form::script();
 ?>
 
 <div class="col-md-4 offset-md-4">
-    <h1 class="text-center mb-4">Create a deck</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="/decks" role="button" class="btn btn-sm btn-outline-secondary" tabindex="-1"><i class="bi bi-arrow-left"></i> Cancel</a>
+        <h1 class="mb-0">Create a deck</h1>
+        <a href="#" role="button" class="invisible btn btn-sm btn-outline-secondary" aria-hidden="true"><i class="bi bi-arrow-left"></i> Cancel</a>
+    </div>
     <?php $form = Form::begin('/decks/create', 'post'); ?>
         <?= $form->inputField($model, 'title', 3, 'Can be up to 48 characters.'); ?>
         <?= $form->inputField($model, 'description', 3, 'Can be up to 128 characters.'); ?>
@@ -37,13 +41,10 @@ $this->script = Form::script();
                     <label class="form-check-label" for="colorG"><img src="/images/mana/G.svg" alt="Green" width="28" height="28"></label>
                 </div>
             </div>
-            <div class="form-text text-center">Leave unselected for <img src="/images/mana/C.svg" alt="Colorless" width="20" height="20"> (colorless) decks.</div>
+            <div class="form-text text-center mt-3">Leave unselected for <img src="/images/mana/C.svg" alt="Colorless" width="20" height="20"> (colorless) decks.</div>
         </div>
         <div class="d-grid mb-2">
             <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Create</button>
         </div>
     <?php Form::end(); ?>
-    <div class="text-center">
-        <span>Changed your mind? Go back to <a href="/decks">your decks</a>.</span>
-    </div>
 </div>
