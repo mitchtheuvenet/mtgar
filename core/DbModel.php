@@ -171,7 +171,7 @@ abstract class DbModel extends Model {
 
             $startRow = !empty($index) ? strval($index * $limit) . ', ' : '';
 
-            $limitSql = 'LIMIT ' . $limit . $startRow;
+            $limitSql = 'LIMIT ' . $startRow . $limit;
         }
 
         if (empty($orderBy)) {
