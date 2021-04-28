@@ -46,7 +46,6 @@ class DbVerification extends DbModel {
     public function rules(): array {
         return [
             'email' => [
-                self::RULE_REQUIRED,
                 self::RULE_EMAIL,
                 [self::RULE_MAX , 'max' => 255],
                 [self::RULE_EXISTS, 'class' => DbUser::class]

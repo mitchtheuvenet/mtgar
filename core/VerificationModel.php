@@ -16,21 +16,6 @@ abstract class VerificationModel extends Model {
 
     protected int $verificationType;
 
-    public function rules(): array {
-        $digits = self::getCodeDigits();
-
-        return [
-            'verificationCode' => [
-                self::RULE_REQUIRED,
-                [
-                    self::RULE_PATTERN,
-                    'pattern' => "/[0-9]{{$digits}}/",
-                    'description' => "a {$digits}-digit numerical code"
-                ]
-            ]
-        ];
-    }
-
     public function labels(): array {
         return [
             'verificationCode' => 'Verification code'
@@ -38,6 +23,10 @@ abstract class VerificationModel extends Model {
     }
 
     public function validate(): bool {
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
         $where = ['email' => ['value' => $this->email]];
 
         if ($this->verificationType === DbVerification::TYPE_REGISTRATION) {
@@ -49,8 +38,8 @@ abstract class VerificationModel extends Model {
 
         $codeDigits = self::getCodeDigits();
 
-        if (!empty($this->verificationCode) && preg_match("/[0-9]{{$codeDigits}}/", $this->verificationCode)) {
-            if (md5($this->verificationCode) !== $this->activeVerification->code) {
+        if (!empty($this->verificationCode)) {
+            if (!preg_match("/[0-9]{{$codeDigits}}/", $this->verificationCode) || md5($this->verificationCode) !== $this->activeVerification->code) {
                 $this->addCustomError('verificationCode', 'This verification code is invalid.');
     
                 return parent::validate();
@@ -83,6 +72,8 @@ abstract class VerificationModel extends Model {
                     $this->addCustomError('verificationCode', 'Something went wrong while verifying your code. Please try again later.');
                 }
             }
+        } else {
+            $this->addCustomError('verificationCode', 'This field is required.');
         }
 
         return parent::validate();

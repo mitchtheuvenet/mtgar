@@ -37,6 +37,14 @@ class PasswordChange extends Model {
         ];
     }
 
+    public function validate(): bool {
+        if ($this->newPassword === $this->password) {
+            $this->addCustomError('newPassword', 'Your new password cannot match your current password.');
+        }
+
+        return parent::validate();
+    }
+
     public function apply() {
         $user = Application::$app->user;
 

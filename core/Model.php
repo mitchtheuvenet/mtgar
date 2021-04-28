@@ -23,7 +23,9 @@ abstract class Model {
         }
     }
 
-    abstract public function rules(): array;
+    public function rules(): array {
+        return [];
+    }
 
     public function labels(): array {
         return [];

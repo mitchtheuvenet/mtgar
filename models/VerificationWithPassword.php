@@ -10,12 +10,14 @@ class VerificationWithPassword extends DbVerification {
     public string $password = '';
 
     public function rules(): array {
-        return [
-            'password' => [
-                self::RULE_REQUIRED,
-                [self::RULE_MAX, 'max' => 255]
-            ]
+        $rules = parent::rules();
+
+        $rules['password'] = [
+            self::RULE_REQUIRED,
+            [self::RULE_MAX, 'max' => 255]
         ];
+
+        return $rules;
     }
 
     public function labels(): array {

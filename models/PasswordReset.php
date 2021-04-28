@@ -9,24 +9,11 @@ class PasswordReset extends VerificationModel {
 
     protected int $verificationType = DbVerification::TYPE_PASSWORD_RESET;
 
-    public string $email;
-
-    public string $verificationCode = '';
     public string $password = '';
     public string $passwordConfirm = '';
 
     public function rules(): array {
-        $digits = self::getCodeDigits();
-
         return [
-            'verificationCode' => [
-                self::RULE_REQUIRED,
-                [
-                    self::RULE_PATTERN,
-                    'pattern' => "/[0-9]{{$digits}}/",
-                    'description' => "a {$digits}-digit numerical code"
-                ]
-            ],
             'password' => [
                 self::RULE_REQUIRED,
                 [self::RULE_MIN, 'min' => 8],
@@ -40,11 +27,12 @@ class PasswordReset extends VerificationModel {
     }
 
     public function labels(): array {
-        return [
-            'verificationCode' => 'Verification code',
-            'password' => 'New password',
-            'passwordConfirm' => 'Confirm new password'
-        ];
+        $labels = parent::labels();
+
+        $labels['password'] = 'New password';
+        $labels['passwordConfirm'] = 'Confirm new password';
+
+        return $labels;
     }
 
     public function apply(): bool {
