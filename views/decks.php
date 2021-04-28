@@ -37,9 +37,9 @@ Rarity CSS colors
     </div>
     <?php if (!empty($decks)): ?>
         <div class="d-flex flex-row justify-content-center mb-4">
-            <a class="btn btn-primary<?= $index <= 0 ? ' disabled' : '' ?>" href="/decks?index=<?= $index - 1; ?>" role="button"><i class="bi-arrow-left"></i></a>
+            <a class="btn btn-primary<?= $index <= 0 ? ' disabled' : '' ?>" href="/decks?p=<?= $index - 1; ?>" role="button"><i class="bi-arrow-left"></i></a>
             <p class="lead align-self-center mx-4 mb-0">Page <?= $index + 1; ?> of <?= $pageCount; ?></p>
-            <a class="btn btn-primary<?= $rowsLeft <= 0 ? ' disabled' : '' ?>" href="/decks?index=<?= $index + 1; ?>" role="button"><i class="bi-arrow-right"></i></a>
+            <a class="btn btn-primary<?= $rowsLeft <= 0 ? ' disabled' : '' ?>" href="/decks?p=<?= $index + 1; ?>" role="button"><i class="bi-arrow-right"></i></a>
         </div>
         <div class="d-flex flex-row justify-content-center mb-3">
             <?php foreach($decks as $i => $deck): ?>
@@ -54,8 +54,8 @@ Rarity CSS colors
                         <h5 id="deckTitle<?= $deck['id']; ?>" class="card-title"><?= $deck['title']; ?></h5>
                         <p class="card-text"><?= $deck['description']; ?></p>
                         <div class="d-flex justify-content-between mt-auto">
-                            <a href="/decks/view?deck=<?= $deck['id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i> View</a>
-                            <a href="/decks/edit?deck=<?= $deck['id']; ?>" class="btn btn-secondary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
+                            <a href="/decks/view?d=<?= $deck['display_id']; ?>" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i> View</a>
+                            <a href="/decks/edit?d=<?= $deck['display_id']; ?>" class="btn btn-secondary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
                             <form id= "deleteForm<?= $deck['id']; ?>" action="/decks/delete" method="post" onsubmit="disableSubmitBtn();">
                                 <input type="hidden" name="deckId" value="<?= $deck['id']; ?>">
                                 <button class="btn btn-outline-danger btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#confirmModal" value="<?= $deck['id']; ?>" onclick="updateModal(this.value)"><i class="bi bi-trash-fill"></i> Delete</button>

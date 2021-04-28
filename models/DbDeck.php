@@ -9,6 +9,11 @@ use app\utils\Mana;
 
 class DbDeck extends DbModel {
 
+    private const DISPLAY_ID_LENGTH = 8;
+    private const DISPLAY_ID_CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+
+    public string $display_id;
+
     public int $user;
 
     public string $title = '';
@@ -35,7 +40,7 @@ class DbDeck extends DbModel {
     }
 
     public static function columnNames(): array {
-        return ['user', 'title', 'description', 'colors'];
+        return ['display_id', 'user', 'title', 'description', 'colors'];
     }
 
     public static function primaryKey(): string {
@@ -108,6 +113,12 @@ class DbDeck extends DbModel {
         return parent::validate();
     }
 
+    public function save(): bool {
+        $this->display_id = self::generateDisplayId();
+
+        return parent::save();
+    }
+
     public function update(array $columns = []): bool {
         if (!empty($this->id)) {
             $ownedDeck = DbDeck::findObject(['id' => ['value' => $this->id], 'user' => ['value' => $this->user]]);
@@ -122,6 +133,26 @@ class DbDeck extends DbModel {
 
     public static function formColors(): array {
         return ['colorW', 'colorU', 'colorB', 'colorR', 'colorG'];
+    }
+
+    private static function generateDisplayId() {
+        $existingDisplayIds = self::findArray([], ['display_id'], self::BYPASS_QUERY_LIMIT);
+        
+        for ($i = 0; $i < count($existingDisplayIds); $i++) {
+            $existingDisplayIds[$i] = $existingDisplayIds[$i]['display_id'];
+        }
+
+        $displayId = '';
+
+        $displayIdCharArray = str_split(self::DISPLAY_ID_CHARACTERS);
+
+        do {
+            for ($i = 0; $i < self::DISPLAY_ID_LENGTH; $i++) {
+                $displayId .= $displayIdCharArray[random_int(0, count($displayIdCharArray) - 1)];
+            }
+        } while (in_array($displayId, $existingDisplayIds));
+
+        return $displayId;
     }
 
 }

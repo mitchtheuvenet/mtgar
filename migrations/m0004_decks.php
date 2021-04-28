@@ -8,6 +8,7 @@ class m0004_decks extends Migration {
         self::exec(<<<'SQL'
             CREATE TABLE `decks` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
+                `display_id` CHAR(8) UNIQUE NOT NULL,
                 `user` INT NOT NULL,
                 `title` VARCHAR(48) NOT NULL,
                 `description` VARCHAR(128) NOT NULL,

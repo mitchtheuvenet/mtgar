@@ -7,7 +7,7 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 
-use app\core\exceptions\NotFoundException;
+use app\core\exceptions\ForbiddenException;
 
 use app\core\middlewares\AuthMiddleware;
 
@@ -17,13 +17,13 @@ use app\models\DbDeck;
 class DeckController extends Controller {
 
     public function __construct() {
-        $this->registerMiddleware(new AuthMiddleware(['decks', 'createDeck', 'editDeck', 'deleteDeck']));
+        $this->registerMiddleware(new AuthMiddleware(['decks', 'createDeck', 'editDeck', 'deleteDeck', 'viewDeck']));
 
         $this->layout = self::LAYOUT_MAIN;
     }
 
     public function decks(Request $request) {
-        $index = $request->getBody()['index'] ?? 0;
+        $index = $request->getBody()['p'] ?? 0;
 
         if (is_numeric($index)) {
             $index = intval($index);
@@ -37,7 +37,7 @@ class DeckController extends Controller {
             ]
         ];
 
-        $decks = DbDeck::findArray($where, ['id', 'user', 'title', 'description', 'colors'], $index, 'title');
+        $decks = DbDeck::findArray($where, ['id', 'display_id', 'user', 'title', 'description', 'colors'], $index, 'title');
 
         if (!empty($decks)) {
             $rowCount = DbDeck::countRows($where);
@@ -81,12 +81,12 @@ class DeckController extends Controller {
         $deck = new DbDeck();
 
         if ($request->isGet()) {
-            $deckId = $request->getBody()['deck'] ?? '';
+            $deckId = $request->getBody()['d'] ?? '';
 
-            $deck = DbDeck::findObject(['id' => ['value' => $deckId], 'user' => ['value' => $deck->user]]);
+            $deck = DbDeck::findObject(['display_id' => ['value' => $deckId], 'user' => ['value' => $deck->user]]);
 
             if (empty($deck)) {
-                $response->redirect('/decks');
+                throw new ForbiddenException();
             }
 
             $colorLetters = str_split($deck->colors);
@@ -100,7 +100,7 @@ class DeckController extends Controller {
             $deck->loadData($request->getBody());
 
             if ($deck->validate()) {
-                if ($deck->update()) {
+                if ($deck->update(['title', 'description', 'colors'])) {
                     $this->setFlash('success', 'Your deck has been updated.');
 
                     $response->redirect('/decks');
@@ -132,10 +132,10 @@ class DeckController extends Controller {
     }
 
     public function viewDeck(Request $request) {
-        $deckId = $request->getBody()['deck'] ?? '';
+        $deckId = $request->getBody()['d'] ?? '';
 
         if (!empty($deckId)) {
-            $deck = DbDeck::findObject(['id' => ['value' => $deckId]], ['title']);
+            $deck = DbDeck::findObject(['display_id' => ['value' => $deckId]], ['title']);
 
             if (!empty($deck)) {
                 return $this->render('decks_view', [
@@ -144,7 +144,7 @@ class DeckController extends Controller {
             }
         }
 
-        throw new NotFoundException();
+        throw new ForbiddenException();
     }
 
 }
