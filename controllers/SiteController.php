@@ -57,13 +57,15 @@ class SiteController extends Controller {
     }
 
     public function users(Request $request) {
-        $index = $request->getBody()['p'] ?? 0;
+        $pageNumber = $request->getBody()['p'] ?? 1;
 
-        if (is_numeric($index)) {
-            $index = intval($index);
+        if (!is_int($pageNumber) && is_numeric($pageNumber)) {
+            $pageNumber = intval($pageNumber);
         } else {
-            $index = 0;
+            $pageNumber = 1;
         }
+
+        $index = $pageNumber - 1;
 
         $where = [
             'status' => [
@@ -82,12 +84,12 @@ class SiteController extends Controller {
 
             $pageCount = ceil(intval($rowCount) / DbUser::queryLimit());
 
-            $rowsLeft = intval($rowCount) - ($index + 1) * DbUser::queryLimit();
+            $rowsLeft = intval($rowCount) - ($pageNumber) * DbUser::queryLimit();
         }
 
         return $this->render('users', [
             'users' => $users,
-            'index' => $index,
+            'pageNumber' => $pageNumber,
             'pageCount' => $pageCount ?? 0,
             'rowsLeft' => $rowsLeft ?? 0
         ]);

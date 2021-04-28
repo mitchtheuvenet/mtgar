@@ -23,13 +23,15 @@ class DeckController extends Controller {
     }
 
     public function decks(Request $request) {
-        $index = $request->getBody()['p'] ?? 0;
+        $pageNumber = $request->getBody()['p'] ?? 1;
 
-        if (is_numeric($index)) {
-            $index = intval($index);
+        if (!is_int($pageNumber) && is_numeric($pageNumber)) {
+            $pageNumber = intval($pageNumber);
         } else {
-            $index = 0;
+            $pageNumber = 1;
         }
+
+        $index = $pageNumber - 1;
 
         $where = [
             'user' => [
@@ -44,12 +46,12 @@ class DeckController extends Controller {
 
             $pageCount = ceil(intval($rowCount) / DbDeck::queryLimit());
             
-            $rowsLeft = intval($rowCount) - ($index + 1) * DbDeck::queryLimit();
+            $rowsLeft = intval($rowCount) - ($pageNumber) * DbDeck::queryLimit();
         }
 
         return $this->render('decks', [
             'decks' => $decks,
-            'index' => $index,
+            'pageNumber' => $pageNumber,
             'pageCount' => $pageCount ?? 0,
             'rowsLeft' => $rowsLeft ?? 0
         ]);

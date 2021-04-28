@@ -37,9 +37,9 @@ Rarity CSS colors
     </div>
     <?php if (!empty($decks)): ?>
         <div class="d-flex flex-row justify-content-center mb-4">
-            <a class="btn btn-primary<?= $index <= 0 ? ' disabled' : '' ?>" href="/decks?p=<?= $index - 1; ?>" role="button"><i class="bi-arrow-left"></i></a>
-            <p class="lead align-self-center mx-4 mb-0">Page <?= $index + 1; ?> of <?= $pageCount; ?></p>
-            <a class="btn btn-primary<?= $rowsLeft <= 0 ? ' disabled' : '' ?>" href="/decks?p=<?= $index + 1; ?>" role="button"><i class="bi-arrow-right"></i></a>
+            <a class="btn btn-primary<?= $pageNumber < 2 ? ' invisible" aria-hidden="true' : '' ?>" href="/decks?p=<?= $pageNumber - 1; ?>" role="button"><i class="bi-arrow-left"></i></a>
+            <p class="lead align-self-center mx-4 mb-0">Page <?= $pageNumber; ?> of <?= $pageCount; ?></p>
+            <a class="btn btn-primary<?= $rowsLeft < 1 ? ' invisible" aria-hidden="true' : '' ?>" href="/decks?p=<?= $pageNumber + 1; ?>" role="button"><i class="bi-arrow-right"></i></a>
         </div>
         <div class="d-flex flex-row justify-content-center mb-3">
             <?php foreach($decks as $i => $deck): ?>
@@ -66,7 +66,7 @@ Rarity CSS colors
                 <?php echo (1 + $i) % 4 === 0 ? '</div><div class="d-flex flex-row justify-content-center mb-3">' : ''; ?>
             <?php endforeach; ?>
         </div>
-    <?php elseif ($index === 0): ?>
+    <?php elseif ($pageNumber === 1): ?>
         <p class="lead text-center">You have no decks saved. Click the button above to create one.</p>
     <?php endif; ?>
 </div>
