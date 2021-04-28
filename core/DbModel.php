@@ -4,6 +4,8 @@ namespace app\core;
 
 abstract class DbModel extends Model {
 
+    public const BYPASS_QUERY_LIMIT = -1;
+
     abstract public static function tableName(): string;
 
     abstract public static function columnNames(): array;
@@ -141,25 +143,36 @@ abstract class DbModel extends Model {
         }
     }
 
-    public static function findArray(array $where, array $columns = [], int $index = 0, string $orderBy = '', bool $ascending = true) {
+    public static function findArray(array $where = [], array $columns = [], int $index = 0, string $orderBy = '', bool $ascending = true) {
         $tableName = static::tableName();
-        $columnNames = array_keys($where);
 
         $selectSql = !empty($columns) ? implode(', ', array_map(fn($col) => "`{$col}`", $columns)) : '*';
 
-        $whereArray = [];
+        $whereSql = '';
 
-        foreach ($columnNames as $col) {
-            $operator = $where[$col]['operator'] ?? '=';
+        if (!empty($where)) {
+            $columnNames = array_keys($where);
 
-            $whereArray[] = "`{$col}` {$operator} :{$col}";
+            $whereArray = [];
+
+            foreach ($columnNames as $col) {
+                $operator = $where[$col]['operator'] ?? '=';
+
+                $whereArray[] = "`{$col}` {$operator} :{$col}";
+            }
+
+            $whereSql = 'WHERE ' . implode(' AND ', $whereArray);
         }
 
-        $whereSql = implode(' AND ', $whereArray);
+        $limitSql = '';
 
-        $limit = static::queryLimit();
+        if ($index !== self::BYPASS_QUERY_LIMIT) {
+            $limit = static::queryLimit();
 
-        $startRow = !empty($index) ? strval($index * $limit) . ', ' : '';
+            $startRow = !empty($index) ? strval($index * $limit) . ', ' : '';
+
+            $limitSql = 'LIMIT ' . $limit . $startRow;
+        }
 
         if (empty($orderBy)) {
             $orderBy = static::primaryKey();
@@ -170,9 +183,9 @@ abstract class DbModel extends Model {
         $statement = self::prepare("
             SELECT {$selectSql}
             FROM `{$tableName}`
-            WHERE {$whereSql}
+            {$whereSql}
             ORDER BY `{$orderBy}` {$order}
-            LIMIT {$startRow}{$limit};
+            {$limitSql};
         ");
 
         foreach ($where as $col => $args) {
