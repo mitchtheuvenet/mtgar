@@ -31,10 +31,6 @@ class DbDeck extends DbModel {
     public ?int $commander;
     public ?string $created_at;
 
-    public function __construct() {
-        $this->user = Application::$app->user->id;
-    }
-
     public static function tableName(): string {
         return 'decks';
     }
@@ -61,7 +57,7 @@ class DbDeck extends DbModel {
     public function rules(): array {
         return [
             'id' => [
-                [self::RULE_EXISTS, 'class' => $this::class]
+                [self::RULE_EXISTS, 'class' => self::class]
             ],
             'title' => [
                 self::RULE_REQUIRED,
@@ -114,21 +110,11 @@ class DbDeck extends DbModel {
     }
 
     public function save(): bool {
+        $this->user = Application::$app->user->id;
+
         $this->display_id = self::generateDisplayId();
 
         return parent::save();
-    }
-
-    public function update(array $columns = []): bool {
-        if (!empty($this->id)) {
-            $ownedDeck = DbDeck::findObject(['id' => ['value' => $this->id], 'user' => ['value' => $this->user]]);
-
-            if (!empty($ownedDeck)) {
-                return parent::update($columns);
-            }
-        }
-
-        return false;
     }
 
     public static function formColors(): array {

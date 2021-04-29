@@ -8,10 +8,10 @@ use app\core\Request;
 use app\core\Response;
 
 use app\core\exceptions\ForbiddenException;
+use app\core\exceptions\NotFoundException;
 
 use app\core\middlewares\AuthMiddleware;
 
-// use app\models\DbCard;
 use app\models\DbDeck;
 
 class DeckController extends Controller {
@@ -85,29 +85,39 @@ class DeckController extends Controller {
         if ($request->isGet()) {
             $deckId = $request->getBody()['d'] ?? '';
 
-            $deck = DbDeck::findObject(['display_id' => ['value' => $deckId], 'user' => ['value' => $deck->user]]);
+            if (!empty($deckId)) {
+                $deck = DbDeck::findObject(['display_id' => ['value' => $deckId, 'operator' => '= BINARY']]);
 
-            if (empty($deck)) {
-                throw new ForbiddenException();
-            }
+                if (empty($deck)) {
+                    throw new NotFoundException();
+                }
 
-            $colorLetters = str_split($deck->colors);
+                if ($deck->user !== Application::$app->user->id) {
+                    throw new ForbiddenException();
+                }
 
-            foreach ($colorLetters as $letter) {
-                $attribute = 'color' . $letter;
+                $colorLetters = str_split($deck->colors);
 
-                $deck->{$attribute} = $letter;
+                foreach ($colorLetters as $letter) {
+                    $attribute = 'color' . $letter;
+
+                    $deck->{$attribute} = $letter;
+                }
+            } else {
+                throw new NotFoundException();
             }
         } else if ($request->isPost()) {
             $deck->loadData($request->getBody());
 
             if ($deck->validate()) {
-                if ($deck->update(['title', 'description', 'colors'])) {
+                $oldDeck = !empty($deck->id) ? DbDeck::findObject(['id' => ['value' => $deck->id], 'user' => ['value' => Application::$app->user->id]]) : false;
+
+                if (!empty($oldDeck) && $deck->update(['title', 'description', 'colors'])) {
                     $this->setFlash('success', 'Your deck has been updated.');
 
                     $response->redirect('/decks');
                 }
-                
+
                 $this->setFlash('error', 'Something went wrong while updating your deck. Please try again later.');
             }
         }
@@ -137,16 +147,22 @@ class DeckController extends Controller {
         $deckId = $request->getBody()['d'] ?? '';
 
         if (!empty($deckId)) {
-            $deck = DbDeck::findObject(['display_id' => ['value' => $deckId]], ['title']);
+            $deck = DbDeck::findObject(['display_id' => ['value' => $deckId, 'operator' => '= BINARY']]);
 
-            if (!empty($deck)) {
-                return $this->render('decks_view', [
-                    'deckTitle' => $deck->title
-                ]);
+            if (empty($deck)) {
+                throw new NotFoundException();
             }
+
+            if ($deck->user !== Application::$app->user->id) {
+                throw new ForbiddenException();
+            }
+
+            return $this->render('decks_view', [
+                'deckTitle' => $deck->title
+            ]);
         }
 
-        throw new ForbiddenException();
+        throw new NotFoundException();
     }
 
 }
