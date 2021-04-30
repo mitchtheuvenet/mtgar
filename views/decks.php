@@ -42,7 +42,7 @@ Rarity CSS colors
         <div class="d-flex justify-content-center mb-4">
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="usersDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-bounding-box"></i> User selector</button>
-                <ul class="dropdown-menu" aria-labelledby="usersDropdown">
+                <ul class="dropdown-menu" style="height:auto;max-height:30rem;overflow-x:hidden;" aria-labelledby="usersDropdown">
                     <li><a href="/decks" class="dropdown-item"><?= Application::$app->user->username; ?></a></li>
                     <?php foreach ($usersArray as $user): ?>
                         <li><a href="/decks?u=<?= $user['id']; ?>" class="dropdown-item"><?= $user['username']; ?></a></li>
