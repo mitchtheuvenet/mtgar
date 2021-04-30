@@ -56,7 +56,12 @@ class DbDeck extends DbModel {
 
     public function rules(): array {
         return [
-            'id' => [
+            'display_id' => [
+                [
+                    self::RULE_PATTERN,
+                    'pattern' => '/[a-zA-Z0-9\-_]{' . self::DISPLAY_ID_LENGTH . '}/',
+                    'description' => 'a deck ID'
+                ],
                 [self::RULE_EXISTS, 'class' => self::class]
             ],
             'title' => [
@@ -119,6 +124,10 @@ class DbDeck extends DbModel {
 
     public static function formColors(): array {
         return ['colorW', 'colorU', 'colorB', 'colorR', 'colorG'];
+    }
+
+    public static function validateDisplayId(string $id): bool {
+        return preg_match('/[a-zA-Z0-9\-_]{' . self::DISPLAY_ID_LENGTH . '}/', $id);
     }
 
     private static function generateDisplayId() {

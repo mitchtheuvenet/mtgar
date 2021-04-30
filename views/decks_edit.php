@@ -14,10 +14,10 @@ $this->script = Form::script();
     <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="/decks<?= Application::isAdmin() ? "?u={$model->user}" : ''; ?>" role="button" class="btn btn-sm btn-outline-secondary" tabindex="-1"><i class="bi bi-arrow-left"></i> Cancel</a>
         <h1 class="mb-0">Edit your deck</h1>
-        <a href="#" role="button" class="invisible btn btn-sm btn-outline-secondary" aria-hidden="true"><i class="bi bi-arrow-left"></i> Cancel</a>
+        <a href="#" role="button" class="invisible btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left"></i> Cancel</a>
     </div>
     <?php $form = Form::begin('/decks/edit', 'post'); ?>
-        <input type="hidden" name="id" id="id" value="<?= $model->id; ?>">
+        <input type="hidden" name="display_id" id="display_id" value="<?= $model->display_id; ?>">
         <?= $form->inputField($model, 'title', 3, 'Can be up to 48 characters.'); ?>
         <?= $form->inputField($model, 'description', 3, 'Can be up to 128 characters.'); ?>
         <div class="mb-5">

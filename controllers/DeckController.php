@@ -119,8 +119,8 @@ class DeckController extends Controller {
         if ($request->isGet()) {
             $deckId = $request->getBody()['d'] ?? '';
 
-            if (!empty($deckId) && preg_match('/[a-zA-Z0-9\-_]{8}/', $deckId)) {
-                $deck = DbDeck::findObject(['display_id' => ['value' => $deckId, 'operator' => '= BINARY']]);
+            if (!empty($deckId) && DbDeck::validateDisplayId($deckId)) {
+                $deck = DbDeck::findObject(['display_id' => ['value' => $deckId]]);
 
                 if (empty($deck)) {
                     throw new NotFoundException();
@@ -144,9 +144,11 @@ class DeckController extends Controller {
             $deck->loadData($request->getBody());
 
             if ($deck->validate()) {
-                $oldDeck = !empty($deck->id) ? DbDeck::findObject(['id' => ['value' => $deck->id]]) : false;
+                $oldDeck = !empty($deck->display_id) ? DbDeck::findObject(['display_id' => ['value' => $deck->display_id]]) : false;
 
                 if (!empty($oldDeck) && (Application::isAdmin() || $oldDeck->user === Application::$app->user->id)) {
+                    $deck->id = $oldDeck->id;
+
                     if ($deck->update(['title', 'description', 'colors'])) {
                         $this->setFlash('success', 'Your deck has been updated.');
     
@@ -168,10 +170,10 @@ class DeckController extends Controller {
     }
 
     public function deleteDeck(Request $request, Response $response) {
-        $deckId = $request->getBody()['deckId'] ?? '';
+        $deckId = $request->getBody()['d'] ?? '';
 
-        if (!empty($deckId) && is_numeric($deckId)) {
-            $deck = DbDeck::findObject(['id' => ['value' => intval($deckId)]]);
+        if (!empty($deckId) && DbDeck::validateDisplayId($deckId)) {
+            $deck = DbDeck::findObject(['display_id' => ['value' => $deckId]]);
 
             if (!empty($deck) && (Application::isAdmin() || $deck->user === Application::$app->user->id)) {
                 if ($deck->delete()) {
@@ -192,8 +194,8 @@ class DeckController extends Controller {
     public function viewDeck(Request $request) {
         $deckId = $request->getBody()['d'] ?? '';
 
-        if (!empty($deckId) && preg_match('/[a-zA-Z0-9\-_]{8}/', $deckId)) {
-            $deck = DbDeck::findObject(['display_id' => ['value' => $deckId, 'operator' => '= BINARY']]);
+        if (!empty($deckId) && DbDeck::validateDisplayId($deckId)) {
+            $deck = DbDeck::findObject(['display_id' => ['value' => $deckId]]);
 
             if (empty($deck)) {
                 throw new NotFoundException();
