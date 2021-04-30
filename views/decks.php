@@ -1,5 +1,7 @@
 <?php
 
+use app\core\Application;
+
 use app\core\form\Form;
 
 $this->title = 'Decks';
@@ -31,15 +33,34 @@ Rarity CSS colors
 ?>
 
 <div class="col-md-8 offset-md-2">
-    <h1 class="text-center mb-4">Decks</h1>
-    <div class="text-center mb-4">
-        <a href="/decks/create" class="btn btn-success"><i class="bi bi-plus"></i> Create new deck</a>
-    </div>
+    <?php if ($userId !== Application::$app->user->id): ?>
+        <h1 class="text-center mb-4"><?= $username; ?>&apos;s decks</h1>
+    <?php else: ?>
+        <h1 class="text-center mb-4">Your decks</h1>
+    <?php endif; ?>
+    <?php if (Application::isAdmin()): ?>
+        <div class="d-flex justify-content-center mb-4">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="usersDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-bounding-box"></i> User selector</button>
+                <ul class="dropdown-menu" aria-labelledby="usersDropdown">
+                    <li><a href="/decks" class="dropdown-item"><?= Application::$app->user->username; ?></a></li>
+                    <?php foreach ($usersArray as $user): ?>
+                        <li><a href="/decks?u=<?= $user['id']; ?>" class="dropdown-item"><?= $user['username']; ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    <?php endif; ?>
+    <?php if ($userId === Application::$app->user->id): ?>
+        <div class="text-center mb-4">
+            <a href="/decks/create" class="btn btn-success"><i class="bi bi-plus"></i> Create new deck</a>
+        </div>
+    <?php endif; ?>
     <?php if (!empty($decks)): ?>
         <div class="d-flex flex-row justify-content-center mb-4">
-            <a class="btn btn-primary<?= $pageNumber < 2 ? ' invisible" aria-hidden="true' : '' ?>" href="/decks?p=<?= $pageNumber - 1; ?>" role="button"><i class="bi-arrow-left"></i></a>
+            <a class="btn btn-primary<?= $pageNumber < 2 ? ' invisible" aria-hidden="true' : '' ?>" href="/decks?u=<?= $userId; ?>&p=<?= $pageNumber - 1; ?>" role="button"><i class="bi bi-arrow-left"></i></a>
             <p class="lead align-self-center mx-4 mb-0">Page <?= $pageNumber; ?> of <?= $pageCount; ?></p>
-            <a class="btn btn-primary<?= $rowsLeft < 1 ? ' invisible" aria-hidden="true' : '' ?>" href="/decks?p=<?= $pageNumber + 1; ?>" role="button"><i class="bi-arrow-right"></i></a>
+            <a class="btn btn-primary<?= $rowsLeft < 1 ? ' invisible" aria-hidden="true' : '' ?>" href="/decks?u=<?= $userId; ?>&p=<?= $pageNumber + 1; ?>" role="button"><i class="bi bi-arrow-right"></i></a>
         </div>
         <div class="d-flex flex-row justify-content-center mb-3">
             <?php foreach($decks as $i => $deck): ?>
@@ -67,7 +88,11 @@ Rarity CSS colors
             <?php endforeach; ?>
         </div>
     <?php elseif ($pageNumber === 1): ?>
-        <p class="lead text-center">You have no decks saved. Click the button above to create one.</p>
+        <?php if ($userId === Application::$app->user->id): ?>
+            <p class="lead text-center">You have no decks saved. Click the button above to create one.</p>
+        <?php else: ?>
+            <p class="lead text-center">This user has no decks saved.</p>
+        <?php endif; ?>
     <?php endif; ?>
 </div>
 

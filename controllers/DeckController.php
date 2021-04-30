@@ -13,6 +13,7 @@ use app\core\exceptions\NotFoundException;
 use app\core\middlewares\AuthMiddleware;
 
 use app\models\DbDeck;
+use app\models\DbUser;
 
 class DeckController extends Controller {
 
@@ -23,6 +24,42 @@ class DeckController extends Controller {
     }
 
     public function decks(Request $request) {
+        $requestBody = $request->getBody();
+
+        $userId = Application::$app->user->id;
+        $username = Application::$app->user->username;
+
+        if (Application::isAdmin()) {
+            $userId = $requestBody['u'] ?? $userId;
+
+            if (!is_int($userId) && is_numeric($userId)) {
+                $userId = intval($userId);
+            }
+
+            $where = [
+                'status' => [
+                    'value' => DbUser::STATUS_ACTIVE
+                ],
+                'admin' => [
+                    'value' => false
+                ]
+            ];
+
+            $usersArray = DbUser::findArray($where, ['id', 'username'], DbUser::BYPASS_QUERY_LIMIT, 'username');
+
+            foreach ($usersArray as $user) {
+                if (intval($user['id']) === $userId) {
+                    $username = $user['username'];
+
+                    break;
+                }
+            }
+        }
+
+        $where = [
+            'user' => ['value' => $userId]
+        ];
+
         $pageNumber = $request->getBody()['p'] ?? 1;
 
         if (!is_int($pageNumber) && is_numeric($pageNumber)) {
@@ -32,12 +69,6 @@ class DeckController extends Controller {
         }
 
         $index = $pageNumber - 1;
-
-        $where = [
-            'user' => [
-                'value' => Application::$app->user->id
-            ]
-        ];
 
         $decks = DbDeck::findArray($where, ['id', 'display_id', 'user', 'title', 'description', 'colors'], $index, 'title');
 
@@ -50,6 +81,9 @@ class DeckController extends Controller {
         }
 
         return $this->render('decks', [
+            'userId' => $userId,
+            'username' => $username,
+            'usersArray' => $usersArray ?? [],
             'decks' => $decks,
             'pageNumber' => $pageNumber,
             'pageCount' => $pageCount ?? 0,
@@ -85,14 +119,14 @@ class DeckController extends Controller {
         if ($request->isGet()) {
             $deckId = $request->getBody()['d'] ?? '';
 
-            if (!empty($deckId)) {
+            if (!empty($deckId) && preg_match('/[a-zA-Z0-9\-_]{8}/', $deckId)) {
                 $deck = DbDeck::findObject(['display_id' => ['value' => $deckId, 'operator' => '= BINARY']]);
 
                 if (empty($deck)) {
                     throw new NotFoundException();
                 }
 
-                if ($deck->user !== Application::$app->user->id) {
+                if (!Application::isAdmin() && $deck->user !== Application::$app->user->id) {
                     throw new ForbiddenException();
                 }
 
@@ -110,12 +144,18 @@ class DeckController extends Controller {
             $deck->loadData($request->getBody());
 
             if ($deck->validate()) {
-                $oldDeck = !empty($deck->id) ? DbDeck::findObject(['id' => ['value' => $deck->id], 'user' => ['value' => Application::$app->user->id]]) : false;
+                $oldDeck = !empty($deck->id) ? DbDeck::findObject(['id' => ['value' => $deck->id]]) : false;
 
-                if (!empty($oldDeck) && $deck->update(['title', 'description', 'colors'])) {
-                    $this->setFlash('success', 'Your deck has been updated.');
-
-                    $response->redirect('/decks');
+                if (!empty($oldDeck) && (Application::isAdmin() || $oldDeck->user === Application::$app->user->id)) {
+                    if ($deck->update(['title', 'description', 'colors'])) {
+                        $this->setFlash('success', 'Your deck has been updated.');
+    
+                        if (Application::isAdmin()) {
+                            $response->redirect("/decks?u={$oldDeck->user}");
+                        } else {
+                            $response->redirect('/decks');
+                        }
+                    }
                 }
 
                 $this->setFlash('error', 'Something went wrong while updating your deck. Please try again later.');
@@ -130,13 +170,19 @@ class DeckController extends Controller {
     public function deleteDeck(Request $request, Response $response) {
         $deckId = $request->getBody()['deckId'] ?? '';
 
-        if (!empty($deckId)) {
-            $deck = DbDeck::findObject(['id' => ['value' => $deckId], 'user' => ['value' => Application::$app->user->id]]);
+        if (!empty($deckId) && is_numeric($deckId)) {
+            $deck = DbDeck::findObject(['id' => ['value' => intval($deckId)]]);
 
-            if (!empty($deck) && $deck->delete()) {
-                $this->setFlash('success', 'Your deck has been deleted.');
-
-                $response->redirect('/decks');
+            if (!empty($deck) && (Application::isAdmin() || $deck->user === Application::$app->user->id)) {
+                if ($deck->delete()) {
+                    $this->setFlash('success', 'Your deck has been deleted.');
+    
+                    if (Application::isAdmin()) {
+                        $response->redirect("/decks?u={$deck->user}");
+                    } else {
+                        $response->redirect('/decks');
+                    }
+                }
             }
         }
 
@@ -146,7 +192,7 @@ class DeckController extends Controller {
     public function viewDeck(Request $request) {
         $deckId = $request->getBody()['d'] ?? '';
 
-        if (!empty($deckId)) {
+        if (!empty($deckId) && preg_match('/[a-zA-Z0-9\-_]{8}/', $deckId)) {
             $deck = DbDeck::findObject(['display_id' => ['value' => $deckId, 'operator' => '= BINARY']]);
 
             if (empty($deck)) {
