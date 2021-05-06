@@ -10,8 +10,8 @@ class m0003_cards extends Migration {
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
                 `name` VARCHAR(32) NOT NULL,
                 `type` VARCHAR(16) NOT NULL,
-                `rarity` CHAR(1) NOT NULL,
-                `set` CHAR(3) NOT NULL,
+                `rarity` VARCHAR(8) NOT NULL,
+                `set` VARCHAR(4) NOT NULL,
                 `number` SMALLINT NOT NULL,
                 `multiverseid` INT UNIQUE NOT NULL,
                 `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
