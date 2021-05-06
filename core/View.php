@@ -8,6 +8,7 @@ class View {
 
     private string $title = '';
     private string $script = '';
+    private string $style = '';
 
     public function renderView($view, $params) {
         $viewContent = $this->renderOnlyView($view, $params);
