@@ -20,16 +20,6 @@ $this->script .= <<<'JS'
     }
 JS;
 
-/*
-
-Rarity CSS colors
-- Common: black
-- Uncommon: lightblue
-- Rare: orange
-- Mythic: redorange
-
-*/
-
 ?>
 
 <div class="col-md-8 offset-md-2">
