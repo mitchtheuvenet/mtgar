@@ -246,7 +246,11 @@ abstract class DbModel extends Model {
         }
     }
 
-    private static function prepare(string $sql): \PDOStatement {
+    public static function lastInsertId(): string {
+        return Application::$app->db->pdo->lastInsertId();
+    }
+
+    protected static function prepare(string $sql): \PDOStatement {
         return Application::$app->db->pdo->prepare($sql);
     }
 

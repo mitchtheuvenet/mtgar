@@ -2,9 +2,10 @@
 
 use app\core\Application;
 
-use app\controllers\SiteController;
-use app\controllers\DeckController;
 use app\controllers\AuthController;
+use app\controllers\CardController;
+use app\controllers\DeckController;
+use app\controllers\SiteController;
 
 require_once  __DIR__ . '/../vendor/autoload.php';
 
@@ -49,6 +50,10 @@ $app->router->get('/decks/edit', [DeckController::class, 'editDeck']);
 $app->router->post('/decks/edit', [DeckController::class, 'editDeck']);
 $app->router->post('/decks/delete', [DeckController::class, 'deleteDeck']);
 $app->router->get('/decks/view', [DeckController::class, 'viewDeck']);
+
+$app->router->get('/cards/search', [CardController::class, 'searchCards']);
+$app->router->post('/cards/add', [CardController::class, 'addCardToDeck']);
+$app->router->post('/cards/remove', [CardController::class, 'removeCardFromDeck']);
 
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);

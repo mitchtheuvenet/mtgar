@@ -28,7 +28,6 @@ class DbDeck extends DbModel {
     public string $colors;
 
     public ?int $id;
-    public ?int $commander;
     public ?string $created_at;
 
     public static function tableName(): string {
@@ -122,12 +121,124 @@ class DbDeck extends DbModel {
         return parent::save();
     }
 
+    public function addCard(int $cardId, int $amount = 1): bool {
+        $statement = null;
+
+        if ($this->containsCard($cardId)) {
+            $statement = self::prepare("
+                UPDATE `decks_cards`
+                SET `amount` = `amount` + :amount
+                WHERE `deck` = :deck
+                AND `card` = :card;
+            ");
+        } else {
+            $statement = self::prepare("
+                INSERT INTO `decks_cards` (`deck`, `card`, `amount`)
+                VALUES (:deck, :card, :amount);
+            ");
+        }
+
+        $statement->bindValue(':deck', $this->id);
+        $statement->bindValue(':card', $cardId);
+        $statement->bindValue(':amount', $amount);
+
+        try {
+            $statement->execute();
+
+            return true;
+        } catch (\PDOException $e) {
+            // TODO: add exception handling
+
+            return false;
+        }
+    }
+
+    public function addCommander(int $cardId): bool {
+        $statement = self::prepare("
+            INSERT INTO `decks_commanders` (`deck`, `commander`)
+            VALUES (:deck, :commander);
+        ");
+
+        $statement->bindValue(':deck', $this->id);
+        $statement->bindValue(':commander', $cardId);
+
+        try {
+            $statement->execute();
+
+            return true;
+        } catch (\PDOException $e) {
+            // TODO: add exception handling
+
+            return false;
+        }
+    }
+
+    public static function findCards(int $deckId, bool $findCommanders = false) {
+        $table = $findCommanders ? '`decks_commanders`' : '`decks_cards`';
+        $cardColumn = $findCommanders ? '`commander`' : '`card`';
+
+        $selectAmount = !$findCommanders ? 'dc.`amount`, ' : '';
+
+        $statement = self::prepare("
+            SELECT dc.{$cardColumn}, {$selectAmount}c.`name`, c.`type`, c.`multiverseid`
+            FROM {$table} AS dc
+            INNER JOIN `cards` AS c
+            ON c.`id` = dc.{$cardColumn}
+            INNER JOIN `decks` AS d
+            ON d.`id` = dc.`deck`
+            WHERE d.`id` = :id;
+        ");
+
+        $statement->bindValue(':id', $deckId);
+
+        try {
+            $statement->execute();
+
+            return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            // TODO: add exception handling
+
+            return false;
+        }
+    }
+
+    public function containsCard(int $cardId, bool $asCommander = false) {
+        $cardCount = $this->countCard($cardId, $asCommander);
+
+        return intval($cardCount) > 0;
+    }
+
     public static function formColors(): array {
         return ['colorW', 'colorU', 'colorB', 'colorR', 'colorG'];
     }
 
     public static function validateDisplayId(string $id): bool {
         return preg_match('/[a-zA-Z0-9\-_]{' . self::DISPLAY_ID_LENGTH . '}/', $id);
+    }
+
+    private function countCard(int $cardId, bool $findCommander) {
+        $table = $findCommander ? '`decks_commanders`' : '`decks_cards`';
+        $cardColumn = $findCommander ? 'commander' : 'card';
+
+        $statement = self::prepare("
+            SELECT COUNT(*)
+            FROM {$table}
+            WHERE `deck` = :deck
+            AND `{$cardColumn}` = :{$cardColumn};
+        ");
+
+        $statement->bindValue(":deck", $this->id);
+        $statement->bindValue(":{$cardColumn}", $cardId);
+
+        try {
+            $statement->execute();
+
+            return $statement->fetchColumn();
+        } catch (\PDOException $e) {
+            // TODO: add exception handling
+
+            return false;
+        }
     }
 
     private static function generateDisplayId() {

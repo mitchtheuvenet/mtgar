@@ -201,12 +201,27 @@ class DeckController extends Controller {
                 throw new NotFoundException();
             }
 
-            if ($deck->user !== Application::$app->user->id) {
+            if (!Application::isAdmin() && $deck->user !== Application::$app->user->id) {
                 throw new ForbiddenException();
             }
 
+            $cards = DbDeck::findCards($deck->id);
+            $commanders = DbDeck::findCards($deck->id, true);
+
+            $cardsByType = [];
+
+            foreach ($cards as $card) {
+                $cardsByType[$card['type']][] = [
+                    'multiverseid' => $card['multiverseid'],
+                    'name' => $card['name'],
+                    'amount' => $card['amount']
+                ];
+            }
+
             return $this->render('decks_view', [
-                'deckTitle' => $deck->title
+                'deck' => $deck,
+                'cards' => $cardsByType,
+                'commanders' => $commanders
             ]);
         }
 
