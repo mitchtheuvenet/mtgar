@@ -2,7 +2,7 @@
 
 use app\core\Migration;
 
-class m0005_decks_commanders extends Migration {
+class m0006_decks_commanders extends Migration {
 
     public function up() {
         self::exec(<<<'SQL'
