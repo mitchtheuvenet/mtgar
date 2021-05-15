@@ -15,7 +15,7 @@ abstract class Model {
 
     public array $errors = [];
 
-    public function loadData($data) {
+    public function loadData(array $data) {
         foreach ($data as $key => $val) {
             if (property_exists($this, $key)) {
                 $this->{$key} = $val;

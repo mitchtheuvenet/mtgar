@@ -89,19 +89,19 @@ $flashMessages = $this->getFlashMessages();
             <div class="container-fluid">
                 <div class="row mt-5">
                     <?php
-                        
-                    foreach ($flashMessages as $key => $message) {
-                        $key = $key === 'error' ? 'danger' : $key;
-                        $message = $message['value'] ?? '';
 
-                        echo "
-                            <div class=\"alert alert-{$key} alert-dismissible fade show text-center\" style=\"border-radius:0;\" role=\"alert\">
-                                {$message}
-                                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\" tabindex=\"-1\"></button>
-                            </div>
-                        ";
-                    }
-                        
+                        foreach ($flashMessages as $key => $message) {
+                            $key = $key === 'error' ? 'danger' : $key;
+                            $message = $message['value'] ?? '';
+
+                            echo "
+                                <div class=\"alert alert-{$key} alert-dismissible fade show text-center\" style=\"border-radius:0;\" role=\"alert\">
+                                    {$message}
+                                    <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\" tabindex=\"-1\"></button>
+                                </div>
+                            ";
+                        }
+
                     ?>
                     <!-- Content -->
                     {{content}}
