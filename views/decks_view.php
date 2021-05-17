@@ -81,7 +81,13 @@ $currentUserIsOwner = $deck->user === Application::$app->user->id;
         <div class="d-flex flex-row justify-content-center">
             <div class="col-md-2">
                 <div class="sticky-top" style="top:5.625rem;">
-                    <img id="card-view" width="223" height="311" class="d-block mx-auto img-fluid" src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=<?= $commanders[0]['multiverseid']; ?>&type=card" alt="Card image">
+                    <?php if (!empty($commanders)): ?>
+                        <img id="card-view" width="223" height="311" class="d-block mx-auto img-fluid" src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=<?= $commanders[0]['multiverseid']; ?>&type=card" alt="<?= $commanders[0]['name']; ?>">
+                    <?php elseif (!empty($cards)): ?>
+                        <img id="card-view" width="223" height="311" class="d-block mx-auto img-fluid" src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=<?= $cards[array_key_first($cards)][0]['multiverseid']; ?>&type=card" alt="<?= $cards[array_key_first($cards)][0]['name']; ?>">
+                    <?php else: ?>
+                        <img id="card-view" width="223" height="311" class="d-block mx-auto img-fluid" src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=0&type=card" alt="Card image">
+                    <?php endif; ?>
                     <button class="d-block mx-auto btn btn-outline-primary mt-5" type="submit"><i class="bi bi-file-earmark-text-fill"></i> Export to PDF</button>
                 </div>
             </div>
