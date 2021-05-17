@@ -137,11 +137,21 @@ class DeckController extends Controller {
 
                     $deck->{$attribute} = $letter;
                 }
+
+                $ref = $request->getBody()['ref'] ?? '';
             } else {
                 throw new NotFoundException();
             }
         } else if ($request->isPost()) {
-            $deck->loadData($request->getBody());
+            $requestBody = $request->getBody();
+
+            if (isset($requestBody['ref'])) {
+                $ref = $requestBody['ref'];
+
+                unset($requestBody['ref']);
+            }
+
+            $deck->loadData($requestBody);
 
             if ($deck->validate()) {
                 $oldDeck = !empty($deck->display_id) ? DbDeck::findObject(['display_id' => ['value' => $deck->display_id]]) : false;
@@ -152,10 +162,14 @@ class DeckController extends Controller {
                     if ($deck->update(['title', 'description', 'colors'])) {
                         $this->setFlash('success', 'Your deck has been updated.');
     
-                        if (Application::isAdmin()) {
-                            $response->redirect("/decks?u={$oldDeck->user}");
+                        if (isset($ref) && $ref === 'deckview') {
+                            $response->redirect("/decks/view?d={$oldDeck->display_id}");
                         } else {
-                            $response->redirect('/decks');
+                            if (Application::isAdmin()) {
+                                $response->redirect("/decks?u={$oldDeck->user}");
+                            } else {
+                                $response->redirect('/decks');
+                            }
                         }
                     }
                 }
@@ -165,7 +179,8 @@ class DeckController extends Controller {
         }
 
         return $this->render('decks_edit', [
-            'model' => $deck
+            'model' => $deck,
+            'ref' => $ref ?? ''
         ]);
     }
 
