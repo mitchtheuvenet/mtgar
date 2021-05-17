@@ -2,9 +2,12 @@
 
 use app\core\Application;
 
+use app\core\form\Form;
+
 $this->title = $deck->title . ' (MTG deck)';
 
-$this->script = <<<'JS'
+$this->script = Form::script();
+$this->script .= <<<'JS'
     const cardView = document.getElementById('card-view');
 
     function updateCardView(multiverseid) {
@@ -44,6 +47,13 @@ $this->style = <<<'CSS'
         cursor: pointer;
         outline: inherit;
     }
+
+    #card-view {
+        min-height: 311px;
+        max-height: 311px;
+        min-width: 223px;
+        max-width: 223px;
+    }
 CSS;
 
 $cardTotal = 0;
@@ -79,7 +89,7 @@ $currentUserIsOwner = $deck->user === Application::$app->user->id;
         <?php endif; ?>
     <?php else: ?>
         <div class="d-flex flex-row justify-content-center">
-            <div class="col-md-2">
+            <div class="col-md-2 me-3">
                 <div class="sticky-top" style="top:5.625rem;">
                     <?php if (!empty($commanders)): ?>
                         <img id="card-view" width="223" height="311" class="d-block mx-auto img-fluid" src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=<?= $commanders[0]['multiverseid']; ?>&type=card" alt="<?= $commanders[0]['name']; ?>">
@@ -88,7 +98,9 @@ $currentUserIsOwner = $deck->user === Application::$app->user->id;
                     <?php else: ?>
                         <img id="card-view" width="223" height="311" class="d-block mx-auto img-fluid" src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=0&type=card" alt="Card image">
                     <?php endif; ?>
-                    <button class="d-block mx-auto btn btn-outline-primary mt-5" type="submit"><i class="bi bi-file-earmark-text-fill"></i> Export to PDF</button>
+                    <button class="d-block btn btn-primary w-100 mt-5" type="button"><i class="bi bi-file-earmark-text-fill"></i> Export to PDF</button>
+                    <a href="/decks/edit?d=<?= $deck->display_id; ?>&ref=deckview" class="d-block btn btn-secondary mt-3" type="button"><i class="bi bi-pencil-square"></i> Edit deck</a>
+                    <button class="d-block btn btn-outline-danger w-100 mt-3" type="button" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="bi bi-trash-fill"></i> Delete deck</button>
                 </div>
             </div>
             <div class="col-md-2">
@@ -185,4 +197,25 @@ $currentUserIsOwner = $deck->user === Application::$app->user->id;
             </div>
         </div>
     <?php endif; ?>
+</div>
+
+<!-- Confirmation modal -->
+<div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmModalLbl" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLbl">Deck deletion confirmation</h5>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your deck: <strong><?= $deck->title ?></strong>? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <form id="delete-deck" action="/decks/delete" method="post" onsubmit="disableSubmitBtn()">
+                    <input type="hidden" name="d" value="<?= $deck->display_id; ?>">
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" id="submitBtn" form="delete-deck" class="btn btn-outline-danger">Delete</button>
+            </div>
+        </div>
+    </div>
 </div>
