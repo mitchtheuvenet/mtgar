@@ -153,6 +153,32 @@ class DbDeck extends DbModel {
         }
     }
 
+    public function removeCard(int $cardId, $isCommander = false) {
+        if ($this->containsCard($cardId, $isCommander)) {
+            $table = $isCommander ? '`decks_commanders`' : '`decks_cards`';
+            $cardColumn = $isCommander ? '`commander`' : '`card`';
+
+            $statement = self::prepare("
+                DELETE FROM {$table}
+                WHERE `deck` = :deck
+                AND {$cardColumn} = :c;
+            ");
+
+            $statement->bindValue(':deck', $this->id);
+            $statement->bindValue(':c', $cardId);
+
+            try {
+                $statement->execute();
+
+                return true;
+            } catch (\PDOException $e) {
+                // TODO: add exception handling
+            }
+        }
+
+        return false;
+    }
+
     public function addCommander(int $cardId): bool {
         $statement = self::prepare("
             INSERT INTO `decks_commanders` (`deck`, `commander`)

@@ -56,7 +56,7 @@ class CardController extends Controller {
 
                             $results[$card->name] = [
                                 'supertype' => $card->supertypes[0] ?? '',
-                                'type' => $card->types[0],
+                                'type' => in_array('Creature', $card->types) ? 'Creature' : $card->types[0],
                                 'multiverseid' => intval($card->multiverseid)
                             ];
                         }
@@ -103,7 +103,7 @@ class CardController extends Controller {
                 $newCard->multiverseid = intval($cardMultiverseid);
 
                 if (!$newCard->validate() || !$newCard->save()) {
-                    $this->setFlash('danger', 'Something went wrong while adding the card to your deck.');
+                    $this->setFlash('danger', 'Something went wrong while adding the card(s) to your deck.');
 
                     $response->redirect("/cards/search?d={$deckDisplayId}");
                 }
@@ -135,7 +135,7 @@ class CardController extends Controller {
                 $response->redirect("/cards/search?d={$deckDisplayId}");
             }
             
-            $this->setFlash('danger', "Something went wrong while adding the card to your deck.");
+            $this->setFlash('danger', "Something went wrong while adding the card(s) to your deck.");
 
             $response->redirect("/cards/search?d={$deckDisplayId}");
         }
@@ -144,10 +144,36 @@ class CardController extends Controller {
     }
 
     public function removeCardFromDeck(Request $request, Response $response) {
-        echo '<pre>';
-        var_dump($request->getBody());
-        echo '</pre>';
-        die;
+        $requestBody = $request->getBody();
+
+        $deckDisplayId = $requestBody['d'] ?? '';
+        $cardMultiverseid = $requestBody['c'] ?? '';
+
+        if ((!empty($deckDisplayId) && DbDeck::validateDisplayId($deckDisplayId)) && (!empty($cardMultiverseid) && is_numeric($cardMultiverseid))) {
+            $deck = DbDeck::findObject(['display_id' => ['value' => $deckDisplayId]], ['id', 'user']);
+
+            if (empty($deck)) {
+                $response->redirect('/decks');
+            }
+
+            if ($deck->user !== Application::$app->user->id) {
+                throw new ForbiddenException();
+            }
+
+            $card = DbCard::findObject(['multiverseid' => ['value' => intval($cardMultiverseid)]], ['id', 'name']);
+
+            if (!empty($card)) {
+                if ($deck->removeCard($card->id, $requestBody['cr'] ? true : false)) {
+                    $this->setFlash('success', "All copies of <strong>{$card->name}</strong> have been removed from your deck.");
+                }
+            } else {
+                $this->setFlash('danger', "Something went wrong while removing the card(s) from your deck.");
+            }
+
+            $response->redirect("/decks/view?d={$deckDisplayId}");
+        }
+
+        $response->redirect('/decks');
     }
 
 }
