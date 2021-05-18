@@ -234,6 +234,12 @@ class DbDeck extends DbModel {
         return intval($cardCount) > 0;
     }
 
+    public function hasTwoCommanders() {
+        $count = $this->countCommanders();
+
+        return intval($count) === 2;
+    }
+
     public static function formColors(): array {
         return ['colorW', 'colorU', 'colorB', 'colorR', 'colorG'];
     }
@@ -255,6 +261,26 @@ class DbDeck extends DbModel {
 
         $statement->bindValue(":deck", $this->id);
         $statement->bindValue(":{$cardColumn}", $cardId);
+
+        try {
+            $statement->execute();
+
+            return $statement->fetchColumn();
+        } catch (\PDOException $e) {
+            // TODO: add exception handling
+
+            return false;
+        }
+    }
+
+    private function countCommanders() {
+        $statement = self::prepare("
+            SELECT COUNT(*)
+            FROM `decks_commanders`
+            WHERE `deck` = :deck;
+        ");
+
+        $statement->bindValue(':deck', $this->id);
 
         try {
             $statement->execute();

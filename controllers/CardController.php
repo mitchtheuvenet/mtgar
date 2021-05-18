@@ -124,12 +124,14 @@ class CardController extends Controller {
                     $response->redirect("/cards/search?d={$deckDisplayId}");
                 }
             } else if (isset($requestBody['cr'])) {
-                // TODO: check if deck already has 2 commanders, cancel if true
-
-                if (!$deck->containsCard($cardId, true) && $deck->addCommander($cardId)) {
-                    $this->setFlash('success', "<strong>{$cardName}</strong> has been added as commander to your deck.");
+                if ($deck->hasTwoCommanders()) {
+                    $this->setFlash('danger', 'Your deck cannot have more than two commanders.');
                 } else {
-                    $this->setFlash('warning', "<strong>{$cardName}</strong> has already been added as commander to your deck.");
+                    if (!$deck->containsCard($cardId, true) && $deck->addCommander($cardId)) {
+                        $this->setFlash('success', "<strong>{$cardName}</strong> has been added as commander to your deck.");
+                    } else {
+                        $this->setFlash('warning', "<strong>{$cardName}</strong> has already been added as commander to your deck.");
+                    }
                 }
 
                 $response->redirect("/cards/search?d={$deckDisplayId}");
