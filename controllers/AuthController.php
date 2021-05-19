@@ -130,6 +130,8 @@ class AuthController extends Controller {
                         $response->redirect("/register/verify?email={$urlEmail}");
                     }
                 }
+
+                $user->password = $user->passwordConfirm;
                 
                 $this->setFlash('error', 'Something went wrong while creating your new account. Please try again later.');
             }

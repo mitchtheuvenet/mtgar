@@ -95,9 +95,9 @@ class DbUser extends DbModel {
     }
 
     public function save(): bool {
-        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
-
         if ($this->deleteInactives()) {
+            $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+
             return parent::save();
         }
         
