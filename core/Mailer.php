@@ -48,7 +48,7 @@ class Mailer {
         $mail = new PHPMailer(true); // enable exceptions
 
         $mail->isSMTP();
-        $mail->SMTPDebug = $debug;
+        $mail->SMTPDebug = $this->debug;
         $mail->Host = $this->host;
         $mail->SMTPAuth = true;
         $mail->Username = $this->username;
