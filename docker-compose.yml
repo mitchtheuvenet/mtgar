@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  mitchphp1:
+    build: .
+    container_name: mitchphp1
+    volumes:
+      - ./public/:/var/www/html/
+      - ./:/var/www
+    networks:
+      - mitchphp1_network
+    expose:
+      - 80
+    ports:
+      - '7100:80'
+    mem_limit: 32m
+    env_file:
+      - .env
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'mitchphp1_db'
+      MYSQL_USER: 'mitchphp1_user'
+      MYSQL_PASSWORD: 'v4k672enw963xyrwg9jbanzzjf44'
+      MYSQL_ROOT_PASSWORD: 'v4k672enw963xyrwg9jbanzzjf44'
+    ports:
+      - '7101:3306'
+    volumes:
+      - ./runtime:/var/lib/mysql
+    networks:
+      - mitchphp1_network
+
+networks:
+  mitchphp1_network:
+    external: false
