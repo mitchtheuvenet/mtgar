@@ -8,7 +8,7 @@ class m0007_donations extends Migration {
         self::exec(<<<'SQL'
             CREATE TABLE `donations` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
-                `amount` VARCHAR(16) NOT NULL,
+                `amount` VARCHAR(8) NOT NULL,
                 `status` TINYINT NOT NULL,
                 `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=INNODB;
