@@ -19,6 +19,9 @@ $config = [
         'host' => $_ENV['SMTP_HOST'],
         'user' => $_ENV['SMTP_USER'],
         'pass' => $_ENV['SMTP_PASS']
+    ],
+    'mollie' => [
+        'api_key' => $_ENV['MOLLIE_API_KEY']
     ]
 ];
 

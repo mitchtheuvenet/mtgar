@@ -24,6 +24,9 @@ $config = [
         'host' => $_ENV['SMTP_HOST'],
         'user' => $_ENV['SMTP_USER'],
         'pass' => $_ENV['SMTP_PASS']
+    ],
+    'mollie' => [
+        'api_key' => $_ENV['MOLLIE_API_KEY']
     ]
 ];
 
@@ -57,6 +60,11 @@ $app->router->post('/cards/remove', [CardController::class, 'removeCardFromDeck'
 
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);
+
+$app->router->get('/donate', [SiteController::class, 'donate']);
+$app->router->post('/donate', [SiteController::class, 'donate']);
+$app->router->post('/mollie', [SiteController::class, 'mollie']);
+$app->router->get('/thanks', [SiteController::class, 'thankYou']);
 
 $app->router->get('/users', [SiteController::class, 'users']);
 

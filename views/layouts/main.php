@@ -64,6 +64,9 @@ $flashMessages = $this->getFlashMessages();
                             <li class="nav-item">
                                 <a href="/contact" class="nav-link<?php echo $this->title === 'Contact' ? ' active' : '' ?>">Contact</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="/donate" class="nav-link<?php echo $this->title === 'Donate' ? ' active' : '' ?>">Donate</a>
+                            </li>
                             <?php if (Application::isAdmin()): ?>
                                 <li class="nav-item border-start ms-3 ps-3">
                                     <a href="/users" class="nav-link<?php echo $this->title === 'Users' ? ' active' : '' ?>">Users</a>

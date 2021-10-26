@@ -11,6 +11,7 @@ use app\core\middlewares\AdminMiddleware;
 use app\core\middlewares\AuthMiddleware;
 
 use app\models\Contact;
+use app\models\DbDonation;
 use app\models\DbUser;
 
 class SiteController extends Controller {
@@ -54,6 +55,40 @@ class SiteController extends Controller {
         return $this->render('contact', [
             'model' => $contact
         ]);
+    }
+
+    public function donate(Request $request, Response $response) {
+        $donation = new DbDonation();
+
+        if ($request->isPost()) {
+            $donation->loadData($request->getBody());
+
+            if ($donation->validate()) {
+                if ($donation->save()) {
+                    $mollieDonation = Application::$app->mollie->createDonation($donation->amount, DbDonation::lastInsertId());
+
+                    header('Location: ' . $mollieDonation->getCheckoutUrl(), true, 303);
+
+                    exit;
+                }
+
+                $this->setFlash('error', 'Something went wrong while processing your donation. Please try again later.');
+            }
+        }
+
+        return $this->render('donate', [
+            'model' => $donation
+        ]);
+    }
+
+    public function mollie(Request $request) {
+        // TODO: add code to process Mollie webhook request
+    }
+
+    public function thankYou(Request $request, Response $response) {
+        // TODO: add middleware to redirect home if not referred by Mollie
+
+        return $this->render('donate_return');
     }
 
     public function users(Request $request) {

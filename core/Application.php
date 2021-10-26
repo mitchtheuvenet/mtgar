@@ -11,6 +11,7 @@ class Application {
 
     public Database $db;
     public Mailer $mailer;
+    public MollieService $mollie;
 
     public ?Controller $controller;
     public View $view;
@@ -34,6 +35,7 @@ class Application {
 
         $this->db = new Database($config['db']);
         $this->mailer = new Mailer($config['smtp']);
+        $this->mollie = new MollieService($config['mollie']);
 
         $userPkVal = $this->session->get('user');
 
