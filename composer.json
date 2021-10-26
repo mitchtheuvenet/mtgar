@@ -14,6 +14,7 @@
     "require": {
         "vlucas/phpdotenv": "^5.3",
         "phpmailer/phpmailer": "^6.3",
-        "mtgsdk/mtgsdk": "dev-master"
+        "mtgsdk/mtgsdk": "dev-master",
+        "mollie/mollie-api-php": "^2.0"
     }
 }
