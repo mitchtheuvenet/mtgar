@@ -15,6 +15,7 @@
         "vlucas/phpdotenv": "^5.3",
         "phpmailer/phpmailer": "^6.3",
         "mtgsdk/mtgsdk": "dev-master",
-        "mollie/mollie-api-php": "^2.0"
+        "mollie/mollie-api-php": "^2.0",
+        "fpdf/fpdf": "^1.83"
     }
 }
