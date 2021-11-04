@@ -18,7 +18,7 @@ use app\models\DbUser;
 class DeckController extends Controller {
 
     public function __construct() {
-        $this->registerMiddleware(new AuthMiddleware(['decks', 'createDeck', 'editDeck', 'deleteDeck', 'viewDeck']));
+        $this->registerMiddleware(new AuthMiddleware(['decks', 'createDeck', 'editDeck', 'deleteDeck', 'viewDeck', 'generatePdf']));
 
         $this->layout = self::LAYOUT_MAIN;
     }
@@ -241,6 +241,26 @@ class DeckController extends Controller {
         }
 
         throw new NotFoundException();
+    }
+
+    public function generatePdf(Request $request) {
+        $deckId = $request->getBody()['d'] ?? '';
+
+        if (!empty($deckId) && DbDeck::validateDisplayId($deckId)) {
+            $deck = DbDeck::findObject(['display_id' => ['value' => $deckId]]);
+
+            if (empty($deck)) {
+                throw new NotFoundException();
+            }
+
+            if (!Application::isAdmin() && $deck->user !== Application::$app->user->id) {
+                throw new ForbiddenException();
+            }
+
+            Application::$app->fpdf->generateDeckQR($deck->display_id, $deck->title, Application::$app->user->username);
+        } else {
+            throw new NotFoundException();
+        }
     }
 
 }

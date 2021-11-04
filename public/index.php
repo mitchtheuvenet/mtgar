@@ -53,6 +53,7 @@ $app->router->get('/decks/edit', [DeckController::class, 'editDeck']);
 $app->router->post('/decks/edit', [DeckController::class, 'editDeck']);
 $app->router->post('/decks/delete', [DeckController::class, 'deleteDeck']);
 $app->router->get('/decks/view', [DeckController::class, 'viewDeck']);
+$app->router->get('/decks/pdf', [DeckController::class, 'generatePdf']);
 
 $app->router->get('/cards/search', [CardController::class, 'searchCards']);
 $app->router->post('/cards/add', [CardController::class, 'addCardToDeck']);

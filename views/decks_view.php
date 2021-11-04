@@ -98,7 +98,7 @@ $currentUserIsOwner = $deck->user === Application::$app->user->id;
                     <?php else: ?>
                         <img id="card-view" width="223" height="311" class="d-block mx-auto img-fluid" src="https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=0&type=card" alt="Card image">
                     <?php endif; ?>
-                    <button class="d-block btn btn-primary w-100 mt-5" type="button"><i class="bi bi-file-earmark-text-fill"></i> Export to PDF</button>
+                    <a href="/decks/pdf?d=<?= $deck->display_id; ?>" target="_blank" class="d-block btn btn-primary w-100 mt-5" type="button"><i class="bi bi-file-earmark-text-fill"></i> Generate QR-code</a>
                     <a href="/decks/edit?d=<?= $deck->display_id; ?>&ref=deckview" class="d-block btn btn-secondary mt-3" type="button"><i class="bi bi-pencil-square"></i> Edit deck</a>
                     <button class="d-block btn btn-outline-danger w-100 mt-3" type="button" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="bi bi-trash-fill"></i> Delete deck</button>
                 </div>
