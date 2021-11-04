@@ -4,6 +4,10 @@ namespace app\core;
 
 class Request {
 
+    public function host() {
+        return $_SERVER['HTTP_HOST'];
+    }
+
     public function path() {
         $path = $_SERVER['REQUEST_URI'] ?? '/';
         $position = strpos($path, '?');
