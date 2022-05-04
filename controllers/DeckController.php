@@ -263,4 +263,37 @@ class DeckController extends Controller {
         }
     }
 
+    public function apiJSON(Request $request) {
+        $deckId = $request->getBody()['d'] ?? '';
+
+        if (!empty($deckId) && DbDeck::validateDisplayId($deckId)) {
+            $deck = DbDeck::findObject(['display_id' => ['value' => $deckId]]);
+
+            if (empty($deck)) {
+                throw new NotFoundException();
+            }
+
+            $cards = DbDeck::findCards($deck->id);
+            $commanders = DbDeck::findCards($deck->id, true);
+
+            $cardsByType = [];
+
+            foreach ($cards as $card) {
+                $cardsByType[$card['type']][] = [
+                    'multiverseid' => $card['multiverseid'],
+                    'name' => $card['name'],
+                    'amount' => $card['amount']
+                ];
+            }
+
+            return json_encode([
+                'deck' => $deck,
+                'cards' => $cardsByType,
+                'commanders' => $commanders
+            ]);
+        }
+
+        throw new NotFoundException();
+    }
+
 }
