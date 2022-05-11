@@ -61,6 +61,9 @@ $app->router->get('/cards/search', [CardController::class, 'searchCards']);
 $app->router->post('/cards/add', [CardController::class, 'addCardToDeck']);
 $app->router->post('/cards/remove', [CardController::class, 'removeCardFromDeck']);
 
+$app->router->get('/watermark', [SiteController::class, 'watermark']);
+$app->router->post('/watermark', [SiteController::class, 'watermark']);
+
 $app->router->get('/contact', [SiteController::class, 'contact']);
 $app->router->post('/contact', [SiteController::class, 'contact']);
 

@@ -60,6 +60,9 @@ $flashMessages = $this->getFlashMessages();
                                 <li class="nav-item">
                                     <a href="/decks" class="nav-link<?php echo $this->title === 'Decks' ? ' active' : '' ?>">Decks</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="/watermark" class="nav-link<?php echo $this->title === 'Watermark' ? ' active' : '' ?>">Watermark</a>
+                                </li>
                             <?php endif; ?>
                             <li class="nav-item">
                                 <a href="/contact" class="nav-link<?php echo $this->title === 'Contact' ? ' active' : '' ?>">Contact</a>

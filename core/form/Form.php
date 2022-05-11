@@ -6,8 +6,11 @@ use app\core\Model;
 
 class Form {
 
-    public static function begin(string $action, string $method, string $id = ''): Form {
-        echo sprintf('<form action="%s" method="%s" onsubmit="disableSubmitBtn();"%s>', $action, $method, !empty($id) ? " id=\"{$id}\"" : '');
+    public static function begin(string $action, string $method, string $id = '', bool $multipart = false): Form {
+        echo sprintf(
+            '<form action="%s" method="%s" onsubmit="disableSubmitBtn();"%s%s>',
+            $action, $method, !empty($id) ? " id=\"{$id}\"" : '', $multipart ? ' enctype="multipart/form-data"' : ''
+        );
 
         return new Form();
     }

@@ -13,6 +13,7 @@ class Application {
     public Mailer $mailer;
     public MollieService $mollie;
     public PDFService $fpdf;
+    public WatermarkService $watermarker;
 
     public ?Controller $controller;
     public View $view;
@@ -38,6 +39,7 @@ class Application {
         $this->mailer = new Mailer($config['smtp']);
         $this->mollie = new MollieService($config['mollie']);
         $this->fpdf = new PDFService();
+        $this->watermarker = new WatermarkService();
 
         $userPkVal = $this->session->get('user');
 

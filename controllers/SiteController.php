@@ -35,6 +35,22 @@ class SiteController extends Controller {
         ]);
     }
 
+    public function watermark(Request $request) {
+        if ($request->isGet()) {
+            return $this->render('watermark');
+        }
+
+        if ($request->isPost()) {
+            try {
+                Application::$app->watermarker->stampImage($request->getFile('image'));
+            } catch (Exception $e) {
+                $this->setFlash('error', $e->getMessage());
+
+                return $this->render('watermark');
+            }
+        }
+    }
+
     public function contact(Request $request, Response $response) {
         $contact = new Contact();
 

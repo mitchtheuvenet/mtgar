@@ -49,4 +49,8 @@ class Request {
         return $body;
     }
 
+    public function getFile(string $fileName) {
+        return isset($_FILES[$fileName]) ? $_FILES[$fileName] : [];
+    }
+
 }
