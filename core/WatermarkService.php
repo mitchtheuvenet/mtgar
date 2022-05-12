@@ -59,8 +59,14 @@ class WatermarkService {
                     . ') exceeds the maximum file size of ' . $this->convertBytesToReadableFileSize(self::MAX_FILE_SIZE) . '.');
         }
 
+        $uploadDirectory = $this->imageDirectory . '\\uploads';
+
+        if (!is_dir($uploadDirectory)) {
+            mkdir($uploadDirectory);
+        }
+
         $newFileName = uniqid('img') . '.jpg';
-        $newFilePath = $this->imageDirectory . '\\uploads\\' . $newFileName;
+        $newFilePath = $uploadDirectory . '\\' . $newFileName;
 
         move_uploaded_file($filePath, $newFilePath);
 
