@@ -263,6 +263,40 @@ class DeckController extends Controller {
         }
     }
 
+    public function exportDecks(Request $request, Response $response) {
+        $userId = Application::$app->user->id;
+
+        $where = [
+            'user' => ['value' => $userId]
+        ];
+
+        $decks = DbDeck::findArray($where, ['title', 'description', 'colors'], DbDeck::BYPASS_QUERY_LIMIT);
+
+        $tempDirectory = Application::$ROOT_DIR . '\\public\\temp';
+
+        if (!is_dir($tempDirectory)) {
+            mkdir($tempDirectory);
+        }
+
+        $fileName = "decks-{$userId}.csv";
+        $filePath = $tempDirectory . '\\' . $fileName;
+
+        $decksCsv = fopen($filePath, 'w');
+
+        foreach ($decks as $d) {
+            fputcsv($decksCsv, $d);
+        }
+
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $fileName . '"');
+
+        readfile($filePath);
+
+        fclose($decksCsv);
+
+        unlink($filePath);
+    }
+
     public function apiJSON(Request $request) {
         $deckId = $request->getBody()['d'] ?? '';
 

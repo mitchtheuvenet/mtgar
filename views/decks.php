@@ -44,6 +44,8 @@ JS;
     <?php if ($userId === Application::$app->user->id): ?>
         <div class="text-center mb-4">
             <a href="/decks/create" class="btn btn-success"><i class="bi bi-plus"></i> Create new deck</a>
+            <a href="/decks/import" class="btn btn-primary mx-2"><i class="bi bi-download"></i> Import decks</a>
+            <a href="/decks/export" class="btn btn-secondary<?= empty($decks) ? ' disabled' : ''; ?>" target="_blank"><i class="bi bi-upload"></i> Export decks</a>
         </div>
     <?php endif; ?>
     <?php if (!empty($decks)): ?>
