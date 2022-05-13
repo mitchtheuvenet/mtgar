@@ -14,6 +14,7 @@ class Application {
     public MollieService $mollie;
     public PDFService $fpdf;
     public WatermarkService $watermarker;
+    public DecksImportService $decksImporter;
 
     public ?Controller $controller;
     public View $view;
@@ -40,6 +41,7 @@ class Application {
         $this->mollie = new MollieService($config['mollie']);
         $this->fpdf = new PDFService();
         $this->watermarker = new WatermarkService();
+        $this->decksImporter = new DecksImportService();
 
         $userPkVal = $this->session->get('user');
 

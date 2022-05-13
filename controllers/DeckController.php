@@ -263,7 +263,7 @@ class DeckController extends Controller {
         }
     }
 
-    public function exportDecks(Request $request, Response $response) {
+    public function exportDecks(Request $request) {
         $userId = Application::$app->user->id;
 
         $where = [
@@ -295,6 +295,22 @@ class DeckController extends Controller {
         fclose($decksCsv);
 
         unlink($filePath);
+    }
+
+    public function importDecks(Request $request, Response $response) {
+        if ($request->isPost()) {
+            try {
+                Application::$app->decksImporter->importFromCsv($request->getFile('decks'));
+
+                $this->setFlash('success', 'Your decks have been imported successfully.');
+
+                $response->redirect('/decks');
+            } catch (\Exception $e) {
+                $this->setFlash('error', $e->getMessage());
+            }
+        }
+
+        return $this->render('decks_import');
     }
 
     public function apiJSON(Request $request) {

@@ -55,6 +55,8 @@ $app->router->post('/decks/delete', [DeckController::class, 'deleteDeck']);
 $app->router->get('/decks/view', [DeckController::class, 'viewDeck']);
 $app->router->get('/decks/pdf', [DeckController::class, 'generatePdf']);
 $app->router->get('/decks/export', [DeckController::class, 'exportDecks']);
+$app->router->get('/decks/import', [DeckController::class, 'importDecks']);
+$app->router->post('/decks/import', [DeckController::class, 'importDecks']);
 $app->router->get('/decks/api', [DeckController::class, 'apiJSON']);
 
 $app->router->get('/cards/search', [CardController::class, 'searchCards']);

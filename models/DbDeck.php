@@ -113,6 +113,14 @@ class DbDeck extends DbModel {
         return parent::validate();
     }
 
+    public function validateCsv(): bool {
+        if ($this->colors !== Mana::COLORLESS && !preg_match('/[WUBRG]{1,5}/', $this->colors)) {
+            return false;
+        }
+
+        return parent::validate();
+    }
+
     public function save(): bool {
         $this->user = Application::$app->user->id;
 
