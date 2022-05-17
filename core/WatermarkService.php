@@ -12,7 +12,7 @@ class WatermarkService {
     private string $imageDirectory;
 
     public function __construct() {
-        $this->imageDirectory = Application::$ROOT_DIR . '\\public\\images';
+        $this->imageDirectory = Application::$ROOT_DIR . '\\public_html\\images';
     }
 
     public function stampImage(array $file) {

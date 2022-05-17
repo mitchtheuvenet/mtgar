@@ -272,7 +272,7 @@ class DeckController extends Controller {
 
         $decks = DbDeck::findArray($where, ['title', 'description', 'colors'], DbDeck::BYPASS_QUERY_LIMIT);
 
-        $tempDirectory = Application::$ROOT_DIR . '\\public\\temp';
+        $tempDirectory = Application::$ROOT_DIR . '\\public_html\\temp';
 
         if (!is_dir($tempDirectory)) {
             mkdir($tempDirectory);

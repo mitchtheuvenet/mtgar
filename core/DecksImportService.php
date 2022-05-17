@@ -13,7 +13,7 @@ class DecksImportService {
     private string $tempDirectory;
 
     public function __construct() {
-        $this->tempDirectory = Application::$ROOT_DIR . '\\public\\temp';
+        $this->tempDirectory = Application::$ROOT_DIR . '\\public_html\\temp';
     }
 
     public function importFromCsv(array $file) {
