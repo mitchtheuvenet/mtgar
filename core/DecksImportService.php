@@ -13,7 +13,7 @@ class DecksImportService {
     private string $tempDirectory;
 
     public function __construct() {
-        $this->tempDirectory = Application::$ROOT_DIR . '\\public_html\\temp';
+        $this->tempDirectory = Application::$ROOT_DIR . '/public_html/temp';
     }
 
     public function importFromCsv(array $file) {
@@ -69,7 +69,7 @@ class DecksImportService {
         }
 
         $newFileName = uniqid('decks') . '.csv';
-        $newFilePath = $this->tempDirectory . '\\' . $newFileName;
+        $newFilePath = $this->tempDirectory . '/' . $newFileName;
 
         move_uploaded_file($filePath, $newFilePath);
 

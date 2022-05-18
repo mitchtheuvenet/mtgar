@@ -12,7 +12,7 @@ class WatermarkService {
     private string $imageDirectory;
 
     public function __construct() {
-        $this->imageDirectory = Application::$ROOT_DIR . '\\public_html\\images';
+        $this->imageDirectory = Application::$ROOT_DIR . '/public_html/images';
     }
 
     public function stampImage(array $file) {
@@ -24,7 +24,7 @@ class WatermarkService {
             throw new Exception('The uploaded image is too small (minimum dimensions: 140 x 50).');
         }
 
-        $stamp = imagecreatefrompng($this->imageDirectory . '\\logo_small.png');
+        $stamp = imagecreatefrompng($this->imageDirectory . '/logo_small.png');
 
         $image = imagecreatefromjpeg($uploadedImg);
         imagefilter($image, IMG_FILTER_GRAYSCALE);
@@ -59,14 +59,14 @@ class WatermarkService {
                     . ') exceeds the maximum file size of ' . $this->convertBytesToReadableFileSize(self::MAX_FILE_SIZE) . '.');
         }
 
-        $uploadDirectory = $this->imageDirectory . '\\uploads';
+        $uploadDirectory = $this->imageDirectory . '/uploads';
 
         if (!is_dir($uploadDirectory)) {
             mkdir($uploadDirectory);
         }
 
         $newFileName = uniqid('img') . '.jpg';
-        $newFilePath = $uploadDirectory . '\\' . $newFileName;
+        $newFilePath = $uploadDirectory . '/' . $newFileName;
 
         move_uploaded_file($filePath, $newFilePath);
 

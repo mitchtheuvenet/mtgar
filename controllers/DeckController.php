@@ -272,14 +272,14 @@ class DeckController extends Controller {
 
         $decks = DbDeck::findArray($where, ['title', 'description', 'colors'], DbDeck::BYPASS_QUERY_LIMIT);
 
-        $tempDirectory = Application::$ROOT_DIR . '\\public_html\\temp';
+        $tempDirectory = Application::$ROOT_DIR . '/public_html/temp';
 
         if (!is_dir($tempDirectory)) {
             mkdir($tempDirectory);
         }
 
         $fileName = "decks-{$userId}.csv";
-        $filePath = $tempDirectory . '\\' . $fileName;
+        $filePath = $tempDirectory . '/' . $fileName;
 
         $decksCsv = fopen($filePath, 'w');
 
