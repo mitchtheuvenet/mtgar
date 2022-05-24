@@ -34,7 +34,7 @@ class DbDonation extends DbModel {
 
     public function labels(): array {
         return [
-            'amount' => '&euro;'
+            'amount' => 'Amount in &euro;'
         ];
     }
 

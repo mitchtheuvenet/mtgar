@@ -7,6 +7,8 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 
+use app\core\exceptions\NotFoundException;
+
 use app\core\middlewares\AdminMiddleware;
 use app\core\middlewares\AuthMiddleware;
 
@@ -98,13 +100,27 @@ class SiteController extends Controller {
     }
 
     public function mollie(Request $request) {
-        // TODO: add code to process Mollie webhook request
+        $molliePaymentId = $request->getBody()['id'] ?? 0;
+
+        if ($request->origin() !== 'https://www.mollie.com/' || empty($molliePaymentId)) {
+            throw new NotFoundException();
+        }
+
+        $result = Application::$app->mollie->processDonation(intval($molliePaymentId));
+
+        if (!$result) {
+            // TODO: add logging
+        }
     }
 
-    public function thankYou(Request $request, Response $response) {
-        // TODO: add middleware to redirect home if not referred by Mollie
+    public function thankYou(Request $request) {
+        $donationId = $request->getBody()['donation_id'] ?? 0;
 
-        return $this->render('donate_return');
+        if ($request->origin() !== 'https://www.mollie.com/' || empty($donationId)) {
+            throw new NotFoundException();
+        }
+
+        return $this->render('donate_return', ['donationId' => $donationId]);
     }
 
     public function users(Request $request) {

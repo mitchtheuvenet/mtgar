@@ -35,4 +35,19 @@ class MollieService {
         ]);
     }
 
+    public function processDonation(int $paymentId): bool {
+        $payment = $this->client->payments->get($paymentId);
+        $donationId = $payment->metadata->donation_id;
+
+        if ($payment->isPaid() && !$payment->hasRefunds() && !$payment->hasChargeBacks()) {
+            $donation = DbDonation::findObject(['id' => ['value' => intval($donationId)]]);
+
+            $donation->status = DbDonation::STATUS_PAID;
+
+            return $donation->update(['status']);
+        }
+
+        return false;
+    }
+
 }

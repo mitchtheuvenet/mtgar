@@ -23,6 +23,10 @@ class Request {
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
+    public function origin() {
+        return $_SERVER['HTTP_ORIGIN'] ?? $_SERVER['HTTP_REFERER'];
+    }
+
     public function isGet() {
         return $this->method() === 'get';
     }
